@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Camera } from "expo-camera";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Alert } from "react-native";
+import axios from "axios";
+import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 
 const Scan = ({ navigation }) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -26,7 +28,58 @@ const Scan = ({ navigation }) => {
     }
   };
 
-  const onCameraPress = () => {};
+  const onCameraPress = async () => {
+    if (cameraRef.current && isCameraReady) {
+      try {
+        const photo = await cameraRef.current.takePictureAsync();
+  
+        // Resize and compress the image
+        const resizedImage = await manipulateAsync(
+          photo.uri,
+          [{ resize: { width: 800 } }], // Adjust width as needed
+          { compress: 0.7 } // Adjust compression quality
+        );
+  
+        const formData = new FormData();
+        formData.append("image", {
+          uri: resizedImage.uri,
+          type: "image/jpeg",
+          name: "image.jpg",
+        });
+  
+        // Make the API call with the resized and compressed image
+        const response = await fetch("https://scrapie-5g3h.onrender.com/predict", {
+          method: "POST",
+          body: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+  
+        const responseData = await response.json();
+  
+        if (responseData && responseData.className && responseData.probability) {
+          const message = `Class: ${responseData.className}\nProbability: ${responseData.probability}`;
+          Alert.alert("Prediction Result", message);
+        } else {
+          Alert.alert("Bad Request", "No valid response data from API.");
+        }
+      } catch (error) {
+        console.error('Error taking picture and making API call:', error);
+      }
+    }
+  };
+  
+  
+
+  const onFlipButtonClick = async () => {
+    try {
+      const response = await axios.get("https://scrapie-5g3h.onrender.com/hi");
+      console.log("GET Response:", response.data);
+    } catch (error) {
+      console.error('Error making GET request:', error);
+    }
+  };
 
   if (hasCameraPermission === null) {
     return <View />;
@@ -46,7 +99,7 @@ const Scan = ({ navigation }) => {
               flex: 1,
               backgroundColor: "transparent",
               flexDirection: "row",
-              justifyContent: "center", // Center the content horizontally
+              justifyContent: "center",
             }}
           >
             <TouchableOpacity
@@ -66,10 +119,11 @@ const Scan = ({ navigation }) => {
               style={{
                 alignSelf: "flex-end",
                 alignItems: "center",
+                justifyContent: "center",
                 backgroundColor: "white",
                 borderRadius: 50,
                 marginRight: 10,
-                marginBottom: 20, // Adjusted margin for spacing
+                marginBottom: 20,
                 height: 100,
                 width: 100,
               }}
@@ -77,6 +131,19 @@ const Scan = ({ navigation }) => {
             >
               <Text style={{ fontSize: 18, marginBottom: 10, color: "black" }}>
                 pic
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{
+                alignSelf: "flex-end",
+                alignItems: "center",
+                color: "#444444",
+              }}
+              onPress={onFlipButtonClick}
+            >
+              <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
+                Flip Button
               </Text>
             </TouchableOpacity>
           </View>
