@@ -3,6 +3,8 @@ import { Camera } from "expo-camera";
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 import axios from "axios";
 import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
+import * as ImagePicker from 'expo-image-picker';
+
 
 const Scan = ({ navigation }) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -22,12 +24,64 @@ const Scan = ({ navigation }) => {
     setIsCameraReady(true);
   };
 
-  const toggleCameraType = () => {
-    if (isCameraReady) {
-      cameraRef.current.flipAsync();
+
+  const getPicFromGallery = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1, // Adjust image quality as needed
+      });
+  
+      if (!result.canceled) {
+        const formData = new FormData();
+        formData.append("image", {
+          uri: result.assets[0].uri,
+          type: "image/jpeg",
+          name: "image.jpg",
+        });
+  
+        // Make the API call with the selected image
+        const response = await fetch("https://scrapie-5g3h.onrender.com/predict", {
+          method: "POST",
+          body: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+  
+        const responseData = await response.json();
+
+        if (Array.isArray(responseData) && responseData.length > 0) {
+          let message = "";
+        
+          responseData.forEach(item => {
+            if (item.className && item.probability) {
+              message += `Class: ${item.className}\nProbability: ${item.probability}\n\n`;
+            } else {
+              message += "Invalid data format in response.\n\n";
+            }
+          });
+        
+          if (message.length > 0) {
+            Alert.alert("Prediction Results", message);
+          } else {
+            const errorMessage = "No valid data found in response.";
+            Alert.alert("Bad Request", errorMessage);
+          }
+        } else {
+          const errorMessage = "No valid response data from API.";
+          Alert.alert("Bad Request", errorMessage);
+        }
+        
+        
+      }
+    } catch (error) {
+      console.error('Error selecting image and making API call:', error);
     }
   };
-
+  
   const onCameraPress = async () => {
     if (cameraRef.current && isCameraReady) {
       try {
@@ -58,12 +112,29 @@ const Scan = ({ navigation }) => {
   
         const responseData = await response.json();
   
-        if (responseData && responseData.className && responseData.probability) {
-          const message = `Class: ${responseData.className}\nProbability: ${responseData.probability}`;
-          Alert.alert("Prediction Result", message);
+        if (Array.isArray(responseData) && responseData.length > 0) {
+          let message = "";
+        
+          responseData.forEach(item => {
+            if (item.className && item.probability) {
+              message += `Class: ${item.className}\nProbability: ${item.probability}\n\n`;
+            } else {
+              message += "Invalid data format in response.\n\n";
+            }
+          });
+        
+          if (message.length > 0) {
+            Alert.alert("Prediction Results", message);
+          } else {
+            const errorMessage = "No valid data found in response.";
+            Alert.alert("Bad Request", errorMessage);
+          }
         } else {
-          Alert.alert("Bad Request", "No valid response data from API.");
+          const errorMessage = "No valid response data from API.";
+          Alert.alert("Bad Request", errorMessage);
         }
+        
+        
       } catch (error) {
         console.error('Error taking picture and making API call:', error);
       }
@@ -72,7 +143,7 @@ const Scan = ({ navigation }) => {
   
   
 
-  const onFlipButtonClick = async () => {
+  const checkapi = async () => {
     try {
       const response = await axios.get("https://scrapie-5g3h.onrender.com/hi");
       console.log("GET Response:", response.data);
@@ -108,10 +179,10 @@ const Scan = ({ navigation }) => {
                 alignItems: "center",
                 color: "#444444",
               }}
-              onPress={toggleCameraType}
+              onPress={checkapi}
             >
               <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
-                Flip
+                check
               </Text>
             </TouchableOpacity>
 
@@ -140,10 +211,10 @@ const Scan = ({ navigation }) => {
                 alignItems: "center",
                 color: "#444444",
               }}
-              onPress={onFlipButtonClick}
+              onPress={getPicFromGallery}
             >
               <Text style={{ fontSize: 18, marginBottom: 10, color: "white" }}>
-                Flip Button
+              gallery
               </Text>
             </TouchableOpacity>
           </View>
