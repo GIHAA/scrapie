@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Home, Profile, Search, Fav, Scan } from "../screens";
 import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
 import { COLORS } from "../constants/index";
+import Test from "../screens/Test";
 
 const Tab = createBottomTabNavigator();
 
@@ -87,8 +88,8 @@ const BottomTabNavigation = () => {
       />
 
       <Tab.Screen
-        name="Profile"
-        component={Profile}
+        name="profile"
+        component={Test}
         options={{
           tabBarIcon: ({ focused }) => {
             return (

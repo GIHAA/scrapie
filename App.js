@@ -5,6 +5,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import BottomTabNavigation from './navigation/BottomTabNavigation';
 import { Cart  } from './screens'
+import Test from './screens/Test';
+import Recycle from './screens/Recycle';
+import Reuse from './screens/Reuse';
+import Repair from './screens/Repair';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -29,16 +34,14 @@ export default function App() {
   }
   
   return (
-    // <View style={styles.container}>
-    //   <Text style={styles.textStyle}>hello</Text>
-    //   <StatusBar style="auto" />
-    // </View>
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Bottom Navigation" component={BottomTabNavigation} options={{headerShown: false}}/>
         <Stack.Screen name="Cart" component={Cart} options={{headerShown: false}}/>
-
-     
+        <Stack.Screen name="Test" component={Test} options={{headerShown: false}}/>
+        <Stack.Screen name="Recycle" component={Recycle} options={{headerShown: false}}/>
+        <Stack.Screen name="Reuse" component={Reuse} options={{headerShown: false}}/>
+        <Stack.Screen name="Repair" component={Repair} options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
