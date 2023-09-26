@@ -32,9 +32,9 @@ const Scan = ({}) => {
   const [loading, setloading] = useState(false);
   const [displayCameraButtom, setdisplayCameraButtom] = useState(true);
   const [displayItemDetails, setDisplayItemDetails] = useState(true);
-  const [target, setTarget] = useState([{ className: "Placeholder" }]);
+  const [target, setTarget] = useState([{ className: "Computer mouse" }]);
   const [image, setImage] = useState();
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const navigation = useNavigation();
 
@@ -52,7 +52,7 @@ const Scan = ({}) => {
   };
 
   const getPicFromGallery = async () => {
-    setloading(true);
+   // setloading(true);
     setdisplayCameraButtom(false);
 
     try {
@@ -97,7 +97,7 @@ const Scan = ({}) => {
           });
 
           if (message.length > 0) {
-            setloading(false);
+            //setloading(false);
             setDisplayItemDetails(true);
             // Alert.alert("Prediction Results", message);
           } else {
@@ -115,7 +115,7 @@ const Scan = ({}) => {
   };
 
   const onCameraPress = async () => {
-    setloading(true);
+    //setloading(true);
     setdisplayCameraButtom(false);
     if (cameraRef.current && isCameraReady) {
       try {
@@ -163,10 +163,10 @@ const Scan = ({}) => {
           });
 
           if (message.length > 0) {
-            setloading(false);
+           // setloading(false);
             setDisplayItemDetails(true);
           } else {
-            setloading(false);
+           // setloading(false);
             const errorMessage = "No valid data found in response.";
             Alert.alert("Bad Request", errorMessage);
           }
@@ -196,15 +196,18 @@ const Scan = ({}) => {
   };
 
   const handleRepairButtonClick = () => {
-    navigation.navigate(Repair);
+    const data = { item: target[0].className };
+    navigation.navigate('Repair', { data }); 
   };
 
   const handleReuseButtonClick = () => {
-    navigation.navigate(Reuse);
+    const data = { item: target[0].className };
+    navigation.navigate('Reuse', { data }); 
   };
-
+  
   const handleRecycleButtonClick = () => {
-    navigation.navigate(Recycle);
+    const data = { item: target[0].className };
+    navigation.navigate('Recycle', { data }); 
   };
 
   if (hasCameraPermission === null) {
@@ -246,7 +249,7 @@ const Scan = ({}) => {
               }}
             >
               <Animatable.Image
-                animation="fadeIn" // You can also apply animations to Image component
+                animation="fadeIn"
                 duration={1000}
                 style={{ height: isExpanded ? "57%" : "40%", width: "100%" }}
                 source={{
@@ -271,6 +274,7 @@ const Scan = ({}) => {
                       paddingTop: 15,
                       paddingBottom: 15,
                       borderRadius: 40,
+                      maxWidth: 300,
                     }}
                   >
                     {target[0].className}
@@ -285,12 +289,12 @@ const Scan = ({}) => {
                     <TouchableOpacity
                       onPress={() => {
                         setIsExpanded(false);
-                        // LayoutAnimation.configureNext({
-                        //   duration: 400,
-                        //   update: {
-                        //     type: LayoutAnimation.Types.easeInEaseOut,
-                        //   },
-                        // });
+                        LayoutAnimation.configureNext({
+                          duration: 400,
+                          update: {
+                            type: LayoutAnimation.Types.easeInEaseOut,
+                          },
+                        });
                       }}
                     >
                       <MaterialIcons name="cancel" size={45} color="black" />
@@ -299,12 +303,12 @@ const Scan = ({}) => {
                       style={{ marginLeft: 10 }}
                       onPress={() => {
                         setIsExpanded(false);
-                        // LayoutAnimation.configureNext({
-                        //   duration: 400,
-                        //   update: {
-                        //     type: LayoutAnimation.Types.easeInEaseOut,
-                        //   },
-                        // });
+                        LayoutAnimation.configureNext({
+                          duration: 400,
+                          update: {
+                            type: LayoutAnimation.Types.easeInEaseOut,
+                          },
+                        });
                       }}
                     >
                       <FontAwesome
@@ -341,10 +345,9 @@ const Scan = ({}) => {
                     onPress={handleRecycleButtonClick}
                     style={{
                       height: 55,
-                      width: "90%",
                       borderRadius: 15,
-                      marginLeft: 30,
-                      marginRight: 30,
+                      marginLeft: 15,
+                      marginRight: 15,
                       backgroundColor: "white",
                       borderColor: "green",
                       borderWidth: 2,
@@ -375,10 +378,9 @@ const Scan = ({}) => {
                     onPress={handleReuseButtonClick}
                     style={{
                       height: 55,
-                      width: "90%",
                       borderRadius: 15,
-                      marginLeft: 30,
-                      marginRight: 30,
+                      marginLeft: 15,
+                      marginRight: 15,
                       backgroundColor: "white",
                       borderColor: "green",
                       borderWidth: 2,
@@ -397,7 +399,7 @@ const Scan = ({}) => {
                       }}
                     >
                       <Text style={{ color: "green", fontSize: 20 }}>
-                        Reuse
+                        Give away
                       </Text>
                       <View style={{ marginLeft: 10 }}>
                         <AntDesign name="arrowright" size={24} color="green" />
@@ -409,10 +411,9 @@ const Scan = ({}) => {
                     onPress={handleRepairButtonClick}
                     style={{
                       height: 55,
-                      width: "90%",
                       borderRadius: 15,
-                      marginLeft: 30,
-                      marginRight: 30,
+                      marginLeft: 15,
+                      marginRight: 15,
                       backgroundColor: "white",
                       borderColor: "green",
                       borderWidth: 2,
