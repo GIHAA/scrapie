@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Home, Profile, Search, Fav, Scan } from "../screens";
 import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
 import { COLORS } from "../constants/index";
+import { Entypo } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -57,15 +58,17 @@ const BottomTabNavigation = () => {
 
       <Tab.Screen
         name="scan"
-        component={React.memo(Scan)} 
+        component={React.memo(Scan)}
         options={{
           tabBarIcon: ({ focused }) => {
             return (
-              <AntDesign
-                name={"pluscircle"}
-                size={50}
-                color={focused ? COLORS.primary : "#198155"}
+              <View style={{ backgroundColor: focused ? COLORS.primary : "#198155", padding: 18 , borderRadius: 50 }}>
+              <Entypo
+                name="camera"
+                size={24}
+                color="white"
               />
+              </View>
             );
           },
         }}
@@ -76,6 +79,7 @@ const BottomTabNavigation = () => {
         options={{
           tabBarIcon: ({ focused }) => {
             return (
+
               <Feather
                 name={"heart"}
                 size={24}
@@ -87,7 +91,7 @@ const BottomTabNavigation = () => {
       />
 
       <Tab.Screen
-        name="Profile"
+        name="profile"
         component={Profile}
         options={{
           tabBarIcon: ({ focused }) => {

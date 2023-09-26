@@ -18,7 +18,6 @@ const COLORS = {
   lightWhite: "#FAFAFC",
 };
 
-
 const SIZES = {
   xSmall: 10,
   small: 12,
@@ -29,7 +28,6 @@ const SIZES = {
   height,
   width
 };
-
 
 const SHADOWS = {
   small: {

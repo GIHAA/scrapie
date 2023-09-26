@@ -8,8 +8,8 @@
         }
       ]
     ],
-    "name": "furniture_app",
-    "slug": "furniture_app",
+    "name": "scripe",
+    "slug": "scripe",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,6 +26,14 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.arcktype.scripe",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -33,6 +41,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1eaa6b1f-4f92-4948-bb2b-366412bf1b60"
+      }
     }
   }
 }
