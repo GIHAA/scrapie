@@ -5,6 +5,7 @@ import { Home, Profile, Search, Fav, Scan } from "../screens";
 import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
 import { COLORS } from "../constants/index";
 import { Entypo } from '@expo/vector-icons';
+import Test from "../screens/Test";
 
 const Tab = createBottomTabNavigator();
 
@@ -92,7 +93,7 @@ const BottomTabNavigation = () => {
 
       <Tab.Screen
         name="profile"
-        component={Profile}
+        component={Test}
         options={{
           tabBarIcon: ({ focused }) => {
             return (
