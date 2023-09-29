@@ -12,7 +12,7 @@ import { COLORS } from "../constants";
 
 const Test = ({ params }) => {
   const data = {
-    image: "https://picsum.photos/seed/696/3000/2000",
+    image: "https://firebasestorage.googleapis.com/v0/b/scrapie-85d87.appspot.com/o/images%2Fgihaaaaa?alt=media&token=e157ba69-2070-41b3-937d-4b13f21aa533",
     seller: "gihan",
     description: "rrrrrrrr rrrr sadsad asdsa dsd adasd asd asd",
     item: "rrrrr",
@@ -20,11 +20,10 @@ const Test = ({ params }) => {
     phone: "0710816191",
   };
 
-  // Function to open the phone's caller when the button is clicked
+
   const callSeller = () => {
     const phoneNumber = data.phone;
-    // Use the tel: scheme to open the phone's dialer with the specified phone number
-    Linking.openURL(`tel:${phoneNumber}`);
+  Linking.openURL(`tel:${phoneNumber}`);
   };
 
   return (
@@ -34,7 +33,7 @@ const Test = ({ params }) => {
         duration={1000}
         style={{ height: "55%", width: "100%" }}
         source={{
-          uri: data.image,
+          uri: 
         }}
         placeholder="image"
         contentFit="cover"

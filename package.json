@@ -45,7 +45,8 @@
     "react-native-video": "^5.2.1",
     "react-native-web": "~0.18.10",
     "react-native-webview": "11.26.0",
-    "uuid": "^9.0.1"
+    "uuid": "^9.0.1",
+    "expo-media-library": "~15.2.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

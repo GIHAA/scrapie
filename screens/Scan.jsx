@@ -22,6 +22,9 @@ import { FontAwesome } from "@expo/vector-icons";
 import storage from "../components/auth/firebase";
 import { getStorage, ref , child , uploadBytes , getDownloadURL } from "firebase/storage";
 import { initializeApp } from "firebase/app";
+import * as FileSystem from "expo-file-system";
+import * as MediaLibrary from 'expo-media-library';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 
 
@@ -37,7 +40,7 @@ const Scan = ({}) => {
   const [target, setTarget] = useState([{ className: "Computer mouse" }]);
   const [image, setImage] = useState();
   const [raw, setRaw] = useState();
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   
 
   const navigation = useNavigation();
@@ -56,36 +59,56 @@ const Scan = ({}) => {
   };
 
   const uploadImageToFirebase = async (imageUri, imageName) => {
-    try {
-      const firebaseConfig = {
-        apiKey: "AIzaSyAlNG-bgiezAnpcZyro90V3odkZ2XowXSU",
-        authDomain: "scrapie-85d87.firebaseapp.com",
-        projectId: "scrapie-85d87",
-        storageBucket: "scrapie-85d87.appspot.com",
-        messagingSenderId: "92530576790",
-        appId: "1:92530576790:web:53b0af7a2afd1583b721b7",
-        measurementId: "G-KPV0GF3HHE",
-      };
-  
-      const app = initializeApp(firebaseConfig);
-      const storage = getStorage(app);
-  
-     const imageFile = new File([new Blob([raw])], imageName);
-  
+  try {
+    const firebaseConfig = {
+      apiKey: "AIzaSyAlNG-bgiezAnpcZyro90V3odkZ2XowXSU",
+      authDomain: "scrapie-85d87.firebaseapp.com",
+      projectId: "scrapie-85d87",
+      storageBucket: "scrapie-85d87.appspot.com",
+      messagingSenderId: "92530576790",
+      appId: "1:92530576790:web:53b0af7a2afd1583b721b7",
+      measurementId: "G-KPV0GF3HHE",
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+    const storage = getStorage(app);
+
+    const { status } = await MediaLibrary.requestPermissionsAsync();
+
+    if (status === 'granted') {
+
+      const imageBlob = await FileSystem.readAsStringAsync(imageUri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      const resizedImage = await ImageManipulator.manipulateAsync(
+        `data:image/jpeg;base64,${imageBlob}`,
+        [{ resize: { width: 500 } }], 
+        { format: 'jpeg', base64: true }
+      );
+
+      console.log('rrrrrrrrrrr')
+
+      const imageBlobObject = new Blob([resizedImage.base64], { type: 'image/jpeg' });
+      const imageFile = new File([imageBlobObject], imageName);
+
       const storageRef = ref(storage, `images/${imageName}`);
-      
-      
       await uploadBytes(storageRef, imageFile);
-  
+
       const downloadURL = await getDownloadURL(storageRef);
-  
+
       console.log('Download URL:', downloadURL);
       return downloadURL;
-    } catch (error) {
-      console.error('Error uploading image to Firebase Storage:', error);
-      throw error;
+    } else {
+      console.error('Permission to read files not granted');
     }
-  };
+  } catch (error) {
+    console.error('Error uploading local image to Firebase Storage:', error);
+    throw error;
+  }
+};
+  
   
 
   const getPicFromGallery = async () => {
@@ -164,7 +187,7 @@ const Scan = ({}) => {
           { compress: 0.7 }
         );
         setImage(resizedImage.uri);
-        setRaw(resizedImage)
+        setRaw(photo.uri)
 
         const formData = new FormData();
         formData.append("image", {
@@ -238,8 +261,8 @@ const Scan = ({}) => {
   };
 
   const handleReuseButtonClick = () => {
-    const data = { item: target[0].className , image: image };
-    uploadImageToFirebase( image , "gihaaaaa");
+    const data = { item: target[0].className , image: raw };
+    uploadImageToFirebase( raw , "gihaaaaa");
     navigation.navigate("Reuse", { data });
   };
 
