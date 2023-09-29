@@ -6,6 +6,8 @@ import { Ionicons, AntDesign, Feather } from "@expo/vector-icons";
 import { COLORS } from "../constants/index";
 import { Entypo } from '@expo/vector-icons';
 import Test from "../screens/Test";
+import Test2 from "../screens/Test2";
+
 
 const Tab = createBottomTabNavigator();
 
@@ -43,7 +45,7 @@ const BottomTabNavigation = () => {
       />
       <Tab.Screen
         name="Search"
-        component={Search}
+        component={React.memo(Search)}
         options={{
           tabBarIcon: ({ focused }) => {
             return (
@@ -93,7 +95,7 @@ const BottomTabNavigation = () => {
 
       <Tab.Screen
         name="profile"
-        component={Test}
+        component={React.memo(Test2)}
         options={{
           tabBarIcon: ({ focused }) => {
             return (

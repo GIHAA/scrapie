@@ -33,7 +33,7 @@ const Test = ({ params }) => {
         duration={1000}
         style={{ height: "55%", width: "100%" }}
         source={{
-          uri: 
+          uri: data.image,
         }}
         placeholder="image"
         contentFit="cover"
@@ -67,7 +67,7 @@ const Test = ({ params }) => {
           </Text>
 
           <TouchableOpacity
-            onPress={callSeller} // Call the function to open the phone's caller
+            onPress={callSeller}
             style={{
               marginTop : 13,
               backgroundColor: COLORS.primary,

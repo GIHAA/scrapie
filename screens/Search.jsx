@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   TextInput,
   TouchableOpacity,
@@ -5,25 +6,45 @@ import {
   FlatList,
   Text,
 } from "react-native";
-import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { COLORS, SIZES } from "../constants";
 import { StyleSheet } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { collection, getDocs } from "firebase/firestore"; // Import Firebase Firestore functions
+import db from "../components/auth/db";
 import ProductCardView2 from "../components/product/ProductCardView2";
 
 const Search = () => {
-  // Sample data for the FlatList
-  const data = [
-    { id: '1', name: 'Product 1', supplier: 'Supplier 1', price: 10.99, imageUri: 'https://picsum.photos/seed/696/3000/2000' },
-    { id: '2', name: 'Product 2', supplier: 'Supplier 2', price: 19.99, imageUri: 'https://picsum.photos/seed/696/3000/2000' },
-    { id: '3', name: 'Product 3', supplier: 'Supplier 3', price: 29.99, imageUri: 'https://picsum.photos/seed/696/3000/2000' },
+  const [userData, setUserData] = useState([]); 
 
-  ];
-  //const products = [1, 2, 3, 4 ,5 , 6, 8 , 8];
+  const getUsersData = async () => {
+    try {
+      const usersCollectionRef = collection(db, "users"); 
 
-  // Render each item in the FlatList
+      const querySnapshot = await getDocs(usersCollectionRef); 
+
+      const userDataArray = []; 
+
+      querySnapshot.forEach((doc) => {
+
+        const user = {
+          id: doc.id, 
+          ...doc.data(), 
+        };
+        userDataArray.push(user);
+      });
+
+      // Set the user data in state
+      setUserData(userDataArray);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  useEffect(() => {
+    getUsersData();
+  }, []);
+
 
   return (
     <SafeAreaView>
@@ -50,11 +71,10 @@ const Search = () => {
         </View>
       </View>
       <FlatList
-        data={data} // Assuming data contains product objects
+        data={userData} 
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ProductCardView2 product={item} />}
         numColumns={2}
-        // style={{paddingHorizontal: 10}}
         contentContainerStyle={styles.flatListContainer}
       />
     </SafeAreaView>

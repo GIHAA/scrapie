@@ -19,8 +19,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
-import storage from "../components/auth/firebase";
-import { getStorage, ref , child , uploadBytes , getDownloadURL } from "firebase/storage";
+import storage from "../components/auth/storage";
+import { getStorage, ref , child , uploadBytes , getDownloadURL , uploadBytesResumable } from "firebase/storage";
 import { initializeApp } from "firebase/app";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from 'expo-media-library';
@@ -58,56 +58,92 @@ const Scan = ({}) => {
     setIsCameraReady(true);
   };
 
-  const uploadImageToFirebase = async (imageUri, imageName) => {
-  try {
-    const firebaseConfig = {
-      apiKey: "AIzaSyAlNG-bgiezAnpcZyro90V3odkZ2XowXSU",
-      authDomain: "scrapie-85d87.firebaseapp.com",
-      projectId: "scrapie-85d87",
-      storageBucket: "scrapie-85d87.appspot.com",
-      messagingSenderId: "92530576790",
-      appId: "1:92530576790:web:53b0af7a2afd1583b721b7",
-      measurementId: "G-KPV0GF3HHE",
-    };
+//   const deuploadImageToFirebase = async (imageUri, imageName) => {
+//   try {
+//     const firebaseConfig = {
+//       apiKey: "AIzaSyAlNG-bgiezAnpcZyro90V3odkZ2XowXSU",
+//       authDomain: "scrapie-85d87.firebaseapp.com",
+//       projectId: "scrapie-85d87",
+//       storageBucket: "scrapie-85d87.appspot.com",
+//       messagingSenderId: "92530576790",
+//       appId: "1:92530576790:web:53b0af7a2afd1583b721b7",
+//       measurementId: "G-KPV0GF3HHE",
+//     };
 
 
-    const app = initializeApp(firebaseConfig);
-    const storage = getStorage(app);
+//     const app = initializeApp(firebaseConfig);
+//     const storage = getStorage(app);
 
-    const { status } = await MediaLibrary.requestPermissionsAsync();
+//     const { status } = await MediaLibrary.requestPermissionsAsync();
 
-    if (status === 'granted') {
+//     if (status === 'granted') {
 
-      const imageBlob = await FileSystem.readAsStringAsync(imageUri, {
-        encoding: FileSystem.EncodingType.Base64,
+//       const imageBlob = await FileSystem.readAsStringAsync(imageUri, {
+//         encoding: FileSystem.EncodingType.Base64,
+//       });
+
+//       const resizedImage = await ImageManipulator.manipulateAsync(
+//         `data:image/jpeg;base64,${imageBlob}`,
+//         [{ resize: { width: 500 } }], 
+//         { format: 'jpeg', base64: true }
+//       );
+
+//       console.log('rrrrrrrrrrr')
+
+//       const imageBlobObject = new Blob([resizedImage.base64], { type: 'image/jpeg' });
+//       const imageFile = new File([imageBlobObject], imageName);
+
+//       const storageRef = ref(storage, `images/${imageName}`);
+//       await uploadBytes(storageRef, imageFile);
+
+//       const downloadURL = await getDownloadURL(storageRef);
+
+//       console.log('Download URL:', downloadURL);
+//       return downloadURL;
+//     } else {
+//       console.error('Permission to read files not granted');
+//     }
+//   } catch (error) {
+//     console.error('Error uploading local image to Firebase Storage:', error);
+//     throw error;
+//   }
+// };
+
+
+const uploadImageToFirebase = async (uri) => {
+
+  const response = await fetch(uri);
+
+
+  const blob = await response.blob();
+
+  const storageRef = ref(storage, "images/" + new Date().getTime());
+
+
+  const uploadTask = uploadBytesResumable(storageRef, blob);
+
+
+  uploadTask.on(
+    "state_changed",
+    (snapshot) => {
+      const progress =
+        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log("Upload is " + progress + "% done");
+    },
+    (error) => {
+      // handle error
+    },
+    () => {
+      getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+        console.log("File available at", downloadURL);
+        const data = { item: target[0].className , image: downloadURL }
+        //console.log(data)
+        navigation.navigate("Reuse", { data });
       });
-
-      const resizedImage = await ImageManipulator.manipulateAsync(
-        `data:image/jpeg;base64,${imageBlob}`,
-        [{ resize: { width: 500 } }], 
-        { format: 'jpeg', base64: true }
-      );
-
-      console.log('rrrrrrrrrrr')
-
-      const imageBlobObject = new Blob([resizedImage.base64], { type: 'image/jpeg' });
-      const imageFile = new File([imageBlobObject], imageName);
-
-      const storageRef = ref(storage, `images/${imageName}`);
-      await uploadBytes(storageRef, imageFile);
-
-      const downloadURL = await getDownloadURL(storageRef);
-
-      console.log('Download URL:', downloadURL);
-      return downloadURL;
-    } else {
-      console.error('Permission to read files not granted');
     }
-  } catch (error) {
-    console.error('Error uploading local image to Firebase Storage:', error);
-    throw error;
-  }
-};
+  );
+
+}
   
   
 
@@ -261,9 +297,11 @@ const Scan = ({}) => {
   };
 
   const handleReuseButtonClick = () => {
-    const data = { item: target[0].className , image: raw };
-    uploadImageToFirebase( raw , "gihaaaaa");
-    navigation.navigate("Reuse", { data });
+   uploadImageToFirebase(image)
+ 
+    // const data = { item: target[0].className , image: downloadLink }
+    // //console.log(data)
+    // navigation.navigate("Reuse", { data });
   };
 
   const handleRecycleButtonClick = () => {

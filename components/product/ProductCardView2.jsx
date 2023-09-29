@@ -6,21 +6,21 @@ import { COLORS } from '../../constants';
 import { Ionicons } from '@expo/vector-icons';
 
 const ProductCardView = ({ product }) => {
-  const { name, supplier, price, imageUri } = product;
+  const { item, seller, price, image } = product;
 
   return (
     <TouchableOpacity onPress={() => {}}>
       <View style={styles.container}>
         <View style={styles.imageContainer}>
-          <Image source={{ uri: imageUri }} style={styles.image} />
+          <Image source={{ uri: image }} style={styles.image} />
         </View>
 
         <View style={styles.details}>
           <Text style={styles.title} numberOfLines={1}>
-            {name}
+            {item}
           </Text>
           <Text style={styles.supplier} numberOfLines={1}>
-            {supplier}
+            {seller}
           </Text>
           <Text style={styles.price}>${price}</Text>
         </View>

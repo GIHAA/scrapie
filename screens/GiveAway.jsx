@@ -46,8 +46,9 @@ const Reuse = ({ route }) => {
     const usersCollection = collection(db, "users");
     const itemWithUID = {
       ...data,
-      image: "temp",
       uid: "2222",
+      seller: "gihan sudeepa",
+      phone: "0710816191",
       description: description,
       price: selectedOption === "Option2" ? parseFloat(price) : null,
     };
