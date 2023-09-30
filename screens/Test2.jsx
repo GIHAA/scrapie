@@ -5,9 +5,9 @@ const MyImageComponent = () => {
   const [imageBlobUrl, setImageBlobUrl] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
 
-  // Simulate fetching Blob URL (replace with your logic)
+
   useEffect(() => {
-    // Replace 'YOUR_BLOB_URL' with the actual Blob URL
+
     const blobUrl =
       "https://firebasestorage.googleapis.com/v0/b/scrapie-85d87.appspot.com/o/images%2Fgihaaaaa?alt=media&token=e157ba69-2070-41b3-937d-4b13f21aa533";
 
@@ -27,7 +27,6 @@ const MyImageComponent = () => {
       });
   }, []);
 
-  // Once you have the Base64 string, set it as the image source
   useEffect(() => {
     if (imageBlobUrl) {
       setImageUrl(imageBlobUrl);

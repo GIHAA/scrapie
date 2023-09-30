@@ -7,7 +7,11 @@ import { Ionicons } from '@expo/vector-icons';
 
 const ProductCardView = ({ product }) => {
   const { item, seller, price, image } = product;
+ 
+  const viewProduct =  () => {
 
+    navigation.navigate("Reuse", { data });
+  }
   return (
     <TouchableOpacity onPress={() => {}}>
       <View style={styles.container}>

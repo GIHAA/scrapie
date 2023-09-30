@@ -19,12 +19,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
-import storage from "../components/auth/storage";
-import { getStorage, ref , child , uploadBytes , getDownloadURL , uploadBytesResumable } from "firebase/storage";
-import { initializeApp } from "firebase/app";
-import * as FileSystem from "expo-file-system";
-import * as MediaLibrary from 'expo-media-library';
-import * as ImageManipulator from 'expo-image-manipulator';
+import { storage } from "../firebase.config";
+import { ref , getDownloadURL , uploadBytesResumable } from "firebase/storage";
+
 
 
 
@@ -36,11 +33,11 @@ const Scan = ({}) => {
   const cameraRef = useRef(null);
   const [loading, setloading] = useState(false);
   const [displayCameraButtom, setdisplayCameraButtom] = useState(true);
-  const [displayItemDetails, setDisplayItemDetails] = useState(false);
+  const [displayItemDetails, setDisplayItemDetails] = useState(true);
   const [target, setTarget] = useState([{ className: "Computer mouse" }]);
   const [image, setImage] = useState();
   const [raw, setRaw] = useState();
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   
 
   const navigation = useNavigation();
@@ -131,7 +128,7 @@ const uploadImageToFirebase = async (uri) => {
       console.log("Upload is " + progress + "% done");
     },
     (error) => {
-      // handle error
+      console.error(error);
     },
     () => {
       getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
@@ -298,10 +295,6 @@ const uploadImageToFirebase = async (uri) => {
 
   const handleReuseButtonClick = () => {
    uploadImageToFirebase(image)
- 
-    // const data = { item: target[0].className , image: downloadLink }
-    // //console.log(data)
-    // navigation.navigate("Reuse", { data });
   };
 
   const handleRecycleButtonClick = () => {

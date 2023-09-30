@@ -45,7 +45,7 @@ const BottomTabNavigation = () => {
       />
       <Tab.Screen
         name="Search"
-        component={React.memo(Search)}
+        component={React.memo(Home)}
         options={{
           tabBarIcon: ({ focused }) => {
             return (

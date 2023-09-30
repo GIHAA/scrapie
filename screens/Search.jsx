@@ -10,8 +10,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { COLORS, SIZES } from "../constants";
 import { StyleSheet } from "react-native";
-import { collection, getDocs } from "firebase/firestore"; // Import Firebase Firestore functions
-import db from "../components/auth/db";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase.config";
 import ProductCardView2 from "../components/product/ProductCardView2";
 
 const Search = () => {
@@ -119,7 +119,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: COLORS.primary,
   },
-  // Style for each item in the FlatList
   flatListItem: {
     flex: 1,
     backgroundColor: COLORS.lightGray,
@@ -128,10 +127,8 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.medium,
     justifyContent: "center",
     alignItems: "center",
-    height: 150, // Adjust as needed
+    height: 150, 
   },
-  // Style for the container of the FlatList
   flatListContainer: {
-    // Add styles for the FlatList container here if needed
   },
 });

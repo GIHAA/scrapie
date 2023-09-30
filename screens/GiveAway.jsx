@@ -14,12 +14,12 @@ import "firebase/auth";
 import "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc } from "firebase/firestore";
-import firebaseConfig from "../components/auth/db";
 import * as Animatable from "react-native-animatable";
 import { Modal } from "react-native";
 import { Video } from "expo-av";
 import { useNavigation } from "@react-navigation/native";
-import db from "../components/auth/db";
+import { db } from "../firebase.config";
+
 const Reuse = ({ route }) => {
   const { data } = route.params;
     const navigation = useNavigation();
@@ -235,7 +235,7 @@ const Reuse = ({ route }) => {
               >
                 {isSuccess && (
                   <Video
-                    source={require("./check.mp4")}
+                    source={require("../assets/video/check.mp4")}
                     shouldPlay={isAnimationPlaying}
                     resizeMode="cover"
                     style={{ width: 150, height: 150, borderRadius: 100 }}
@@ -244,7 +244,7 @@ const Reuse = ({ route }) => {
 
                 {isFail && (
                   <Video
-                    source={require("./uncheck.mp4")}
+                    source={require("../assets/video/uncheck.mp4")}
                     shouldPlay={isAnimationPlaying}
                     resizeMode="cover"
                     style={{ width: 150, height: 150, borderRadius: 100 }}
