@@ -10,16 +10,21 @@ import {
 } from "react-native";
 import { COLORS } from "../constants";
 
-const Test = ({ params }) => {
-  const data = {
-    image: "https://firebasestorage.googleapis.com/v0/b/scrapie-85d87.appspot.com/o/images%2Fgihaaaaa?alt=media&token=e157ba69-2070-41b3-937d-4b13f21aa533",
-    seller: "gihan",
-    description: "rrrrrrrr rrrr sadsad asdsa dsd adasd asd asd",
-    item: "rrrrr",
-    price: 100,
-    phone: "0710816191",
-  };
+const ViewProduct = ({ route }) => {
 
+    const { data } = route.params;
+
+   // const { image , seller , description , item , price , phone } = route.params;
+  
+  
+//     const data = {
+//     image: "https://firebasestorage.googleapis.com/v0/b/scrapie-85d87.appspot.com/o/images%2Fgihaaaaa?alt=media&token=e157ba69-2070-41b3-937d-4b13f21aa533",
+//     seller: "gihan",
+//     description: "rrrrrrrr rrrr sadsad asdsa dsd adasd asd asd",
+//     item: "rrrrr",
+//     price: 100,
+//     phone: "0710816191",
+//   }
 
   const callSeller = () => {
     const phoneNumber = data.phone;
@@ -87,6 +92,6 @@ const Test = ({ params }) => {
   );
 };
 
-export default Test;
+export default ViewProduct;
 
 const styles = StyleSheet.create({});

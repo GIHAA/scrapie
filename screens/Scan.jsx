@@ -19,11 +19,13 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
+import { storage } from "../firebase.config";
+import { ref , getDownloadURL , uploadBytesResumable } from "firebase/storage";
+
+
+
 
 import Test from "./Test";
-import Repair from "./Repair";
-import Reuse from "./Reuse";
-import Recycle from "./Recycle";
 
 const Scan = ({}) => {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
@@ -34,7 +36,9 @@ const Scan = ({}) => {
   const [displayItemDetails, setDisplayItemDetails] = useState(true);
   const [target, setTarget] = useState([{ className: "Computer mouse" }]);
   const [image, setImage] = useState();
+  const [raw, setRaw] = useState();
   const [isExpanded, setIsExpanded] = useState(false);
+  
 
   const navigation = useNavigation();
 
@@ -51,8 +55,97 @@ const Scan = ({}) => {
     setIsCameraReady(true);
   };
 
+//   const deuploadImageToFirebase = async (imageUri, imageName) => {
+//   try {
+//     const firebaseConfig = {
+//       apiKey: "AIzaSyAlNG-bgiezAnpcZyro90V3odkZ2XowXSU",
+//       authDomain: "scrapie-85d87.firebaseapp.com",
+//       projectId: "scrapie-85d87",
+//       storageBucket: "scrapie-85d87.appspot.com",
+//       messagingSenderId: "92530576790",
+//       appId: "1:92530576790:web:53b0af7a2afd1583b721b7",
+//       measurementId: "G-KPV0GF3HHE",
+//     };
+
+
+//     const app = initializeApp(firebaseConfig);
+//     const storage = getStorage(app);
+
+//     const { status } = await MediaLibrary.requestPermissionsAsync();
+
+//     if (status === 'granted') {
+
+//       const imageBlob = await FileSystem.readAsStringAsync(imageUri, {
+//         encoding: FileSystem.EncodingType.Base64,
+//       });
+
+//       const resizedImage = await ImageManipulator.manipulateAsync(
+//         `data:image/jpeg;base64,${imageBlob}`,
+//         [{ resize: { width: 500 } }], 
+//         { format: 'jpeg', base64: true }
+//       );
+
+//       console.log('rrrrrrrrrrr')
+
+//       const imageBlobObject = new Blob([resizedImage.base64], { type: 'image/jpeg' });
+//       const imageFile = new File([imageBlobObject], imageName);
+
+//       const storageRef = ref(storage, `images/${imageName}`);
+//       await uploadBytes(storageRef, imageFile);
+
+//       const downloadURL = await getDownloadURL(storageRef);
+
+//       console.log('Download URL:', downloadURL);
+//       return downloadURL;
+//     } else {
+//       console.error('Permission to read files not granted');
+//     }
+//   } catch (error) {
+//     console.error('Error uploading local image to Firebase Storage:', error);
+//     throw error;
+//   }
+// };
+
+
+const uploadImageToFirebase = async (uri) => {
+
+  const response = await fetch(uri);
+
+
+  const blob = await response.blob();
+
+  const storageRef = ref(storage, "images/" + new Date().getTime());
+
+
+  const uploadTask = uploadBytesResumable(storageRef, blob);
+
+
+  uploadTask.on(
+    "state_changed",
+    (snapshot) => {
+      const progress =
+        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log("Upload is " + progress + "% done");
+    },
+    (error) => {
+      console.error(error);
+    },
+    () => {
+      getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+        console.log("File available at", downloadURL);
+        const data = { item: target[0].className , image: downloadURL }
+        //console.log(data)
+        navigation.navigate("Reuse", { data });
+      });
+    }
+  );
+
+}
+  
+  
+
   const getPicFromGallery = async () => {
-   // setloading(true);
+    setloading(true);
     setdisplayCameraButtom(false);
 
     try {
@@ -71,7 +164,8 @@ const Scan = ({}) => {
           name: "image.jpg",
         });
 
-        // Make the API call with the selected image
+        setImage(result.assets[0].uri);
+
         const response = await fetch(
           "https://scrapie-5g3h.onrender.com/predict",
           {
@@ -97,9 +191,8 @@ const Scan = ({}) => {
           });
 
           if (message.length > 0) {
-            //setloading(false);
+            setloading(false);
             setDisplayItemDetails(true);
-            // Alert.alert("Prediction Results", message);
           } else {
             const errorMessage = "No valid data found in response.";
             Alert.alert("Bad Request", errorMessage);
@@ -115,19 +208,19 @@ const Scan = ({}) => {
   };
 
   const onCameraPress = async () => {
-    //setloading(true);
+    setloading(true);
     setdisplayCameraButtom(false);
     if (cameraRef.current && isCameraReady) {
       try {
         const photo = await cameraRef.current.takePictureAsync();
 
-        // Resize and compress the image
         const resizedImage = await manipulateAsync(
           photo.uri,
           [{ resize: { width: 800 } }],
           { compress: 0.7 }
         );
-        setImage(photo.uri);
+        setImage(resizedImage.uri);
+        setRaw(photo.uri)
 
         const formData = new FormData();
         formData.append("image", {
@@ -163,10 +256,10 @@ const Scan = ({}) => {
           });
 
           if (message.length > 0) {
-           // setloading(false);
+            setloading(false);
             setDisplayItemDetails(true);
           } else {
-           // setloading(false);
+            setloading(false);
             const errorMessage = "No valid data found in response.";
             Alert.alert("Bad Request", errorMessage);
           }
@@ -197,17 +290,16 @@ const Scan = ({}) => {
 
   const handleRepairButtonClick = () => {
     const data = { item: target[0].className };
-    navigation.navigate('Repair', { data }); 
+    navigation.navigate("Repair", { data });
   };
 
   const handleReuseButtonClick = () => {
-    const data = { item: target[0].className };
-    navigation.navigate('Reuse', { data }); 
+   uploadImageToFirebase(image)
   };
-  
+
   const handleRecycleButtonClick = () => {
     const data = { item: target[0].className };
-    navigation.navigate('Recycle', { data }); 
+    navigation.navigate("Recycle", { data });
   };
 
   if (hasCameraPermission === null) {
@@ -224,18 +316,24 @@ const Scan = ({}) => {
           onCameraReady={handleCameraReady}
         >
           {loading && (
-            <ActivityIndicator
-              size={100}
-              color={COLORS.secondary}
+            <View
               style={{
-                position: "absolute",
-                top: 0,
-                right: 0,
-                bottom: 0,
-                left: 0,
-                backgroundColor: "transparent",
+                flex: 1,
+                marginTop: 250,
+                justifyContent: "center",
+                alignItems: "center",
               }}
-            />
+            >
+              <ActivityIndicator
+                size={100}
+                color={COLORS.secondary}
+                style={{
+                  height: 100,
+                  width: 100,
+                  borderRadius: 50,
+                }}
+              />
+            </View>
           )}
 
           {displayItemDetails && (
