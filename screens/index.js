@@ -4,5 +4,6 @@ import Profile from "./Profile";
 import Cart from "./Cart";
 import Scan from "./Scan";
 import Fav from "./Fav";
+import ViewProduct from "./ViewProduct"
 
-export { Search, Home, Profile ,Cart , Scan , Fav };
+export { Search, Home, Profile ,Cart , Scan , Fav , ViewProduct };
