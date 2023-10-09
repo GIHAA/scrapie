@@ -1,4 +1,3 @@
-import LottieView from "lottie-react-native";
 import React from "react";
 import {
   Text,
@@ -6,7 +5,7 @@ import {
   View,
   TouchableOpacity,
   Image,
-  Linking, // Import the Linking module
+  Linking, 
 } from "react-native";
 import { COLORS } from "../constants";
 

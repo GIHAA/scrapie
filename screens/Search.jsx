@@ -12,14 +12,14 @@ import { COLORS, SIZES } from "../constants";
 import { StyleSheet } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase.config";
-import ProductCardView2 from "../components/product/ProductCardView2";
+import ProductCardView2 from "../components/product/ProductCardView";
 
 const Search = () => {
   const [userData, setUserData] = useState([]); 
 
   const getUsersData = async () => {
     try {
-      const usersCollectionRef = collection(db, "users"); 
+      const usersCollectionRef = collection(db, "items"); 
 
       const querySnapshot = await getDocs(usersCollectionRef); 
 
