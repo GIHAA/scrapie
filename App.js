@@ -9,6 +9,7 @@ import Test from "./screens/Test";
 import Recycle from "./screens/Recycle";
 import Reuse from "./screens/GiveAway";
 import Repair from "./screens/Repair";
+import ViewProduct from "./screens/ViewProduct"
 import { db } from "./firebase.config";
 
 const Stack = createNativeStackNavigator();
@@ -66,7 +67,7 @@ export default function App() {
         />
         <Stack.Screen
           name="ViewProduct"
-          component={Repair}
+          component={ViewProduct}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

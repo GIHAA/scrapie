@@ -20,10 +20,7 @@ import * as Animatable from "react-native-animatable";
 import { useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import { storage } from "../firebase.config";
-import { ref , getDownloadURL , uploadBytesResumable } from "firebase/storage";
-
-
-
+import { ref, getDownloadURL, uploadBytesResumable } from "firebase/storage";
 
 import Test from "./Test";
 
@@ -33,12 +30,11 @@ const Scan = ({}) => {
   const cameraRef = useRef(null);
   const [loading, setloading] = useState(false);
   const [displayCameraButtom, setdisplayCameraButtom] = useState(true);
-  const [displayItemDetails, setDisplayItemDetails] = useState(true);
+  const [displayItemDetails, setDisplayItemDetails] = useState(false);
   const [target, setTarget] = useState([{ className: "Computer mouse" }]);
   const [image, setImage] = useState();
   const [raw, setRaw] = useState();
-  const [isExpanded, setIsExpanded] = useState(false);
-  
+  const [isExpanded, setIsExpanded] = useState(true);
 
   const navigation = useNavigation();
 
@@ -55,94 +51,41 @@ const Scan = ({}) => {
     setIsCameraReady(true);
   };
 
-//   const deuploadImageToFirebase = async (imageUri, imageName) => {
-//   try {
-//     const firebaseConfig = {
-//       apiKey: "AIzaSyAlNG-bgiezAnpcZyro90V3odkZ2XowXSU",
-//       authDomain: "scrapie-85d87.firebaseapp.com",
-//       projectId: "scrapie-85d87",
-//       storageBucket: "scrapie-85d87.appspot.com",
-//       messagingSenderId: "92530576790",
-//       appId: "1:92530576790:web:53b0af7a2afd1583b721b7",
-//       measurementId: "G-KPV0GF3HHE",
-//     };
+  const resetAll = () => {
+    navigation.navigate("scan");
+  };
 
+  const uploadImageToFirebase = async (uri) => {
+    const response = await fetch(uri);
 
-//     const app = initializeApp(firebaseConfig);
-//     const storage = getStorage(app);
+    const blob = await response.blob();
 
-//     const { status } = await MediaLibrary.requestPermissionsAsync();
+    const storageRef = ref(storage, "images/" + new Date().getTime());
 
-//     if (status === 'granted') {
+    const uploadTask = uploadBytesResumable(storageRef, blob);
 
-//       const imageBlob = await FileSystem.readAsStringAsync(imageUri, {
-//         encoding: FileSystem.EncodingType.Base64,
-//       });
-
-//       const resizedImage = await ImageManipulator.manipulateAsync(
-//         `data:image/jpeg;base64,${imageBlob}`,
-//         [{ resize: { width: 500 } }], 
-//         { format: 'jpeg', base64: true }
-//       );
-
-//       console.log('rrrrrrrrrrr')
-
-//       const imageBlobObject = new Blob([resizedImage.base64], { type: 'image/jpeg' });
-//       const imageFile = new File([imageBlobObject], imageName);
-
-//       const storageRef = ref(storage, `images/${imageName}`);
-//       await uploadBytes(storageRef, imageFile);
-
-//       const downloadURL = await getDownloadURL(storageRef);
-
-//       console.log('Download URL:', downloadURL);
-//       return downloadURL;
-//     } else {
-//       console.error('Permission to read files not granted');
-//     }
-//   } catch (error) {
-//     console.error('Error uploading local image to Firebase Storage:', error);
-//     throw error;
-//   }
-// };
-
-
-const uploadImageToFirebase = async (uri) => {
-
-  const response = await fetch(uri);
-
-
-  const blob = await response.blob();
-
-  const storageRef = ref(storage, "images/" + new Date().getTime());
-
-
-  const uploadTask = uploadBytesResumable(storageRef, blob);
-
-
-  uploadTask.on(
-    "state_changed",
-    (snapshot) => {
-      const progress =
-        (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log("Upload is " + progress + "% done");
-    },
-    (error) => {
-      console.error(error);
-    },
-    () => {
-      getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-        console.log("File available at", downloadURL);
-        const data = { item: target[0].className , image: downloadURL }
-        //console.log(data)
-        navigation.navigate("Reuse", { data });
-      });
-    }
-  );
-
-}
-  
-  
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+      },
+      (error) => {
+        console.error(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+          console.log("File available at", downloadURL);
+          const data = {
+            item: target[0].className.split(",")[0],
+            image: downloadURL,
+          };
+          navigation.navigate("Reuse", { data });
+        });
+      }
+    );
+  };
 
   const getPicFromGallery = async () => {
     setloading(true);
@@ -220,7 +163,7 @@ const uploadImageToFirebase = async (uri) => {
           { compress: 0.7 }
         );
         setImage(resizedImage.uri);
-        setRaw(photo.uri)
+        setRaw(photo.uri);
 
         const formData = new FormData();
         formData.append("image", {
@@ -289,16 +232,16 @@ const uploadImageToFirebase = async (uri) => {
   };
 
   const handleRepairButtonClick = () => {
-    const data = { item: target[0].className };
+    const data = { item: target[0].className.split(",")[0] };
     navigation.navigate("Repair", { data });
   };
 
   const handleReuseButtonClick = () => {
-   uploadImageToFirebase(image)
+    uploadImageToFirebase(image);
   };
 
   const handleRecycleButtonClick = () => {
-    const data = { item: target[0].className };
+    const data = { item: target[0].className.split(",")[0] };
     navigation.navigate("Recycle", { data });
   };
 
@@ -349,7 +292,7 @@ const uploadImageToFirebase = async (uri) => {
               <Animatable.Image
                 animation="fadeIn"
                 duration={1000}
-                style={{ height: isExpanded ? "57%" : "40%", width: "100%" }}
+                style={{ height: isExpanded ? "56%" : "37%", width: "100%" }}
                 source={{
                   uri: image || "https://picsum.photos/seed/696/3000/2000",
                 }}
@@ -364,38 +307,68 @@ const uploadImageToFirebase = async (uri) => {
                     alignItems: "center",
                   }}
                 >
-                  <Text
-                    style={{
-                      fontSize: 30,
-                      fontWeight: "bold",
-                      paddingLeft: 15,
-                      paddingTop: 15,
-                      paddingBottom: 15,
-                      borderRadius: 40,
-                      maxWidth: 300,
-                    }}
-                  >
-                    {target[0].className}
-                  </Text>
+                  <View>
+                    <Text
+                      style={{
+                        fontSize: 30,
+                        fontWeight: "bold",
+                        paddingLeft: 15,
+                        paddingTop: 15,
+                        borderRadius: 40,
+                        maxWidth: 300,
+                      }}
+                    >
+                      {target[0].className.split(",")[0]}
+                    </Text>
+
+                    <Text
+                      style={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        paddingLeft: 15,
+                        paddingBottom: 15,
+                        borderRadius: 40,
+                        maxWidth: 300,
+                        flexDirection: "row", // Make sure the text elements are displayed horizontally
+                      }}
+                    >
+                      Confidence Level
+                      <Text
+                        style={{
+                          color:
+                            target[0].probability > 0.7
+                              ? "#08ac00"
+                              : target[0].probability > 0.5
+                              ? "#f0ac37"
+                              : "#f52900",
+                        }}
+                      >
+                        {" "}
+                        {target[0].probability >= 0 &&
+                          target[0].probability <= 0.5 &&
+                          " - Low"}
+                        {target[0].probability > 0.5 &&
+                          target[0].probability <= 0.7 &&
+                          " - Medium"}
+                        {target[0].probability > 0.7 && " - High"}
+                      </Text>
+                    </Text>
+                  </View>
+
                   <View
                     style={{
                       flexDirection: "row",
                       alignContent: "center",
                       marginRight: 20,
+                      width: isExpanded ? 106 : 0,
                     }}
                   >
                     <TouchableOpacity
                       onPress={() => {
-                        setIsExpanded(false);
-                        LayoutAnimation.configureNext({
-                          duration: 400,
-                          update: {
-                            type: LayoutAnimation.Types.easeInEaseOut,
-                          },
-                        });
+                        resetAll();
                       }}
                     >
-                      <MaterialIcons name="cancel" size={45} color="black" />
+                      <MaterialIcons name="cancel" size={55} color="#e75e00" />
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={{ marginLeft: 10 }}
@@ -411,8 +384,8 @@ const uploadImageToFirebase = async (uri) => {
                     >
                       <FontAwesome
                         name="check-circle"
-                        size={45}
-                        color="black"
+                        size={55}
+                        color={COLORS.primary}
                       />
                     </TouchableOpacity>
                   </View>

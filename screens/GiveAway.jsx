@@ -43,7 +43,7 @@ const Reuse = ({ route }) => {
 
   const handleButtonPress = () => {
     setIsModalVisible(true);
-    const usersCollection = collection(db, "users");
+    const usersCollection = collection(db, "items");
     const itemWithUID = {
       ...data,
       uid: "2222",
@@ -133,6 +133,7 @@ const Reuse = ({ route }) => {
                   value={price}
                   onChangeText={(text) => updatePrice(text)}
                   style={styles.input}
+                  keyboardType="numeric"
                 />
               </View>
             )}
@@ -184,8 +185,13 @@ const Reuse = ({ route }) => {
             onPress={() => {
               setisConfirmVisible(false);
             }}
-            style={styles.button}
-            disabled={!selectedOption}
+            style={{    margin: 20,
+              backgroundColor: selectedOption && description ? COLORS.primary : 'gray',
+              height: 50,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 50}}
+            disabled={!selectedOption || !description || !price}
           >
             <Text style={{ color: "white", fontSize: 20 }}>Proceed</Text>
           </TouchableOpacity>
@@ -194,13 +200,60 @@ const Reuse = ({ route }) => {
             onPress={() => {
               handleButtonPress();
             }}
-            style={styles.button}
+            style={{    margin: 20,
+              backgroundColor: selectedOption ? COLORS.primary : 'gray',
+              height: 50,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 50}}
             disabled={!selectedOption}
           >
             <Text style={{ color: "white", fontSize: 20 }}>Post item</Text>
           </TouchableOpacity>
         )}
       </View>
+
+      
+{/* <View>
+  <TouchableOpacity
+    onPress={() => {
+      if (selectedOption) {
+        setisConfirmVisible(false);
+      }
+    }}
+    style={{
+      margin: 20,
+      backgroundColor: selectedOption ? COLORS.primary : 'gray', // Set background color based on selectedOption
+      height: 50,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 50
+    }}
+    disabled={!selectedOption}
+  >
+    <Text style={{ color: 'white', fontSize: 20 }}>Proceed</Text>
+  </TouchableOpacity>
+
+  <TouchableOpacity
+    onPress={() => {
+      if (selectedOption) {
+        handleButtonPress();
+      }
+    }}
+    style={{
+      margin: 20,
+      backgroundColor: selectedOption ? COLORS.primary : 'gray', // Set background color based on selectedOption
+      height: 50,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 50
+    }}
+    disabled={!selectedOption}
+  >
+    <Text style={{ color: 'white', fontSize: 20 }}>Post item</Text>
+  </TouchableOpacity>
+</View> */}
+
 
       <Modal visible={isModalVisible} transparent={true} animationType="fade">
         <View style={{ flex: 1, backgroundColor: "rgba(0, 0, 0, 0.5)" }}>
@@ -258,7 +311,7 @@ const Reuse = ({ route }) => {
             <TouchableOpacity
               onPress={() => {
                 setIsModalVisible(false);
-                navigation.navigate("Bottom Navigation");
+                navigation.navigate("Home");
               }}
               style={styles.button}
               disabled={!selectedOption}
