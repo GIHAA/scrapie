@@ -9,8 +9,11 @@ import Test from "./screens/Test";
 import Recycle from "./screens/Recycle";
 import Reuse from "./screens/GiveAway";
 import Repair from "./screens/Repair";
-import ViewProduct from "./screens/ViewProduct"
+import ViewProduct from "./screens/ViewProduct";
 import { db } from "./firebase.config";
+import StartScreen from "./screens/StartScreen";
+import LoginScreen from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +38,21 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="Start"
+          component={StartScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={RegisterScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Bottom Navigation"
           component={BottomTabNavigation}
