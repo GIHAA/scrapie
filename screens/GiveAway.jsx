@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -13,12 +13,14 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import {  collection , query , where , getDocs , addDoc} from "firebase/firestore";
 import * as Animatable from "react-native-animatable";
 import { Modal } from "react-native";
 import { Video } from "expo-av";
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../firebase.config";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 
 const Reuse = ({ route }) => {
   const { data } = route.params;
@@ -31,7 +33,8 @@ const Reuse = ({ route }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isFail, setIsFail] = useState(false);
-
+  const [user , setUser] = useState({})
+ 
 
   const updateDescription = (value) => {
     setDescription(value);
@@ -41,44 +44,147 @@ const Reuse = ({ route }) => {
     setPrice(value);
   };
 
+
+  useEffect(() => {
+    const auth = getAuth();
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const userEmail = user.email;
+
+        const usersCollection = collection(db, "users");
+        const userQuery = query(
+          usersCollection,
+          where("email", "==", userEmail)
+        );
+
+        getDocs(userQuery)
+          .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+              const userDoc = querySnapshot.docs[0];
+              const userData = userDoc.data();
+
+              setUser(userData)
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching user data:", error);
+          });
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+
+
   const handleButtonPress = () => {
     setIsModalVisible(true);
-    const usersCollection = collection(db, "items");
-    const itemWithUID = {
-      ...data,
-      uid: "2222",
-      seller: "gihan sudeepa",
-      phone: "0710816191",
-      description: description,
-      price: selectedOption === "Option2" ? parseFloat(price) : null,
-    };
+
+    const auth = getAuth();
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const userEmail = user.email;
+
+        const usersCollection = collection(db, "users");
+        const userQuery = query(
+          usersCollection,
+          where("email", "==", userEmail)
+        );
+
+        getDocs(userQuery)
+          .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+              const userDoc = querySnapshot.docs[0];
+              const userData = userDoc.data();
+
+              setUser(userData)
+
+              const usersCollection = collection(db, "items");
   
-    if (selectedOption) {
-      setisConfirmVisible(true);
-  
-      addDoc(usersCollection, itemWithUID)
-        .then((docRef) => {
-          console.log("Document written with ID: ", docRef.id);
-          setIsSuccess(true);
-          setIsAnimationPlaying(true);
-        })
-        .catch((error) => {
-          setIsFail(true);
-          setIsAnimationPlaying(true);
-          console.error("Error adding document: ", error);
-  
-          if (error.code === "permission-denied") {
-            Alert.alert("Permission denied. Please check your Firebase rules.");
-          } else {
-            Alert.alert("An error occurred while connecting to the server.");
-          }
-        });
-  
-      if (selectedOption === "Option2") {
+              const itemWithUID = {
+                ...data,
+                uid: userData.email,
+                seller: userData.name,
+                phone: userData.phone,
+                description: description,
+                price: selectedOption === "Option2" ? parseFloat(price) : null,
+              };
+          
+              if (selectedOption) {
+                setisConfirmVisible(true);
+            
+                addDoc(usersCollection, itemWithUID)
+                  .then((docRef) => {
+                    console.log("Document written with ID: ", docRef.id);
+                    setIsSuccess(true);
+                    setIsAnimationPlaying(true);
+                  })
+                  .catch((error) => {
+                    setIsFail(true);
+                    setIsAnimationPlaying(true);
+                    console.error("Error adding document: ", error);
+            
+                    if (error.code === "permission-denied") {
+                      Alert.alert("Permission denied. Please check your Firebase rules.");
+                    } else {
+                      Alert.alert("An error occurred while connecting to the server.");
+                    }
+                  });
+            
+                if (selectedOption === "Option2") {
+                }
+                } else {
+                  Alert.alert("Please select an option first.");
+                }
+
+
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching user data:", error);
+          });
       }
-    } else {
-      Alert.alert("Please select an option first.");
-    }
+    });
+
+
+    // const usersCollection = collection(db, "items");
+  
+    // const itemWithUID = {
+    //   ...data,
+    //   uid: user.uid,
+    //   seller: user.name,
+    //   phone: user.phone,
+    //   description: description,
+    //   price: selectedOption === "Option2" ? parseFloat(price) : null,
+    // };
+
+    // if (selectedOption) {
+    //   setisConfirmVisible(true);
+  
+    //   addDoc(usersCollection, itemWithUID)
+    //     .then((docRef) => {
+    //       console.log("Document written with ID: ", docRef.id);
+    //       setIsSuccess(true);
+    //       setIsAnimationPlaying(true);
+    //     })
+    //     .catch((error) => {
+    //       setIsFail(true);
+    //       setIsAnimationPlaying(true);
+    //       console.error("Error adding document: ", error);
+  
+    //       if (error.code === "permission-denied") {
+    //         Alert.alert("Permission denied. Please check your Firebase rules.");
+    //       } else {
+    //         Alert.alert("An error occurred while connecting to the server.");
+    //       }
+    //     });
+  
+    //   if (selectedOption === "Option2") {
+    //   }
+    //   } else {
+    //     Alert.alert("Please select an option first.");
+    //   }
   };
   
 

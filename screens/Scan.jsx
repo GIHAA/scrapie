@@ -122,6 +122,8 @@ const Scan = ({}) => {
 
         const responseData = await response.json();
 
+        setTarget(responseData);
+
         if (Array.isArray(responseData) && responseData.length > 0) {
           let message = "";
 
@@ -329,7 +331,7 @@ const Scan = ({}) => {
                         paddingBottom: 15,
                         borderRadius: 40,
                         maxWidth: 300,
-                        flexDirection: "row", // Make sure the text elements are displayed horizontally
+                        flexDirection: "row", 
                       }}
                     >
                       Confidence Level

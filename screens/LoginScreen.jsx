@@ -44,6 +44,26 @@ export default function LoginScreen({ navigation }) {
 
   };
 
+  const onLoginPresseddebug = async () => {
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, "gihan3@gmail.com","gihan123")
+    .then((userCredential) => {
+      //console.log("User logged in:", userCredential.user);
+
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Bottom Navigation" }],
+      });
+    })
+    .catch((error) => {
+      console.error("Sign in error : ", error);
+    });
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Bottom Navigation" }],
+    });
+  }
+
   return (
     <Background>
       <BackButton goBack={navigation.goBack} />
@@ -80,6 +100,12 @@ export default function LoginScreen({ navigation }) {
       <Button mode="outlined" onPress={onLoginPressed}>
         Login
       </Button>
+
+
+      <Button mode="outlined" onPress={onLoginPresseddebug}>
+        Debug
+      </Button>
+
 
       <View style={styles.row}>
         <Text>Don’t have an account? </Text>

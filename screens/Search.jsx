@@ -33,7 +33,7 @@ const Search = () => {
         };
         userDataArray.push(user);
       });
-
+      userDataArray.sort((a, b) => b.timestamp - a.timestamp);
       // Set the user data in state
       setUserData(userDataArray);
     } catch (error) {
@@ -43,6 +43,7 @@ const Search = () => {
 
   useEffect(() => {
     getUsersData();
+    console.log(userData)
   }, []);
 
 
