@@ -320,7 +320,13 @@ const Scan = ({}) => {
                         maxWidth: 300,
                       }}
                     >
-                      {target[0].className.split(",")[0]}
+                      {target[0].className
+                        .split(",")[0]
+                        .split(" ")
+                        .map(
+                          (word) => word.charAt(0).toUpperCase() + word.slice(1)
+                        )
+                        .join(" ")}
                     </Text>
 
                     <Text
@@ -331,7 +337,7 @@ const Scan = ({}) => {
                         paddingBottom: 15,
                         borderRadius: 40,
                         maxWidth: 300,
-                        flexDirection: "row", 
+                        flexDirection: "row",
                       }}
                     >
                       Confidence Level
