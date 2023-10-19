@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  Button,
 } from "react-native";
 import { RadioButton, TextInput } from "react-native-paper";
 import { COLORS } from "../constants";
@@ -109,11 +110,12 @@ const Fav = ({ route }) => {
               const itemWithUID = {
                 ...data,
                 uid: userData.email,
-                seller: userData.name,
+                user: userData.name,
                 phone: userData.phone,
                 description: description,
                 type: type,
                 timestamp: new Date().toISOString(),
+                location: {Longitude: 6.914741887410768, Latitude: 79.97316738716815},
               };
           
               if (true) {
@@ -185,7 +187,7 @@ const Fav = ({ route }) => {
               onChangeText={(text) => updateDescription(text)}
               style={styles.input}
             />
-          </View>       
+          </View>     
       </ScrollView>
 
       <View>

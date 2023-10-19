@@ -95,7 +95,7 @@ const BottomTabNavigation = () => {
 
       <Tab.Screen
         name="profile"
-        component={React.memo(Test2)}
+        component={Profile}
         options={{
           tabBarIcon: ({ focused }) => {
             return (
