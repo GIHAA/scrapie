@@ -15,26 +15,25 @@ import { db } from "../firebase.config";
 import ProductCardView2 from "../components/product/ProductCardView";
 
 const Search = () => {
-  const [userData, setUserData] = useState([]); 
+  const [userData, setUserData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const getUsersData = async () => {
     try {
-      const usersCollectionRef = collection(db, "items"); 
+      const usersCollectionRef = collection(db, "items");
 
-      const querySnapshot = await getDocs(usersCollectionRef); 
+      const querySnapshot = await getDocs(usersCollectionRef);
 
-      const userDataArray = []; 
+      const userDataArray = [];
 
       querySnapshot.forEach((doc) => {
-
         const user = {
-          id: doc.id, 
-          ...doc.data(), 
+          id: doc.id,
+          ...doc.data(),
         };
         userDataArray.push(user);
       });
       userDataArray.sort((a, b) => b.timestamp - a.timestamp);
-      // Set the user data in state
       setUserData(userDataArray);
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -43,8 +42,13 @@ const Search = () => {
 
   useEffect(() => {
     getUsersData();
-    console.log(userData)
   }, []);
+
+const filteredData = userData.filter((item) => {
+
+  const itemName = item.item.toLowerCase();
+  return itemName.includes(searchQuery.toLowerCase());
+});
 
 
   return (
@@ -61,7 +65,8 @@ const Search = () => {
         <View style={styles.searchWrapper}>
           <TextInput
             style={styles.searchInput}
-            value=""
+            value={searchQuery}
+            onChangeText={(text) => setSearchQuery(text)}
             placeholder="What are you looking for"
           />
         </View>
@@ -72,7 +77,7 @@ const Search = () => {
         </View>
       </View>
       <FlatList
-        data={userData} 
+        data={filteredData}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ProductCardView2 product={item} />}
         numColumns={2}
@@ -128,8 +133,7 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.medium,
     justifyContent: "center",
     alignItems: "center",
-    height: 150, 
+    height: 150,
   },
-  flatListContainer: {
-  },
+  flatListContainer: {},
 });

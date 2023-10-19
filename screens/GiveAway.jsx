@@ -109,6 +109,7 @@ const Reuse = ({ route }) => {
                 phone: userData.phone,
                 description: description,
                 price: selectedOption === "Option2" ? parseFloat(price) : null,
+                timestamp: new Date().toISOString(),
               };
           
               if (selectedOption) {
