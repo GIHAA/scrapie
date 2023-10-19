@@ -15,26 +15,25 @@ import { db } from "../firebase.config";
 import ProductCardView2 from "../components/product/ProductCardView";
 
 const Search = () => {
-  const [userData, setUserData] = useState([]); 
+  const [userData, setUserData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const getUsersData = async () => {
     try {
-      const usersCollectionRef = collection(db, "items"); 
+      const usersCollectionRef = collection(db, "items");
 
-      const querySnapshot = await getDocs(usersCollectionRef); 
+      const querySnapshot = await getDocs(usersCollectionRef);
 
-      const userDataArray = []; 
+      const userDataArray = [];
 
       querySnapshot.forEach((doc) => {
-
         const user = {
-          id: doc.id, 
-          ...doc.data(), 
+          id: doc.id,
+          ...doc.data(),
         };
         userDataArray.push(user);
       });
-
-      // Set the user data in state
+      userDataArray.sort((a, b) => b.timestamp - a.timestamp);
       setUserData(userDataArray);
     } catch (error) {
       console.error("Error fetching user data:", error);
@@ -45,9 +44,13 @@ const Search = () => {
     getUsersData();
   }, []);
 
+  const filteredData = userData.filter((item) => {
+    const itemName = item.item.toLowerCase();
+    return itemName.includes(searchQuery.toLowerCase());
+  });
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.searchContainer}>
         <TouchableOpacity>
           <Ionicons
@@ -60,7 +63,8 @@ const Search = () => {
         <View style={styles.searchWrapper}>
           <TextInput
             style={styles.searchInput}
-            value=""
+            value={searchQuery}
+            onChangeText={(text) => setSearchQuery(text)}
             placeholder="What are you looking for"
           />
         </View>
@@ -70,13 +74,15 @@ const Search = () => {
           </TouchableOpacity>
         </View>
       </View>
-      <FlatList
-        data={userData} 
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ProductCardView2 product={item} />}
-        numColumns={2}
-        contentContainerStyle={styles.flatListContainer}
-      />
+
+      <View style={styles.flatListContainer}>
+        <FlatList
+          data={filteredData}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <ProductCardView2 product={item} />}
+          numColumns={2}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -127,8 +133,10 @@ const styles = StyleSheet.create({
     borderRadius: SIZES.medium,
     justifyContent: "center",
     alignItems: "center",
-    height: 150, 
+    height: 150,
   },
   flatListContainer: {
+    flex: 1,
+    alignItems: "center",
   },
 });
