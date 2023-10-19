@@ -103,7 +103,7 @@ export default function LoginScreen({ navigation }) {
 
 
       <Button mode="outlined" onPress={onLoginPresseddebug}>
-        Debug
+        Debug 1 Click Login
       </Button>
 
 

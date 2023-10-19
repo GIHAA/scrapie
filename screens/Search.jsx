@@ -44,15 +44,13 @@ const Search = () => {
     getUsersData();
   }, []);
 
-const filteredData = userData.filter((item) => {
-
-  const itemName = item.item.toLowerCase();
-  return itemName.includes(searchQuery.toLowerCase());
-});
-
+  const filteredData = userData.filter((item) => {
+    const itemName = item.item.toLowerCase();
+    return itemName.includes(searchQuery.toLowerCase());
+  });
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.searchContainer}>
         <TouchableOpacity>
           <Ionicons
@@ -76,13 +74,15 @@ const filteredData = userData.filter((item) => {
           </TouchableOpacity>
         </View>
       </View>
-      <FlatList
-        data={filteredData}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ProductCardView2 product={item} />}
-        numColumns={2}
-        contentContainerStyle={styles.flatListContainer}
-      />
+
+      <View style={styles.flatListContainer}>
+        <FlatList
+          data={filteredData}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <ProductCardView2 product={item} />}
+          numColumns={2}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -135,5 +135,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     height: 150,
   },
-  flatListContainer: {},
+  flatListContainer: {
+    flex: 1,
+    alignItems: "center",
+  },
 });

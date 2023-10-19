@@ -32,7 +32,7 @@ export default function RegisterScreen({ navigation }) {
     const confirmPasswordError = password.value !== confirmPassword.value ? "Passwords do not match" : "";
     const phoneError = phoneValidator(phone.value); 
 
-    if (emailError || passwordError || nameError || confirmPasswordError ) {
+    if (emailError || passwordError || nameError || confirmPasswordError || phoneError ) {
       setName({ ...name, error: nameError });
       setEmail({ ...email, error: emailError });
       setPassword({ ...password, error: passwordError });
@@ -109,7 +109,7 @@ export default function RegisterScreen({ navigation }) {
         secureTextEntry
       />
       <TextInput
-        label="Confirm Password" // New field for confirming the password
+        label="Confirm Password" 
         returnKeyType="next"
         value={confirmPassword.value}
         onChangeText={(text) => setConfirmPassword({ value: text, error: "" })}
@@ -118,7 +118,7 @@ export default function RegisterScreen({ navigation }) {
         secureTextEntry
       />
       <TextInput
-        label="Mobile Phone Number" // New field for the mobile phone number
+        label="Mobile Phone Number" 
         returnKeyType="done"
         value={phone.value}
         onChangeText={(text) => setPhone({ value: text, error: "" })}

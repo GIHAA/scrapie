@@ -11,12 +11,11 @@ import { getDocs, doc, collection, query, where } from "firebase/firestore";
 
 const Welcome = () => {
   const navigation = useNavigation();
-  const [name, setName] = useState("user");
+  const [name, setName] = useState("");
 
   useEffect(() => {
     const auth = getAuth();
-
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, (user) => {
       if (user) {
         const userEmail = user.email;
 

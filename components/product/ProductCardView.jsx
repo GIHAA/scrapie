@@ -19,6 +19,7 @@ const ProductCardView = ({ product }) => {
       onPress={() => {
         viewProduct();
       }}
+      
     >
       <View style={styles.container}>
         <View style={styles.imageContainer}>
