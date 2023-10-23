@@ -3,12 +3,22 @@ import { TouchableOpacity, Text } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { COLORS } from '../../constants';
 
-const Button = ({ text, onPress }) => {
+const Button = ({ text, onPress, status }) => {
+
+    let buttonColor = COLORS.primary;
+
+    if (status === 'success') {
+        buttonColor = COLORS.primary;
+    } else if (status === 'fail') {
+        buttonColor = COLORS.red;
+    }
+
     return (
         <TouchableOpacity
             style={{
-                backgroundColor: COLORS.primary,
-                borderRadius: 20,
+                height: 50,
+                backgroundColor: buttonColor,
+                borderRadius: 50,
                 marginLeft: 10,
                 marginRight: 10,
                 paddingHorizontal: 20,

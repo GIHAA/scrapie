@@ -11,6 +11,9 @@ import Reuse from "./screens/GiveAway";
 import Repair from "./screens/Repair";
 import ViewProduct from "./screens/ViewProduct"
 import { db } from "./firebase.config";
+import SelectRepairCenter from "./screens/SelectRepairCenter";
+import ConfirmRequestRepairCenter from "./screens/ConfirmRequestRepairCenter";
+import RepairCenterRequest from "./screens/RepairCenterRequest";
 
 const Stack = createNativeStackNavigator();
 
@@ -63,6 +66,21 @@ export default function App() {
         <Stack.Screen
           name="Repair"
           component={Repair}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SelectRepairCenter"
+          component={SelectRepairCenter}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ConfirmRequestRepairCenter"
+          component={ConfirmRequestRepairCenter}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="RepairCenterRequest"
+          component={RepairCenterRequest}
           options={{ headerShown: false }}
         />
         <Stack.Screen

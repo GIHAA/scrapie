@@ -11,8 +11,8 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 10,
         borderRadius: SIZES.medium,
-        backgroundColor: COLORS.secondary,
-        borderColor: COLORS.black,
+        backgroundColor: COLORS.white,
+        borderColor: COLORS.gray,
     },
     imageContainer: {
         flex: 1,

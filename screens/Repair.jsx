@@ -5,17 +5,20 @@ import {
   SafeAreaView,
   TextInput,
   Slider,
-  Alert
 } from 'react-native'
 import { useState } from 'react';
 import React from 'react'
 import formatTitle from '../util/FormatTitle';
-import ImageWithText from '../components/product/ImageWithText';
-import Button from '../components/product/Button';
+import ImageWithText from '../components/repair/ImageWithText';
+import Button from '../components/repair/Button';
+import { useNavigation } from "@react-navigation/native";
+import SelectRepairCenter from './SelectRepairCenter';
 
 const Repair = ({ route }) => {
   const [text, onChangeText] = React.useState('Useless Text');
   const [sliderValue, setSliderValue] = useState(0);
+
+  const navigation = useNavigation();
 
   const { data } = route.params;
 
@@ -24,7 +27,7 @@ const Repair = ({ route }) => {
   };
 
   const handleButtonPress = () => {
-    Alert.alert('Button Pressed', 'You pressed the custom button!');
+    navigation.navigate(SelectRepairCenter);
   };
 
   const imageData = {
@@ -80,7 +83,7 @@ const Repair = ({ route }) => {
       <View style={{
         marginTop: 80
       }}>
-        <Button text="Click Me" onPress={handleButtonPress}/>
+        <Button text="Proceed" onPress={handleButtonPress}/>
       </View>
     </View>
   )
