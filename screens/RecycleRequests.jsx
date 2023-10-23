@@ -12,15 +12,15 @@ import { COLORS, SIZES } from "../constants";
 import { StyleSheet } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase.config";
-import ProductCardView2 from "../components/product/ProductCardView";
+import RecycleRequestCardView from "../components/product/RecycleRequestCardView";
 
-const Search = () => {
+const RecycleRequests = () => {
   const [userData, setUserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   const getUsersData = async () => {
     try {
-      const usersCollectionRef = collection(db, "items");
+      const usersCollectionRef = collection(db, "recycleItems");
 
       const querySnapshot = await getDocs(usersCollectionRef);
 
@@ -35,6 +35,7 @@ const Search = () => {
       });
       userDataArray.sort((a, b) => b.timestamp - a.timestamp);
       setUserData(userDataArray);
+      console.log("userDataArray", userDataArray)
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -79,7 +80,7 @@ const Search = () => {
         <FlatList
           data={filteredData}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <ProductCardView2 product={item} />}
+          renderItem={({ item }) => <RecycleRequestCardView recycleRequest={item} />}
           numColumns={2}
         />
       </View>
@@ -87,7 +88,7 @@ const Search = () => {
   );
 };
 
-export default Search;
+export default RecycleRequests;
 
 const styles = StyleSheet.create({
   searchContainer: {

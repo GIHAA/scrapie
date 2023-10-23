@@ -5,19 +5,19 @@ import { COLORS } from "../../constants";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-const ProductCardView = ({ product }) => {
-  const { item, seller, price, image, description, phone } = product;
+const RecycleRequestCardView = ({ recycleRequest }) => {
+  const { item, seller, price, image, description, phone } = recycleRequest;
   const navigation = useNavigation();
 
-  const viewProduct = () => {
+  const viewRequest = () => {
     const data = { image, seller, description, item, price, phone };
 
-    navigation.navigate("ViewProduct", { data });
+    navigation.navigate("ViewRecycleRequest", { data });
   };
   return (
     <TouchableOpacity
       onPress={() => {
-        viewProduct();
+        viewRequest();
       }}
       
     >
@@ -40,4 +40,4 @@ const ProductCardView = ({ product }) => {
   );
 };
 
-export default ProductCardView;
+export default RecycleRequestCardView;
