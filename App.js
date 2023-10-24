@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNavigation from "./navigation/BottomTabNavigation";
-import { Cart } from "./screens";
+import { Cart, Profile, RecycleRequest, RecycleRequests } from "./screens";
 import Test from "./screens/Test";
 import Recycle from "./screens/Recycle";
 import Reuse from "./screens/GiveAway";
@@ -15,7 +15,7 @@ import StartScreen from "./screens/StartScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ViewMyProduct from "./screens/ViewMyProduct";
-
+import ViewRecycleRequest from "./components/product/ViewRecycleRequest";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -92,6 +92,21 @@ export default function App() {
         <Stack.Screen
           name="ViewMyProduct"
           component={ViewMyProduct}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Profile"
+          component={Profile}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="RecycleRequests"
+          component={RecycleRequests}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ViewRecycleRequest"
+          component={ViewRecycleRequest}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
