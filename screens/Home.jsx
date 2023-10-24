@@ -1,15 +1,21 @@
-import { View , StyleSheet} from "react-native";
+import { View , StyleSheet, Button} from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons , Fontisto } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import { Welcome } from "../components";
 import Carousel from "../components/home/Carousel";
 import Headlng from "../components/home/Headlng";
 import ProductRow from "../components/product/ProductRow";
 import { COLORS , SIZES } from "../constants";
+import { useNavigation } from "@react-navigation/native";
 
 const Home = () => {
+  const navigation = useNavigation();
+
+  const handleRepairsButton = () => {
+    navigation.navigate("RepairCenterRequest");
+  }
+
   return (
     <SafeAreaView>
       <View style={styles.appBarWrapper}>
@@ -24,6 +30,7 @@ const Home = () => {
           <Headlng />
           {/* <ProductRow /> */}
       </ScrollView>
+      <Button onPress={handleRepairsButton} title="Repairs">Repairs</Button>
     </SafeAreaView>
   );
 };
