@@ -14,6 +14,7 @@ import { db } from "./firebase.config";
 import StartScreen from "./screens/StartScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
+import ViewMyProduct from "./screens/ViewMyProduct";
 
 const Stack = createNativeStackNavigator();
 
@@ -86,6 +87,11 @@ export default function App() {
         <Stack.Screen
           name="ViewProduct"
           component={ViewProduct}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ViewMyProduct"
+          component={ViewMyProduct}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
