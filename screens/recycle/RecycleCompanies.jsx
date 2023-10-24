@@ -12,15 +12,15 @@ import { COLORS, SIZES } from "../../constants";
 import { StyleSheet } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase.config";
-import RecycleRequestCardView from "../../components/recycle/RecycleRequestCardView";
+import RecycleCompanyCardView from "../../components/recycle/RecycleCompanyCardView";
 
-const RecycleRequests = () => {
+const RecycleCompanies = () => {
   const [userData, setUserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
   const getUsersData = async () => {
     try {
-      const usersCollectionRef = collection(db, "recycleItems");
+      const usersCollectionRef = collection(db, "recycleCompanies");
 
       const querySnapshot = await getDocs(usersCollectionRef);
 
@@ -73,7 +73,7 @@ const RecycleRequests = () => {
           data={filteredData}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <RecycleRequestCardView recycleRequest={item} />
+            <RecycleCompanyCardView recycleCompany={item} />
           )}
         />
       </View>
@@ -82,7 +82,7 @@ const RecycleRequests = () => {
   );
 };
 
-export default RecycleRequests;
+export default RecycleCompanies;
 
 const styles = StyleSheet.create({
   searchContainer: {

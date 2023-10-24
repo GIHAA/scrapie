@@ -235,7 +235,7 @@ const Recycle = ({ route }) => {
               >
                 {isSuccess && (
                   <Video
-                    source={require("../assets/video/check.mp4")}
+                    source={require("../../assets/video/check.mp4")}
                     shouldPlay={isAnimationPlaying}
                     resizeMode="cover"
                     style={{ width: 150, height: 150, borderRadius: 100 }}
@@ -244,7 +244,7 @@ const Recycle = ({ route }) => {
 
                 {isFail && (
                   <Video
-                    source={require("../assets/video/uncheck.mp4")}
+                    source={require("../../assets/video/uncheck.mp4")}
                     shouldPlay={isAnimationPlaying}
                     resizeMode="cover"
                     style={{ width: 150, height: 150, borderRadius: 100 }}
