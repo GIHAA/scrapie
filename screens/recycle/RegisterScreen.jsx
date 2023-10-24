@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Text } from "react-native-paper";
-import Background from "../components/Background";
-import Logo from "../components/Logo";
-import Header from "../components/Header";
-import Button from "../components/Button";
-import TextInput from "../components/TextInput";
-import BackButton from "../components/BackButton";
-import { emailValidator } from "../helpers/emailValidator";
-import { passwordValidator } from "../helpers/passwordValidator";
-import { nameValidator } from "../helpers/nameValidator";
-import { phoneValidator } from "../helpers/phoneValidator"; // Import phone number validator
-import { THEME } from "../constants";
+import Background from "../../components/Background";
+import Logo from "../../components/Logo";
+import Header from "../../components/Header";
+import Button from "../../components/Button";
+import TextInput from "../../components/TextInput";
+import BackButton from "../../components/BackButton";
+import { emailValidator } from "../../helpers/emailValidator";
+import { passwordValidator } from "../../helpers/passwordValidator";
+import { nameValidator } from "../../helpers/nameValidator";
+import { phoneValidator } from "../../helpers/phoneValidator"; // Import phone number validator
+import { THEME } from "../../constants";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { db } from "../firebase.config";
+import { db } from "../../firebase.config";
 import { collection, addDoc } from "firebase/firestore";
 
 

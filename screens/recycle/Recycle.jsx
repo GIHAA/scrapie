@@ -9,7 +9,7 @@ import {
   Button,
 } from "react-native";
 import { RadioButton, TextInput } from "react-native-paper";
-import { COLORS } from "../constants";
+import { COLORS } from "../../constants";
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
@@ -19,7 +19,7 @@ import * as Animatable from "react-native-animatable";
 import { Modal } from "react-native";
 import { Video } from "expo-av";
 import { useNavigation } from "@react-navigation/native";
-import { db } from "../firebase.config";
+import { db } from "../../firebase.config";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 

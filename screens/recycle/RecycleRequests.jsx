@@ -8,10 +8,10 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather, Ionicons } from "@expo/vector-icons";
-import { COLORS, SIZES } from "../constants";
+import { COLORS, SIZES } from "../../constants";
 import { StyleSheet } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase.config";
+import { db } from "../../firebase.config";
 import RecycleRequestCardView from "../components/product/RecycleRequestCardView";
 
 const RecycleRequests = () => {
