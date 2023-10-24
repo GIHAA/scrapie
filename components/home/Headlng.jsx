@@ -9,7 +9,7 @@ const Headlng = () => {
   return (
     <View style={styles.continer}>
         <View style={styles.header}>
-            <Text style={styles.headerTitle}> New arrivals</Text>
+            <Text style={styles.headerTitle}> New Arrivals</Text>
                 <TouchableOpacity>
                     <Ionicons name="ios-grid" size={24} color={COLORS.primary} />
                 </TouchableOpacity> 

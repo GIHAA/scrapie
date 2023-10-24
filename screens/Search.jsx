@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { TextInput, TouchableOpacity, View, FlatList, Text, Button } from "react-native";
+import {
+  TextInput,
+  TouchableOpacity,
+  View,
+  FlatList,
+  Text,
+  Button,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { COLORS, SIZES } from "../constants";
 import { StyleSheet } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase.config";
-import { getAuth } from 'firebase/auth'; 
+import { getAuth } from "firebase/auth";
 import ProductCardView from "../components/product/ProductCardView";
 import ProductCardView2 from "../components/product/ProductCardView2";
 
@@ -38,7 +45,6 @@ const Search = () => {
   };
 
   useEffect(() => {
-
     const fetchUserEmail = async () => {
       const auth = getAuth();
       if (auth.currentUser) {
@@ -52,9 +58,8 @@ const Search = () => {
 
   const filteredData = userData.filter((item) => {
     const itemName = item.item.toLowerCase();
-    const itemUid = item.uid; // Assuming the UID is stored in the 'uid' field of each item
-    const isMyItem = itemUid === currentUserEmail; // Replace with your authentication logic
-
+    const itemUid = item.uid;
+    const isMyItem = itemUid === currentUserEmail;
     return (
       itemName.includes(searchQuery.toLowerCase()) &&
       (view === "marketplace" || isMyItem)
@@ -81,11 +86,25 @@ const Search = () => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Text>{view === "marketplace" ? "Marketplace" : "My Items"}</Text>
-      <Button
-        title={`Switch to ${view === "marketplace" ? "My Items" : "Marketplace"}`}
-        onPress={() => setView(view === "marketplace" ? "myItems" : "marketplace")}
-      />
+      <TouchableOpacity
+                style={{
+                  marginTop : 13,
+                  backgroundColor: COLORS.primary,
+                  height: 50,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 50,
+                  marginHorizontal : 20
+                }}
+        onPress={() =>
+          setView(view === "marketplace" ? "myItems" : "marketplace")
+        }
+      >
+        <Text style={{ color: "white", fontSize: 20 }}>{`Switch to ${
+          view === "marketplace" ? "My Items" : "Marketplace"
+        }`}</Text>
+      </TouchableOpacity>
+
       <View style={styles.searchContainer}>
         <TouchableOpacity>
           <Ionicons
@@ -103,12 +122,23 @@ const Search = () => {
             placeholder="What are you looking for"
           />
         </View>
+
         <View>
           <TouchableOpacity style={styles.searchBtn}>
             <Feather name="search" size={24} color={COLORS.offwhite} />
           </TouchableOpacity>
         </View>
       </View>
+
+      <Text
+        style={{
+          fontFamily: "semibold",
+          fontSize: SIZES.xLarge - 2,
+          marginLeft: 8,
+        }}
+      >
+        {view === "marketplace" ? "Marketplace" : "My Items"}
+      </Text>
 
       <View style={styles.flatListContainer}>
         {view === "marketplace" ? renderMarketplaceView() : renderMyItemsView()}
@@ -118,8 +148,6 @@ const Search = () => {
 };
 
 export default Search;
-
-
 
 const styles = StyleSheet.create({
   searchContainer: {

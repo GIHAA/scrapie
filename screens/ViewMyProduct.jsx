@@ -12,11 +12,8 @@ const ViewMyProduct = ({ route, navigation }) => {
     // Get a reference to the Firestore document
     const itemRef = doc(firestore, "items", data.id); // Replace "your-collection-name" with your actual collection name
 
-    // Update the "status" field in Firestore to "sold" for the given item
-    update(itemRef, { status: "sold" })
+  update(itemRef, { status: "sold" })
       .then(() => {
-        // Item marked as sold successfully
-        // You can add any additional logic here
       })
       .catch((error) => {
         console.error("Error marking item as sold:", error);
@@ -25,15 +22,11 @@ const ViewMyProduct = ({ route, navigation }) => {
 
   const deleteItem = async () => {
     try {
-      // Get a reference to the Firestore document and delete it
-      await deleteDoc(doc(db, "items", data.id));
-      // Handle success here, e.g., show a success message to the user
-      console.log("Item deleted successfully!");
+    await deleteDoc(doc(db, "items", data.id));
+    console.log("Item deleted successfully!");
     } catch (error) {
-      // Handle errors here
-      console.error("Error deleting item:", error);
-      // You can also show an error message to the user or perform other error handling actions
-    }
+     console.error("Error deleting item:", error);
+   }
   };
   
 
