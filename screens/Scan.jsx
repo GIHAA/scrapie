@@ -99,15 +99,21 @@ const Scan = ({}) => {
         quality: 1,
       });
 
+      const resizedImage = await manipulateAsync(
+        result.assets[0].uri,
+        [{ resize: { width: 800 } }],
+        { compress: 0.8 }
+      );
+
       if (!result.canceled) {
         const formData = new FormData();
         formData.append("image", {
-          uri: result.assets[0].uri,
+          uri: resizedImage.uri,
           type: "image/jpeg",
           name: "image.jpg",
         });
 
-        setImage(result.assets[0].uri);
+        setImage(resizedImage.uri);
 
         const response = await fetch(
           "https://scrapie-5g3h.onrender.com/predict",
@@ -162,7 +168,7 @@ const Scan = ({}) => {
         const resizedImage = await manipulateAsync(
           photo.uri,
           [{ resize: { width: 800 } }],
-          { compress: 0.7 }
+          { compress: 0.8 }
         );
         setImage(resizedImage.uri);
         setRaw(photo.uri);

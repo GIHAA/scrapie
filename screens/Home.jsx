@@ -22,7 +22,7 @@ const Home = () => {
           <Welcome />
           <Carousel />
           <Headlng />
-          <ProductRow />
+          {/* <ProductRow /> */}
       </ScrollView>
     </SafeAreaView>
   );
