@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import React from "react";
-import styles from "./productCardView.style";
+import styles from "../product/productCardView.style";
 import { COLORS } from "../../constants";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
