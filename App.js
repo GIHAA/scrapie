@@ -17,8 +17,8 @@ import RepairCenterRequest from "./screens/RepairCenterRequest";
 import StartScreen from "./screens/StartScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
-import ViewRecycleRequest from "./components/product/ViewRecycleRequest"
-
+import ViewMyProduct from "./screens/ViewMyProduct";
+import ViewRecycleRequest from "./components/product/ViewRecycleRequest";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -108,6 +108,11 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="ViewMyProduct"
+          component={ViewMyProduct}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="Profile"
           component={Profile}
           options={{ headerShown: false }}
@@ -117,7 +122,7 @@ export default function App() {
           component={RecycleRequests}
           options={{ headerShown: false }}
         />
-                <Stack.Screen
+        <Stack.Screen
           name="ViewRecycleRequest"
           component={ViewRecycleRequest}
           options={{ headerShown: false }}
