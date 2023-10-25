@@ -78,7 +78,7 @@ const BottomTabNavigation = () => {
       />
       <Tab.Screen
         name="fav"
-        component={Test2}
+        component={Fav}
         options={{
           tabBarIcon: ({ focused }) => {
             return (

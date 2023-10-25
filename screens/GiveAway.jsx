@@ -28,7 +28,7 @@ const Reuse = ({ route }) => {
 
   const [selectedOption, setSelectedOption] = useState(null);
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState("Free");
   const [isConfirmVisible, setisConfirmVisible] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -78,6 +78,7 @@ const Reuse = ({ route }) => {
 
 
   const handleButtonPress = () => {
+    console.log('sdasdasd')
     setIsModalVisible(true);
 
     const auth = getAuth();
@@ -91,7 +92,7 @@ const Reuse = ({ route }) => {
           usersCollection,
           where("email", "==", userEmail)
         );
-
+          console.log('sdasdasd')
         getDocs(userQuery)
           .then((querySnapshot) => {
             if (!querySnapshot.empty) {
