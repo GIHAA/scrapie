@@ -20,6 +20,7 @@ import RegisterScreen from "./screens/RegisterScreen";
 import ViewMyProduct from "./screens/ViewMyProduct";
 import ViewRecycleRequest from "./components/product/ViewRecycleRequest";
 const Stack = createNativeStackNavigator();
+import { LogBox } from 'react-native';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -30,7 +31,7 @@ export default function App() {
     extrabold: require("./assets/fonts/Poppins-ExtraBold.ttf"),
     semibold: require("./assets/fonts/Poppins-SemiBold.ttf"),
   });
-
+  LogBox.ignoreLogs(['@firebase/auth']);
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) await SplashScreen.hideAsync();
   }, [fontsLoaded]);

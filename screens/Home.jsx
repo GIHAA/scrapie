@@ -20,10 +20,8 @@ const Home = () => {
     <SafeAreaView>
       <View style={styles.appBarWrapper}>
         <View style={styles.appBar}>
-
         </View>
       </View>
-
       <ScrollView>
           <Welcome />
           <Carousel />

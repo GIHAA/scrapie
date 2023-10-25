@@ -25,14 +25,12 @@ const RepairCenterRequest = () => {
         <View>
             <Text style={styles.header}>Repair Requests</Text>
 
-            {/* filtration chips */}
             <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 30, marginBottom: 30 }}>
                 <RepairFilterButton text="Pending" onPress={() => handleRequestTypes("pending")} clicked={activeButton === "pending"} />
                 <RepairFilterButton text="On-going" onPress={() => handleRequestTypes("on-going")} clicked={activeButton === "on-going"} />
                 <RepairFilterButton text="Completed" onPress={() => handleRequestTypes("completed")} clicked={activeButton === "completed"} />
             </View>
 
-            {/* Render the selected Repair Center component */}
             {renderedComponent}
         </View>
     );
