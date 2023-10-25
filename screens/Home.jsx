@@ -28,7 +28,7 @@ const Home = () => {
           <Welcome />
           <Carousel />
           <Headlng />
-          {/* <ProductRow /> */}
+          <ProductRow />
       </ScrollView>
       <Button onPress={handleRepairsButton} title="Repairs">Repairs</Button>
     </SafeAreaView>

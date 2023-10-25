@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-<<<<<<< HEAD
 import {
   TextInput,
   TouchableOpacity,
@@ -8,20 +7,13 @@ import {
   Text,
   Button,
 } from "react-native";
-=======
-import { TextInput, TouchableOpacity, View, FlatList, Text, Button } from "react-native";
->>>>>>> feat/repair-center
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { COLORS, SIZES } from "../constants";
 import { StyleSheet } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase.config";
-<<<<<<< HEAD
 import { getAuth } from "firebase/auth";
-=======
-import { getAuth } from 'firebase/auth'; 
->>>>>>> feat/repair-center
 import ProductCardView from "../components/product/ProductCardView";
 import ProductCardView2 from "../components/product/ProductCardView2";
 
@@ -53,10 +45,6 @@ const Search = () => {
   };
 
   useEffect(() => {
-<<<<<<< HEAD
-=======
-
->>>>>>> feat/repair-center
     const fetchUserEmail = async () => {
       const auth = getAuth();
       if (auth.currentUser) {
@@ -70,14 +58,8 @@ const Search = () => {
 
   const filteredData = userData.filter((item) => {
     const itemName = item.item.toLowerCase();
-<<<<<<< HEAD
     const itemUid = item.uid;
     const isMyItem = itemUid === currentUserEmail;
-=======
-    const itemUid = item.uid; // Assuming the UID is stored in the 'uid' field of each item
-    const isMyItem = itemUid === currentUserEmail; // Replace with your authentication logic
-
->>>>>>> feat/repair-center
     return (
       itemName.includes(searchQuery.toLowerCase()) &&
       (view === "marketplace" || isMyItem)
