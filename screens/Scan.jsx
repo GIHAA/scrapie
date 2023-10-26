@@ -35,8 +35,45 @@ const Scan = ({}) => {
   const [image, setImage] = useState();
   const [raw, setRaw] = useState();
   const [isExpanded, setIsExpanded] = useState(true);
+  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
+  const quotes = [
+    "Recycle your aluminum cans, and save energy while reducing waste.",
+    "Don't forget to separate your paper for recycling to help save trees.",
+    "Always recycle glass bottles and jars to reduce pollution and conserve resources.",
+    "Collect steel items for recycling to make an energy-saving impact.",
+    "Recycle plastic bottles to save energy and reduce plastic pollution.",
+    "Be sure to recycle glass bottles to brighten the world and save energy.",
+    "When upgrading your electronics, recycle the old ones to recover valuable materials.",
+    "Flatten cardboard boxes before recycling to save space and resources.",
+    "Dispose of old cell phones responsibly through e-waste recycling programs.",
+    "Aluminum is a valuable resource, so make sure to recycle your aluminum items.",
+    "Recycle as much as possible to reduce your carbon footprint and combat climate change.",
+    "When it's time to replace a car battery, recycle the old one to protect the environment.",
+    "Did you know that one recycled aluminum can saves enough energy to power a TV for three hours?",
+    "Paper recycling is like a superhero – saving 17 trees per ton of paper!",
+    "Glass recycling is a clean superhero, reducing air pollution by 20% and water pollution by 50%.",
+    "Recycling 100 pounds of steel is like powering a home for two months – that's impressive!",
+    "Your plastic bottle recycling conserves energy equivalent to powering a computer for 25 minutes!",
+    "Just one glass bottle saves enough energy to light a room for four hours!",
+    "Recycling electronics is like treasure hunting, recovering valuable metals like gold, silver, and copper.",
+    "Cardboard recycling is a space-saver, saving over 9 cubic yards of landfill space for every ton.",
+    "Recycling old cell phones is a win for wildlife, as it reduces the need for mining materials like coltan that can harm gorilla habitats.",
+    "Aluminum recycling is a low-energy hero, using only 5% of the energy needed to create new aluminum.",
+    "Recycling is a climate change warrior, reducing greenhouse gas emissions and helping the planet.",
+    "Recycling car batteries is a life-saver, preventing harmful lead and acid from harming the environment."
+  ];
+  
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      setCurrentQuoteIndex(randomIndex)
+    }, 3900);
+
+    return () => clearInterval(timer);
+  }, [currentQuoteIndex]);
 
   useEffect(() => {
     const askCameraPermission = async () => {
@@ -56,35 +93,42 @@ const Scan = ({}) => {
   };
 
   const uploadImageToFirebase = async (uri) => {
-    const response = await fetch(uri);
-
-    const blob = await response.blob();
-
-    const storageRef = ref(storage, "images/" + new Date().getTime());
-
-    const uploadTask = uploadBytesResumable(storageRef, blob);
-
-    uploadTask.on(
-      "state_changed",
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log("Upload is " + progress + "% done");
-      },
-      (error) => {
-        console.error(error);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-          console.log("File available at", downloadURL);
-          const data = {
-            item: target[0].className.split(",")[0],
-            image: downloadURL,
-          };
-          navigation.navigate("Reuse", { data });
-        });
+    return new Promise(async (resolve, reject) => {
+      try {
+        const response = await fetch(uri);
+        const blob = await response.blob();
+        const storageRef = ref(storage, "images/" + new Date().getTime());
+        const uploadTask = uploadBytesResumable(storageRef, blob);
+  
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log("Upload is " + progress + "% done");
+          },
+          (error) => {
+            console.error(error);
+            reject(error);
+          },
+          async () => {
+            try {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              console.log("File available at", downloadURL);
+              const data = {
+                item: target[0].className.split(",")[0],
+                image: downloadURL,
+              };
+              resolve(data); 
+            } catch (error) {
+              reject(error);
+            }
+          }
+        );
+      } catch (error) {
+        reject(error);
       }
-    );
+    });
   };
 
   const getPicFromGallery = async () => {
@@ -99,80 +143,21 @@ const Scan = ({}) => {
         quality: 1,
       });
 
+      const resizedImage = await manipulateAsync(
+        result.assets[0].uri,
+        [{ resize: { width: 800 } }],
+        { compress: 0.8 }
+      );
+
       if (!result.canceled) {
-        const formData = new FormData();
-        formData.append("image", {
-          uri: result.assets[0].uri,
-          type: "image/jpeg",
-          name: "image.jpg",
-        });
-
-        setImage(result.assets[0].uri);
-
-        const response = await fetch(
-          "https://scrapie-5g3h.onrender.com/predict",
-          {
-            method: "POST",
-            body: formData,
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-
-        const responseData = await response.json();
-
-        setTarget(responseData);
-
-        if (Array.isArray(responseData) && responseData.length > 0) {
-          let message = "";
-
-          responseData.forEach((item) => {
-            if (item.className && item.probability) {
-              message += `Class: ${item.className}\nProbability: ${item.probability}\n\n`;
-            } else {
-              message += "Invalid data format in response.\n\n";
-            }
-          });
-
-          if (message.length > 0) {
-            setloading(false);
-            setDisplayItemDetails(true);
-          } else {
-            const errorMessage = "No valid data found in response.";
-            Alert.alert("Bad Request", errorMessage);
-          }
-        } else {
-          const errorMessage = "No valid response data from API.";
-          Alert.alert("Bad Request", errorMessage);
-        }
-      }
-    } catch (error) {
-      console.error("Error selecting image and making API call:", error);
-    }
-  };
-
-  const onCameraPress = async () => {
-    setloading(true);
-    setdisplayCameraButtom(false);
-    if (cameraRef.current && isCameraReady) {
-      try {
-        const photo = await cameraRef.current.takePictureAsync();
-
-        const resizedImage = await manipulateAsync(
-          photo.uri,
-          [{ resize: { width: 800 } }],
-          { compress: 0.7 }
-        );
-        setImage(resizedImage.uri);
-        setRaw(photo.uri);
-
         const formData = new FormData();
         formData.append("image", {
           uri: resizedImage.uri,
           type: "image/jpeg",
           name: "image.jpg",
         });
+
+        setImage(resizedImage.uri);
 
         const response = await fetch(
           "https://scrapie-5g3h.onrender.com/predict",
@@ -213,6 +198,74 @@ const Scan = ({}) => {
           const errorMessage = "No valid response data from API.";
           Alert.alert("Bad Request", errorMessage);
         }
+      }
+    } catch (error) {
+      setloading(false);
+      console.error("Error selecting image and making API call:", error);
+    }
+  };
+
+  const onCameraPress = async () => {
+    setloading(true);
+    setdisplayCameraButtom(false);
+    if (cameraRef.current && isCameraReady) {
+      try {
+        const photo = await cameraRef.current.takePictureAsync();
+
+        const resizedImage = await manipulateAsync(
+          photo.uri,
+          [{ resize: { width: 800 } }],
+          { compress: 0.8 }
+        );
+        setImage(resizedImage.uri);
+        setRaw(photo.uri);
+
+        const formData = new FormData();
+        formData.append("image", {
+          uri: resizedImage.uri,
+          type: "image/jpeg",
+          name: "image.jpg",
+        });
+
+        const response = await fetch(
+          "https://scrapie-5g3h.onrender.com/predict",
+          {
+            method: "POST",
+            body: formData,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        const responseData = await response.json();
+
+        setTarget(responseData);
+
+        if (Array.isArray(responseData) && responseData.length > 0) {
+          let message = "";
+
+          responseData.forEach((item) => {
+            if (item.className && item.probability) {
+              message += `Class: ${item.className}\nProbability: ${item.probability}\n\n`;
+            } else {
+              message += "Invalid data format in response.\n\n";
+            }
+          });
+
+          if (message.length > 0) {
+            setDisplayItemDetails(true);
+            setloading(false);
+          } else {
+            setloading(false);
+            const errorMessage = "No valid data found in response.";
+            Alert.alert("Bad Request", errorMessage);
+          }
+        } else {
+          setloading(false);
+          const errorMessage = "No valid response data from API.";
+          Alert.alert("Bad Request", errorMessage);
+        }
       } catch (error) {
         setloading(false);
         console.error("Error taking picture and making API call:", error);
@@ -238,8 +291,13 @@ const Scan = ({}) => {
     navigation.navigate("Repair", { data });
   };
 
-  const handleReuseButtonClick = () => {
-    uploadImageToFirebase(image);
+  const handleReuseButtonClick = async () => {
+    try {
+      const data = await uploadImageToFirebase(image);
+      navigation.navigate("Reuse", { data });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleRecycleButtonClick = () => {
@@ -278,6 +336,19 @@ const Scan = ({}) => {
                   borderRadius: 50,
                 }}
               />
+              <Animatable.Text
+                animation="fadeIn"
+                duration={1000}
+                iterationCount={1}
+                style={{
+                  fontSize: 16,
+                  textAlign: "center",
+                  marginHorizontal : 30,
+                  color: COLORS.white,
+                }}
+              >
+                {quotes[currentQuoteIndex]}
+              </Animatable.Text>
             </View>
           )}
 
@@ -554,7 +625,7 @@ const Scan = ({}) => {
                     alignItems: "center",
                     justifyContent: "center",
                     borderColor: "white",
-                    borderWidth: 5, // Adding border width
+                    borderWidth: 5,
                     borderRadius: 50,
                     marginRight: 10,
                     marginBottom: 20,

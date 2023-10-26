@@ -13,6 +13,7 @@ const Welcome = () => {
   const navigation = useNavigation();
   const [name, setName] = useState("");
 
+
   useEffect(() => {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {

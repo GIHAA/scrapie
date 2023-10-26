@@ -12,10 +12,17 @@ import Reuse from "./screens/GiveAway";
 import Repair from "./screens/Repair";
 import ViewProduct from "./screens/ViewProduct";
 import { db } from "./firebase.config";
+import SelectRepairCenter from "./screens/SelectRepairCenter";
+import ConfirmRequestRepairCenter from "./screens/ConfirmRequestRepairCenter";
+import RepairCenterRequest from "./screens/RepairCenterRequest";
 import StartScreen from "./screens/StartScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
+import ViewMyProduct from "./screens/ViewMyProduct";
+import ViewRecycleRequest from "./components/product/ViewRecycleRequest";
+
 const Stack = createNativeStackNavigator();
+import { LogBox } from 'react-native';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -26,7 +33,7 @@ export default function App() {
     extrabold: require("./assets/fonts/Poppins-ExtraBold.ttf"),
     semibold: require("./assets/fonts/Poppins-SemiBold.ttf"),
   });
-
+  LogBox.ignoreLogs(['@firebase/auth']);
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) await SplashScreen.hideAsync();
   }, [fontsLoaded]);
@@ -84,8 +91,28 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="SelectRepairCenter"
+          component={SelectRepairCenter}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ConfirmRequestRepairCenter"
+          component={ConfirmRequestRepairCenter}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="RepairCenterRequest"
+          component={RepairCenterRequest}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="ViewProduct"
           component={ViewProduct}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ViewMyProduct"
+          component={ViewMyProduct}
           options={{ headerShown: false }}
         />
         <Stack.Screen

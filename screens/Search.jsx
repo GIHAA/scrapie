@@ -5,6 +5,7 @@ import {
   View,
   FlatList,
   Text,
+  Button,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather, Ionicons } from "@expo/vector-icons";
@@ -12,16 +13,19 @@ import { COLORS, SIZES } from "../constants";
 import { StyleSheet } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase.config";
-import ProductCardView2 from "../components/product/ProductCardView";
+import { getAuth } from "firebase/auth";
+import ProductCardView from "../components/product/ProductCardView";
+import ProductCardView2 from "../components/product/ProductCardView2";
 
 const Search = () => {
   const [userData, setUserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [view, setView] = useState("marketplace");
+  const [currentUserEmail, setCurrentUserEmail] = useState("gihan3@gmail.com"); // Replace with your authentication logic
 
   const getUsersData = async () => {
     try {
       const usersCollectionRef = collection(db, "items");
-
       const querySnapshot = await getDocs(usersCollectionRef);
 
       const userDataArray = [];
@@ -41,16 +45,66 @@ const Search = () => {
   };
 
   useEffect(() => {
+    const fetchUserEmail = async () => {
+      const auth = getAuth();
+      if (auth.currentUser) {
+        setCurrentUserEmail(auth.currentUser.email);
+      }
+    };
+
+    fetchUserEmail();
     getUsersData();
   }, []);
 
   const filteredData = userData.filter((item) => {
     const itemName = item.item.toLowerCase();
-    return itemName.includes(searchQuery.toLowerCase());
+    const itemUid = item.uid;
+    const isMyItem = itemUid === currentUserEmail;
+    return (
+      itemName.includes(searchQuery.toLowerCase()) &&
+      (view === "marketplace" || isMyItem)
+    );
   });
+
+  const renderMarketplaceView = () => (
+    <FlatList
+      data={filteredData}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => <ProductCardView product={item} />}
+      numColumns={2}
+    />
+  );
+
+  const renderMyItemsView = () => (
+    <FlatList
+      data={filteredData}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => <ProductCardView2 product={item} />}
+      numColumns={2}
+    />
+  );
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <TouchableOpacity
+                style={{
+                  marginTop : 13,
+                  backgroundColor: COLORS.primary,
+                  height: 50,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  borderRadius: 50,
+                  marginHorizontal : 20
+                }}
+        onPress={() =>
+          setView(view === "marketplace" ? "myItems" : "marketplace")
+        }
+      >
+        <Text style={{ color: "white", fontSize: 20 }}>{`Switch to ${
+          view === "marketplace" ? "My Items" : "Marketplace"
+        }`}</Text>
+      </TouchableOpacity>
+
       <View style={styles.searchContainer}>
         <TouchableOpacity>
           <Ionicons
@@ -68,6 +122,7 @@ const Search = () => {
             placeholder="What are you looking for"
           />
         </View>
+
         <View>
           <TouchableOpacity style={styles.searchBtn}>
             <Feather name="search" size={24} color={COLORS.offwhite} />
@@ -75,19 +130,26 @@ const Search = () => {
         </View>
       </View>
 
+      <Text
+        style={{
+          fontFamily: "semibold",
+          fontSize: SIZES.xLarge - 2,
+          marginLeft: 8,
+        }}
+      >
+        {view === "marketplace" ? "Marketplace" : "My Items"}
+      </Text>
+
       <View style={styles.flatListContainer}>
-        <FlatList
-          data={filteredData}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <ProductCardView2 product={item} />}
-          numColumns={2}
-        />
+        {view === "marketplace" ? renderMarketplaceView() : renderMyItemsView()}
       </View>
     </SafeAreaView>
   );
 };
 
 export default Search;
+
+
 
 const styles = StyleSheet.create({
   searchContainer: {
@@ -124,16 +186,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: COLORS.primary,
-  },
-  flatListItem: {
-    flex: 1,
-    backgroundColor: COLORS.lightGray,
-    margin: SIZES.small,
-    padding: SIZES.small,
-    borderRadius: SIZES.medium,
-    justifyContent: "center",
-    alignItems: "center",
-    height: 150,
   },
   flatListContainer: {
     flex: 1,

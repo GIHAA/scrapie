@@ -4,7 +4,7 @@ import { COLORS , SIZES } from "../../constants";
 const styles = StyleSheet.create({
     continer: {
         marginTop: SIZES.medium,
-        marginBottom: SIZES.xxLarge,
+        marginBottom: SIZES.medium,
         marginHorizontal: 12
     },
     header: {
