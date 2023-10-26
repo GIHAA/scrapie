@@ -22,6 +22,7 @@ import { useNavigation } from "@react-navigation/native";
 import { db } from "../../firebase.config";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { FontAwesome5, AntDesign } from '@expo/vector-icons';
+import AppBar from "../../components/recycle/AppBar";
 
 const PickUp = ({ route }) => {
   const { recycleCompany, recycleItem, recycleRequest } = route.params;
@@ -196,7 +197,7 @@ const PickUp = ({ route }) => {
         </View>
       ) : (
 
-          <View style={{ flex: 1, backgroundColor: "#FFF" }}>
+          <View style={{ flex: 1, backgroundColor: "#FFF", justifyContent: "flex-end" }}>
             <Image
               source={require("../../assets/images/ny-map.jpeg")}
               style={{
@@ -212,12 +213,12 @@ const PickUp = ({ route }) => {
                 backgroundColor: "#FFF",
                 padding: 12,
                 borderRadius: 10,
-                marginTop: 20,
+                marginTop: 60,
                 width: width * 0.8,
                 alignSelf: "center",
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "space-between",
+                justifyContent: "center",
               }}
             >
               <TextInput
@@ -229,14 +230,16 @@ const PickUp = ({ route }) => {
               />
               <FontAwesome5 name="times" size={24} color={COLORS.primary} />
             </View>
+
             <View style={styles.container}>
               <TouchableOpacity
                 onPress={() => {
                   setConfirmation(true);
                 }}
                 style={{
-                  margin: 20,
-                  marginBottom: -20,
+                  marginTop: 650,
+                  marginLeft: 20,
+                  marginRight: 20,
                   backgroundColor: myLocation ? COLORS.primary : "gray",
                   height: 50,
                   justifyContent: "center",
@@ -245,7 +248,7 @@ const PickUp = ({ route }) => {
                 }}
               >
                 <Text style={{ color: "white", fontSize: 20 }}>
-                  Submit location
+                  Submit Location
                 </Text>
               </TouchableOpacity>
             </View>
