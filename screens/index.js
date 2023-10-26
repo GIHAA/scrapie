@@ -5,6 +5,6 @@ import Cart from "./Cart";
 import Scan from "./Scan";
 import Fav from "./Fav";
 import ViewProduct from "./ViewProduct"
-import RecycleRequests from "./RecycleRequests"
+import RecycleRequests from "./recycle/RecycleRequests"
 
 export { Search, Home, Profile ,Cart , Scan , Fav , ViewProduct, RecycleRequests };

@@ -70,7 +70,7 @@ export default function Profile() {
     // }
   }
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, marginVertical: 44, }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ marginVertical: 10, flex: 1, paddingHorizontal: 20 }}
@@ -104,7 +104,7 @@ export default function Profile() {
             }}
           >
             <Text style={{ paddingVertical: 0 }}>
-              {/* {user?.username || user?.email} */}
+              John Snow
             </Text>
             <Text
               style={{ paddingVertical: 0, fontSize: 11, color: "gray" }}
@@ -151,7 +151,7 @@ export default function Profile() {
             borderBottomColor: "#f3f3f3",
           }}
         >
-          <Entypo name="help-with-circle" size={18} color="#2b6ed9" />
+          <Entypo name="grooveshark" size={18} color="#00C135" />
           <Text style={{ paddingHorizontal: 20, flex: 1 }}>
             View Recycling Items
           </Text>
