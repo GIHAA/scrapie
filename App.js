@@ -15,6 +15,10 @@ import { db } from "./firebase.config";
 import StartScreen from "./screens/StartScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
+import RecycleCompanies from "./screens/recycle/RecycleCompanies";
+import ViewRecycleCompany from "./components/recycle/ViewRecycleCompany";
+import  DropOff  from "./screens/recycle/DropOff";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -101,6 +105,21 @@ export default function App() {
         <Stack.Screen
           name="ViewRecycleRequest"
           component={ViewRecycleRequest}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="RecycleCompanies"
+          component={RecycleCompanies}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ViewRecycleCompany"
+          component={ViewRecycleCompany}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DropOff"
+          component={DropOff}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

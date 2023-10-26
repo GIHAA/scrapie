@@ -6,34 +6,41 @@ import { useNavigation } from "@react-navigation/native";
 import { Card, Title, Button } from 'react-native-paper';
 
 
-const RecycleRequestCardView = ({ recycleRequest }) => {
-  const { item, seller, price, image, description, phone } = recycleRequest;
+const RecycleCompanyCardView = ({ recycleCompany, recycleItem}) => {
+
+  console.log("Recycle Company Card View Recycle Company", recycleCompany)
+  console.log("Recycle Company Card View Recycle Item", recycleItem)
+
   const navigation = useNavigation();
 
-  const viewRequest = () => {
-    const data = { image, seller, description, item, price, phone };
-
-    navigation.navigate("ViewRecycleRequest", { data });
+  const viewCompany = () => {
+    navigation.navigate("ViewRecycleCompany", { recycleCompany, recycleItem });
   };
+
   return (
    
     <Card style={styles.card}>
-      <Card.Cover source={{ uri: recycleRequest.imageUrl }} />
+      <Card.Cover source={{ uri: recycleCompany.image }} />
       <Card.Content>
-        <Title>{recycleRequest.title}</Title>
-        <Text>{recycleRequest.description}</Text>
+        <Title>{recycleCompany.name}</Title>
+        <Text>{recycleCompany.description}</Text>
       </Card.Content>
       <Card.Actions>
-        <Button buttonColor="green" labelStyle={{ color: 'white' }}>View</Button>
+        <Button 
+        onPress={viewCompany}
+        buttonColor="green" 
+        labelStyle={{ color: 'white' }}>
+        Select
+        </Button>
       </Card.Actions>
     </Card>
   );
 };
 
-export default RecycleRequestCardView;
+export default RecycleCompanyCardView;
 
 const styles = {
   card: {
-    margin: 5, // Add margin for spacing between cards
+    margin: 5,
   },
 };

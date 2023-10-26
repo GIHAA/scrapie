@@ -24,8 +24,11 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 
 const Recycle = ({ route }) => {
-  const { data } = route.params;
-    const navigation = useNavigation();
+
+const { recycleItem = { item: "Shoes", image: "https://picsum.photos/200/300" }} = route.params;
+
+  console.log("Recycle Screen Data", recycleItem);
+  const navigation = useNavigation();
 
   const [selectedOption, setSelectedOption] = useState(null);
   const [description, setDescription] = useState("");
@@ -79,91 +82,18 @@ const Recycle = ({ route }) => {
 
 
   const handleButtonPress = () => {
-    setIsModalVisible(true);
-
-    const auth = getAuth();
-
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const userEmail = user.email;
-
-        const usersCollection = collection(db, "users");
-        const userQuery = query(
-          usersCollection,
-          where("email", "==", userEmail)
-        );
-
-        getDocs(userQuery)
-          .then((querySnapshot) => {
-            if (!querySnapshot.empty) {
-              const userDoc = querySnapshot.docs[0];
-              const userData = userDoc.data();
-
-              setUser(userData)
-
-              const usersCollection = collection(db, "recycleItems");
-  
-              const itemWithUID = {
-                ...data,
-                uid: userData.email,
-                user: userData.name,
-                phone: userData.phone,
-                description: description,
-                type: type,
-                timestamp: new Date().toISOString(),
-                location: {Longitude: 6.914741887410768, Latitude: 79.97316738716815},
-              };
-          
-              if (true) {
-                setisConfirmVisible(true);
-            
-                addDoc(usersCollection, itemWithUID)
-                  .then((docRef) => {
-                    console.log("Document written with ID: ", docRef.id);
-                    setIsSuccess(true);
-                    setIsAnimationPlaying(true);
-                  })
-                  .catch((error) => {
-                    setIsFail(true);
-                    setIsAnimationPlaying(true);
-                    console.error("Error adding document: ", error);
-            
-                    if (error.code === "permission-denied") {
-                      Alert.alert("Permission denied. Please check your Firebase rules.");
-                    } else {
-                      Alert.alert("An error occurred while connecting to the server.");
-                    }
-                  });
-            
-                if (selectedOption === "Option2") {
-                }
-                } else {
-                  Alert.alert("Please select an option first.");
-                }
-
-
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching user data:", error);
-          });
-      }
-    });
+    recycleItem.type = type;
+    recycleItem.description = description;    
+    navigation.navigate("RecycleCompanies", {recycleItem});
   };
   
-  const closeModal = () => {
-    setisConfirmVisible(false);
-  };
-
-  const [isAnimationPlaying, setIsAnimationPlaying] = useState(false);
-
   return (
     <View style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
     
           <View style={{ flex: 1, margin: 20, marginTop: 80 }}>
             <Text style={{ fontSize: 38, fontWeight: "bold" }}>
-              Recycle {data.item}{" "}
+              Recycle {recycleItem.item}{" "}
             </Text>
 
             <TextInput
@@ -198,7 +128,7 @@ const Recycle = ({ route }) => {
               alignItems: "center",
               borderRadius: 50}}
           >
-            <Text style={{ color: "white", fontSize: 20 }}>Recycle Item </Text>
+            <Text style={{ color: "white", fontSize: 20 }}>Find a Recycling Center </Text>
           </TouchableOpacity>
       </View>
 
@@ -233,23 +163,6 @@ const Recycle = ({ route }) => {
                   top: -50,
                 }}
               >
-                {isSuccess && (
-                  <Video
-                    source={require("../../assets/video/check.mp4")}
-                    shouldPlay={isAnimationPlaying}
-                    resizeMode="cover"
-                    style={{ width: 150, height: 150, borderRadius: 100 }}
-                  />
-                )}
-
-                {isFail && (
-                  <Video
-                    source={require("../../assets/video/uncheck.mp4")}
-                    shouldPlay={isAnimationPlaying}
-                    resizeMode="cover"
-                    style={{ width: 150, height: 150, borderRadius: 100 }}
-                  />
-                )}
               </View>
             </View>
           </View>

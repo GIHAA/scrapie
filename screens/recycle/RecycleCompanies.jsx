@@ -14,42 +14,45 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase.config";
 import RecycleCompanyCardView from "../../components/recycle/RecycleCompanyCardView";
 
-const RecycleCompanies = () => {
-  const [userData, setUserData] = useState([]);
+const RecycleCompanies = ({ route }) => {
+  const { recycleItem } = route.params;
+
+  console.log("Recycle company Screen Data", recycleItem);
+  
+  const [companyData, setCompanyData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const getUsersData = async () => {
+  const getCompanyData = async () => {
     try {
-      const usersCollectionRef = collection(db, "recycleCompanies");
+      const companiesCollectionRef = collection(db, "recycleCompanies");
 
-      const querySnapshot = await getDocs(usersCollectionRef);
+      const querySnapshot = await getDocs(companiesCollectionRef);
 
-      const userDataArray = [];
+      const companyDataArray = [];
 
       querySnapshot.forEach((doc) => {
-        const user = {
+        const company = {
           id: doc.id,
           ...doc.data(),
         };
-        userDataArray.push(user);
+        companyDataArray.push(company);
       });
-      userDataArray.sort((a, b) => b.timestamp - a.timestamp);
-      setUserData(userDataArray);
-      console.log("userDataArray", userDataArray);
+      companyDataArray.sort((a, b) => b.timestamp - a.timestamp);
+      setCompanyData(companyDataArray);
+      console.log("companyDataArray", companyDataArray);
     } catch (error) {
-      console.error("Error fetching user data:", error);
+      console.error("Error fetching company data:", error);
     }
   };
 
   useEffect(() => {
-    getUsersData();
+    getCompanyData();
   }, []);
 
-  const filteredData = userData.filter((item) => {
-    const itemName = item.item.toLowerCase();
-    return itemName.includes(searchQuery.toLowerCase());
+  const filteredData = companyData.filter((company) => {
+    const name = company.name.toLowerCase();
+    return name.includes(searchQuery.toLowerCase());
   });
-
   return (
     <SafeAreaView>
 
@@ -59,7 +62,7 @@ const RecycleCompanies = () => {
             style={styles.searchInput}
             value={searchQuery}
             onChangeText={(text) => setSearchQuery(text)}
-            placeholder="Search for recycle requests"
+            placeholder="Search for recycle companies"
           />
         </View>
         <TouchableOpacity style={styles.searchBtn}>
@@ -73,7 +76,7 @@ const RecycleCompanies = () => {
           data={filteredData}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <RecycleCompanyCardView recycleCompany={item} />
+            <RecycleCompanyCardView recycleCompany={item} recycleItem={recycleItem} />
           )}
         />
       </View>
