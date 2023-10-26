@@ -55,7 +55,7 @@ const ViewRecycleCompany = ({ route }) => {
         <View
           style={{ flexDirection: "row" }}
         >
-          <Entypo name="grooveshark" size={80} color="#00C135" />
+          <Entypo name="grooveshark" size={80} color= {COLORS.primary} />
           <View style={{ marginLeft: 20 }}>
             <Text style={{ fontSize: 25, color: "#1f2023" }}>
               {recycleCompany.name}
@@ -86,7 +86,7 @@ const ViewRecycleCompany = ({ route }) => {
 
             <View style={{ justifyContent: "center", alignItems: "center" }}>
               <Text style={{ fontSize: 16, color: "#1f2023" }}>1K</Text>
-              <Text style={{ fontSize: 12, color: "#d9d9d9" }}>Carbon</Text>
+              <Text style={{ fontSize: 12, color: "#d9d9d9" }}>Carbon Reduced</Text>
             </View>
           </View>
 
@@ -100,7 +100,6 @@ const ViewRecycleCompany = ({ route }) => {
                 paddingVertical: 6,
                 borderWidth: 1,
                 backgroundColor: COLORS.primary,
-                borderColor: "#2069e6",
                 borderRadius: 10,
                 width: 180,
                 justifyContent: "center",
@@ -127,7 +126,6 @@ const ViewRecycleCompany = ({ route }) => {
                 paddingHorizontal: 8,
                 paddingVertical: 6,
                 borderWidth: 1,
-                borderColor: "#e5e8eb",
                 backgroundColor: COLORS.primary,
                 borderRadius: 10,
                 width: 180,

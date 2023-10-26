@@ -4,20 +4,20 @@ import {
   TouchableOpacity,
   View,
   FlatList,
-  Text,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Feather, Ionicons } from "@expo/vector-icons";
 import { COLORS, SIZES } from "../../constants";
 import { StyleSheet } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase.config";
 import RecycleCompanyCardView from "../../components/recycle/RecycleCompanyCardView";
+import AppBar from "../../components/recycle/AppBar";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const RecycleCompanies = ({ route }) => {
   const { recycleItem } = route.params;
 
-  console.log("Recycle company Screen Data", recycleItem);
+  console.log("RecycleCompanies Screen Data", recycleItem);
   
   const [companyData, setCompanyData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -55,20 +55,34 @@ const RecycleCompanies = ({ route }) => {
   });
   return (
     <SafeAreaView>
-
-      <View style={styles.searchContainer}>
-        <View style={styles.searchWrapper}>
-          <TextInput
-            style={styles.searchInput}
-            value={searchQuery}
+    <AppBar title={"Recycle Partners"}></AppBar>
+      <View
+      style={{
+        width: "90%",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        backgroundColor: COLORS.white,
+        borderColor: COLORS.gray,
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        marginHorizontal: 10,
+        marginTop: 20,
+        marginLeft: 20,
+      }}
+    >
+      <TextInput
+        style={{ flex: 1, paddingVertical: 10, color: COLORS.black }}
+        placeholder="Search"
+        placeholderTextColor={COLORS.black}
+        value={searchQuery}
             onChangeText={(text) => setSearchQuery(text)}
-            placeholder="Search for recycle companies"
-          />
-        </View>
-        <TouchableOpacity style={styles.searchBtn}>
-          <Feather name="search" size={24} color={COLORS.offwhite} />
-        </TouchableOpacity>
-      </View>
+      />
+      <TouchableOpacity style={{ padding: 10 }}>
+        <Icon name="search" size={20} color={COLORS.primary} />
+      </TouchableOpacity>
+    </View>
+    
 
       <View >
         <FlatList
