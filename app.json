@@ -1,7 +1,23 @@
 {
   "expo": {
-    "name": "scrapie-recycle",
-    "slug": "scrapie-recycle",
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera."
+        }
+      ],
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to access your photos.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save photos.",
+          "isAccessMediaLocationEnabled": true
+        }
+      ]
+    ],
+    "name": "scripe",
+    "slug": "scripe",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,11 +32,17 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "config": {
-        "googleMapsApiKey": "AIzaSyCjOvydDkNAsIzytSPZXyqkgAxd7C6G8Tg"
-      }
+      "bundleIdentifier": "com.arcktype.scripe"
     },
     "android": {
+      "package": "com.arcktype.scripe",
+      "permissions": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -28,6 +50,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1eaa6b1f-4f92-4948-bb2b-366412bf1b60"
+      }
     }
   }
 }

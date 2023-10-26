@@ -4,7 +4,7 @@ import { COLORS , SIZES } from "../../constants";
 const styles = StyleSheet.create({
     container : {
         width: "100%",
-
+        
     },
     container2 : {
         height: 100,
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     },
     welcomeText: (color , top) => ({
         fontFamily: "bold",
-        fontSize: SIZES.xxLarge -10,
+        fontSize: SIZES.xxLarge -15,
         marginTop: top,
         color: color,
         marginHorizontal: 12
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.secondary,
         marginRight: SIZES.small,
         borderRadius: SIZES.small,
-
+  
     },
     searchInput: {
         fontFamily: "regular",
