@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNavigation from "./navigation/BottomNavBar";
-import {Home, StartScreen, Register, Login, RecyclersMap} from "./screens"
+import {RecycleCenterHome, StartScreen, Register, Login, RecyclersMap} from "./screens"
 import { db } from "./firebase.config";
 const Stack = createNativeStackNavigator();
 
@@ -50,8 +50,8 @@ export default function App() {
               options={{ headerShown: false }}
           />
           <Stack.Screen
-              name="Home Screen"
-              component={Home}
+              name="Recycle Center Home Screen"
+              component={RecycleCenterHome}
               options={{headerShown: true}}
           />
           <Stack.Screen

@@ -5,7 +5,7 @@ import { ScrollView } from "react-native";
 import {Heading, MapGlimpse, SchedulesCarousel, Welcome} from "../../components";
 import { COLORS , SIZES } from "../../constants";
 
-const Home = () => {
+const RecycleCenterHome = () => {
     const [currentLocation, setCurrentLocation] = useState("");
     const getCurrentLocation = async () => {
 
@@ -29,7 +29,7 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default RecycleCenterHome;
 
 const styles = StyleSheet.create({
     testStyle: {
