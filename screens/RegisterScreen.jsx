@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Text } from "react-native-paper";
 import Background from "../components/Background";
-import Logo from "../components/Logo";
+import Logo2 from "../components/Logo2";
 import Header from "../components/Header";
 import Button from "../components/Button";
 import TextInput from "../components/TextInput";
@@ -77,8 +77,8 @@ export default function RegisterScreen({ navigation }) {
   return (
     <Background>
       <BackButton goBack={navigation.goBack} />
-      <Logo />
-      <Header>Create Account</Header>
+      <Logo2 />
+      <Header>Join Scrapie</Header>
       <TextInput
         label="Name"
         returnKeyType="next"
@@ -126,6 +126,9 @@ export default function RegisterScreen({ navigation }) {
         errorText={phone.error}
         keyboardType="phone-pad"
       />
+      <Text style={{}}>
+
+      </Text>
       <Button mode="outlined" onPress={onSignUpPressed}>
         Sign Up
       </Button>
