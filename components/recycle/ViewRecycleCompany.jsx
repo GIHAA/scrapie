@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-import LottieView from "lottie-react-native";
+
 import {
-  FontAwesome5,
-  MaterialIcons,
-  AntDesign,
   Entypo,
 } from "@expo/vector-icons";
 import {
@@ -17,7 +14,6 @@ import {
   Button,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import Animated, { FadeInDown, FadeInRight } from "react-native-reanimated";
 import { COLORS } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
 
@@ -56,9 +52,8 @@ const ViewRecycleCompany = ({ route }) => {
       </View>
 
       <ScrollView style={{ flex: 1, padding: 20 }}>
-        <Animated.View
+        <View
           style={{ flexDirection: "row" }}
-          entering={FadeInDown.delay(500).duration(500)}
         >
           <Entypo name="grooveshark" size={80} color="#00C135" />
           <View style={{ marginLeft: 20 }}>
@@ -69,9 +64,9 @@ const ViewRecycleCompany = ({ route }) => {
               Tree Friend
             </Text>
           </View>
-        </Animated.View>
+        </View>
 
-        <Animated.View entering={FadeInDown.delay(1000).duration(500)}>
+        <View>
           <View
             style={{
               flexDirection: "row",
@@ -153,9 +148,9 @@ const ViewRecycleCompany = ({ route }) => {
               </Text>
             </TouchableOpacity>
           </View>
-        </Animated.View>
+        </View>
 
-        <Animated.View entering={FadeInDown.delay(1500).duration(500)}>
+        <View>
           <ScrollView
             style={{ flexGrow: 0, marginBottom: 20, marginTop: 20 }}
             horizontal
@@ -171,9 +166,9 @@ const ViewRecycleCompany = ({ route }) => {
               }}
             />
           </ScrollView>
-        </Animated.View>
+        </View>
 
-        <Animated.View entering={FadeInDown.delay(2000).duration(500)}>
+        <View>
           <View
             style={{
               flexDirection: "row",
@@ -234,9 +229,9 @@ const ViewRecycleCompany = ({ route }) => {
               <Text style={{ fontSize: 14, color: "#1f2023" }}>Best #10</Text>
             </View>
           </View>
-        </Animated.View>
+        </View>
 
-        <Animated.View entering={FadeInDown.delay(2500).duration(500)}>
+        <View>
           <View
             style={{
               flexDirection: "row",
@@ -394,7 +389,7 @@ const ViewRecycleCompany = ({ route }) => {
               </View>
             </View>
           </View>
-        </Animated.View>
+        </View>
         <View style={{ height: 50 }} />
       </ScrollView>
     </View>
