@@ -6,6 +6,7 @@ import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { COLORS } from "../../constants";
 
 const RecycleCompanyCardView = ({ recycleCompany, recycleItem }) => {
+  
   console.log("Recycle Company Card View Recycle Company", recycleCompany);
   console.log("Recycle Company Card View Recycle Item", recycleItem);
 

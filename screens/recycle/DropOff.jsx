@@ -1,5 +1,5 @@
 import { Calendar } from "react-native-calendars";
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Modal,
@@ -8,26 +8,28 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  Image,
 } from "react-native";
 import { COLORS } from "../../constants";
 import "firebase/auth";
 import "firebase/firestore";
-import {  collection , query , where , getDocs , addDoc} from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import * as Animatable from "react-native-animatable";
 import { Video } from "expo-av";
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../../firebase.config";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-
+import AppBar from "../../components/recycle/AppBar";
 
 const DropOff = ({ route }) => {
   const { recycleCompany, recycleItem, recycleRequest } = route.params;
+
   console.log("View dropOff Screen company", recycleCompany);
   console.log("View dropOff Screen item", recycleItem);
   console.log("View dropOff request", recycleRequest);
 
   const navigation = useNavigation();
-  
+
   const [selectedDay, setSelectedDay] = useState("2023-10-29");
   const [selectedOption, setSelectedOption] = useState(null);
   const [description, setDescription] = useState("");
@@ -105,30 +107,29 @@ const DropOff = ({ route }) => {
                 timestamp: new Date().toISOString(),
               };
 
-                setConfirmation(false);
+              setConfirmation(false);
 
-                addDoc(usersCollection, itemWithUID)
-                  .then((docRef) => {
-                    console.log("Document written with ID: ", docRef.id);
-                    setIsSuccess(true);
-                    setIsAnimationPlaying(true);
-                  })
-                  .catch((error) => {
-                    setIsFail(true);
-                    setIsAnimationPlaying(true);
-                    console.error("Error adding document: ", error);
+              addDoc(usersCollection, itemWithUID)
+                .then((docRef) => {
+                  console.log("Document written with ID: ", docRef.id);
+                  setIsSuccess(true);
+                  setIsAnimationPlaying(true);
+                })
+                .catch((error) => {
+                  setIsFail(true);
+                  setIsAnimationPlaying(true);
+                  console.error("Error adding document: ", error);
 
-                    if (error.code === "permission-denied") {
-                      Alert.alert(
-                        "Permission denied. Please check your Firebase rules."
-                      );
-                    } else {
-                      Alert.alert(
-                        "An error occurred while connecting to the server."
-                      );
-                    }
-                  });
-
+                  if (error.code === "permission-denied") {
+                    Alert.alert(
+                      "Permission denied. Please check your Firebase rules."
+                    );
+                  } else {
+                    Alert.alert(
+                      "An error occurred while connecting to the server."
+                    );
+                  }
+                });
             }
           })
           .catch((error) => {
@@ -139,7 +140,8 @@ const DropOff = ({ route }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
+    <View style={{ flex: 1, backgroundColor: "#f0efeb" }}>
+      <AppBar title={"Drop Off"}></AppBar>
       {Confirmation ? (
         <View style={{ flex: 1, margin: 20, marginTop: 80 }}>
           <Text style={{ fontSize: 38, fontWeight: "bold" }}>
@@ -151,7 +153,8 @@ const DropOff = ({ route }) => {
             duration={1000}
             style={{ height: "40%", width: "100%", marginTop: 40 }}
             source={{
-              uri: recycleItem.image || "https://picsum.photos/seed/696/3000/2000",
+              uri:
+                recycleItem.image || "https://picsum.photos/seed/696/3000/2000",
             }}
             placeholder="image"
             contentFit="cover"
@@ -162,7 +165,8 @@ const DropOff = ({ route }) => {
           </Text>
 
           <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 10 }}>
-            Price : <Text style={{ fontWeight: "500" }}>{recycleCompany.name}</Text>
+            Price :{" "}
+            <Text style={{ fontWeight: "500" }}>{recycleCompany.name}</Text>
           </Text>
           <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 10 }}>
             Description :{" "}
@@ -170,44 +174,83 @@ const DropOff = ({ route }) => {
           </Text>
 
           <TouchableOpacity
-                onPress={() => {
-                  handleButtonPress();
-                }}
-                style={{
-                  margin: 20,
-                  backgroundColor: selectedDay ? COLORS.primary : "gray",
-                  height: 50,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  borderRadius: 50,
-                }}
-              >
-                <Text style={{ color: "white", fontSize: 20 }}>
-                  Confirm
-                </Text>
-              </TouchableOpacity>
-
+            onPress={() => {
+              handleButtonPress();
+            }}
+            style={{
+              margin: 20,
+              backgroundColor: selectedDay ? COLORS.primary : "gray",
+              height: 50,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 50,
+            }}
+          >
+            <Text style={{ color: "white", fontSize: 20 }}>Confirm</Text>
+          </TouchableOpacity>
         </View>
       ) : (
-        <View>
+        <View style={{ marginTop: 100 }}>
+          <View style={styles.container}>
+            <Image
+              source={require("../../assets/images/Schedule-sis.png")}
+              style={styles.image}
+            />
+          </View>
           <Calendar
             initialDate={selectedDay}
+            minDate={new Date()}
+            enableSwipeMonths={true}
             onDayPress={(day) => {
               setSelectedDay(day.dateString);
             }}
+            // Specify style for calendar container element. Default = {}
+            style={{
+              borderWidth: 1,
+              borderColor: "gray",
+              height: 350,
+            }}
+            // Specify theme properties to override specific styles for calendar parts. Default = {}
+            theme={{
+              backgroundColor: "#ffffff",
+              calendarBackground: "#ffffff",
+              textSectionTitleColor: "#b6c1cd",
+              textSectionTitleDisabledColor: "#d9e1e8",
+              selectedDayBackgroundColor: "#00adf5",
+              selectedDayTextColor: "#ffffff",
+              todayTextColor: "#00adf5",
+              dayTextColor: "#2d4150",
+              textDisabledColor: "#d9e1e8",
+              dotColor: "#00adf5",
+              selectedDotColor: "#ffffff",
+              arrowColor: "orange",
+              disabledArrowColor: "#d9e1e8",
+              monthTextColor: "blue",
+              indicatorColor: "blue",
+              textDayFontFamily: "monospace",
+              textMonthFontFamily: "monospace",
+              textDayHeaderFontFamily: "monospace",
+              textDayFontWeight: "300",
+              textMonthFontWeight: "bold",
+              textDayHeaderFontWeight: "300",
+              textDayFontSize: 16,
+              textMonthFontSize: 16,
+              textDayHeaderFontSize: 16,
+            }}
           />
+          <View
+            style={{
+              backgroundColor: COLORS.primary,
+              padding: 20,
+              margin: 20,
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: 5,
+            }}
+          >
+            <Text style={{ color: "#FFF", fontSize: 20 }}>{selectedDay}</Text>
+          </View>
           <View style={{ flex: 1, backgroundColor: "#f0efeb", padding: 20 }}>
-            <View
-              style={{
-                backgroundColor: COLORS.primary,
-                padding: 12,
-                justifyContent: "center",
-                alignItems: "center",
-                borderRadius: 5,
-              }}
-            >
-              <Text style={{ color: "#FFF", fontSize: 20 }}>{selectedDay}</Text>
-            </View>
             <View>
               <TouchableOpacity
                 onPress={() => {
@@ -321,5 +364,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 50,
+  },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: -100,
+    minHeight: 200,
+  },
+  image: {
+    width: 200,
+    height: 200,
   },
 });
