@@ -29,6 +29,13 @@ export default function LoginScreen({ navigation }) {
       .then((userCredential) => {
         console.log("User logged in:", userCredential.user);
 
+        if(email.value === "shabina@gmail.com"){
+          //qerQuj-2zicso-gazqom
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "RecycleCenterBottomNavBar" }],
+          });
+        }
         navigation.reset({
           index: 0,
           routes: [{ name: "Bottom Navigation" }],
@@ -36,10 +43,6 @@ export default function LoginScreen({ navigation }) {
       })
       .catch((error) => {
         console.error("Sign in error : ", error);
-      });
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "Bottom Navigation" }],
       });
 
   };
@@ -57,10 +60,6 @@ export default function LoginScreen({ navigation }) {
     })
     .catch((error) => {
       console.error("Sign in error : ", error);
-    });
-    navigation.reset({
-      index: 0,
-      routes: [{ name: "Bottom Navigation" }],
     });
   }
 
@@ -102,9 +101,9 @@ export default function LoginScreen({ navigation }) {
       </Button>
 
 
-      <Button mode="outlined" onPress={onLoginPresseddebug}>
+      {/* <Button mode="outlined" onPress={onLoginPresseddebug}>
         Debug 1 Click Login
-      </Button>
+      </Button> */}
 
 
       <View style={styles.row}>

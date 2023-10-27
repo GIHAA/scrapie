@@ -38,7 +38,6 @@ const Scan = ({}) => {
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
   const quotes = [
     "Recycle your aluminum cans, and save energy while reducing waste.",
-    "Don't forget to separate your paper for recycling to help save trees.",
     "Always recycle glass bottles and jars to reduce pollution and conserve resources.",
     "Collect steel items for recycling to make an energy-saving impact.",
     "Recycle plastic bottles to save energy and reduce plastic pollution.",
@@ -62,7 +61,7 @@ const Scan = ({}) => {
     "Recycling is a climate change warrior, reducing greenhouse gas emissions and helping the planet.",
     "Recycling car batteries is a life-saver, preventing harmful lead and acid from harming the environment."
   ];
-  
+  const [marketPrice, setRandomPrice] = useState((Math.random() * 1000 + 500).toFixed(2));
 
   const navigation = useNavigation();
 
@@ -131,6 +130,37 @@ const Scan = ({}) => {
     });
   };
 
+  const uploadImageToFirebaseRecycle = async (uri) => {
+    const response = await fetch(uri);
+
+    const blob = await response.blob();
+
+    const storageRef = ref(storage, "images/" + new Date().getTime());
+
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+      },
+      (error) => {
+        console.error(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+          console.log("File available at", downloadURL);
+          const transferObj = {
+            item: target[0].className.split(",")[0],
+            image: downloadURL,
+          };
+          navigation.navigate("Recycle", { transferObj });
+        });
+      }
+    );
+  };
   const getPicFromGallery = async () => {
     setloading(true);
     setdisplayCameraButtom(false);
@@ -286,8 +316,9 @@ const Scan = ({}) => {
     navigation.navigate(Test);
   };
 
-  const handleRepairButtonClick = () => {
-    const data = { item: target[0].className.split(",")[0] };
+  const handleRepairButtonClick = async () => {
+    const ImageUpload = await uploadImageToFirebase(image);
+    const data = { item: target[0].className.split(",")[0], image: ImageUpload.image };
     navigation.navigate("Repair", { data });
   };
 
@@ -301,9 +332,9 @@ const Scan = ({}) => {
   };
 
   const handleRecycleButtonClick = () => {
-    const data = { item: target[0].className.split(",")[0] };
-    navigation.navigate("Recycle", { data });
+    uploadImageToFirebaseRecycle(image);
   };
+
 
   if (hasCameraPermission === null) {
     return <View />;
@@ -334,6 +365,7 @@ const Scan = ({}) => {
                   height: 100,
                   width: 100,
                   borderRadius: 50,
+                  opacity : loading ? 1 : 0
                 }}
               />
               <Animatable.Text
@@ -470,16 +502,15 @@ const Scan = ({}) => {
                   </View>
                 </View>
 
-                <View style={{ width: "98%", flexDirection: "row" }}>
+                <View style={{ width: "98%", flexDirection: "row" , marginBottom : 4 }}>
                   <MaterialCommunityIcons
                     name="lightbulb-on-outline"
                     size={30}
                     color="green"
                     style={{ margin: 7 }}
                   />
-                  <Text style={{ fontSize: 16, margin: 6, marginRight: 30 }}>
-                    Recycling materials like paper, glass, and aluminum helps
-                    conserve valuable natural resources
+                  <Text style={{ fontSize: 16, margin: 6, marginTop : 11,  marginRight: 30 }}>
+                  Current market value: ${marketPrice}
                   </Text>
                 </View>
 

@@ -100,7 +100,7 @@ const Search = () => {
           setView(view === "marketplace" ? "myItems" : "marketplace")
         }
       >
-        <Text style={{ color: "white", fontSize: 20 }}>{`Switch to ${
+        <Text style={{ color: "white", fontSize: 20  }}>{`Switch to ${
           view === "marketplace" ? "My Items" : "Marketplace"
         }`}</Text>
       </TouchableOpacity>
@@ -134,7 +134,8 @@ const Search = () => {
         style={{
           fontFamily: "semibold",
           fontSize: SIZES.xLarge - 2,
-          marginLeft: 8,
+          marginLeft: 13,
+          marginBottom : 2
         }}
       >
         {view === "marketplace" ? "Marketplace" : "My Items"}
@@ -190,5 +191,7 @@ const styles = StyleSheet.create({
   flatListContainer: {
     flex: 1,
     alignItems: "center",
+    paddingBottom : 70,
+    paddingHorizontal : 10
   },
 });

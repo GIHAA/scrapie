@@ -9,26 +9,32 @@ import { useState } from "react";
 import RepairCenterPopular from "../components/repair/RepairCenterPopular";
 import RepairCenterNearBy from "../components/repair/RepairCenterNearBy";
 import RepairCenterTop from "../components/repair/RepairCenterTop";
+import { data } from "@tensorflow/tfjs";
 
-const SelectRepairCenter = () => {
+const SelectRepairCenter = ({ route }) => {
     const navigation = useNavigation();
     const [activeButton, setActiveButton] = useState("popular");
+    const [selectedCardIndex, setSelectedCardIndex] = useState(null);
+
+    const { data } = route.params;
+    const { item, image, days, sliderValue } = data;
 
     const handleFilterChipsButton = (buttonName) => {
         setActiveButton(buttonName);
     }
 
     const handleButtonPress = () => {
-        navigation.navigate(ConfirmRequestRepairCenter);
+        const data = { item: item, image: image, days: days, sliderValue: sliderValue, repairCenterId: selectedCardIndex };
+        navigation.navigate("ConfirmRequestRepairCenter", { data });
     }
 
     let renderedComponent;
     if (activeButton === 'popular') {
-        renderedComponent = <RepairCenterPopular />;
+        renderedComponent = <RepairCenterPopular setSelectedCardIndex={setSelectedCardIndex} />;
     } else if (activeButton === 'nearby') {
-        renderedComponent = <RepairCenterNearBy />;
+        renderedComponent = <RepairCenterNearBy setSelectedCardIndex={setSelectedCardIndex} />;
     } else if (activeButton === 'top') {
-        renderedComponent = <RepairCenterTop />;
+        renderedComponent = <RepairCenterTop setSelectedCardIndex={setSelectedCardIndex} />;
     }
 
     return (

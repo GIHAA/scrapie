@@ -35,7 +35,7 @@ const ProductRow = () => {
   }, []);
 
   return (
-    <View style={{ marginTop: 3 , marginBottom : 80}}>
+    <View style={{ marginTop: 3 , marginBottom : 80 , marginLeft : 10}}>
       <FlatList
         data={userData}
         keyExtractor={(item) => item.id}

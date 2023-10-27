@@ -1,8 +1,8 @@
 import { View , StyleSheet} from "react-native";
 import React, {useState} from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {MapGlimpse} from "../components";
-import { COLORS , SIZES } from "../constants";
+import {MapGlimpse} from "../../components";
+import { COLORS , SIZES } from "../../constants";
 
 const RecyclersMap = () => {
     const [currentLocation, setCurrentLocation] = useState("");
