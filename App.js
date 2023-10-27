@@ -6,7 +6,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNavigation from "./navigation/BottomTabNavigation";
 import { Cart, Profile, RecycleRequest, RecycleRequests } from "./screens";
 import Test from "./screens/Test";
-import Recycle from "./screens/Recycle";
+import Recycle from "./screens/recycle/Recycle";
+import ViewRecycleRequest from "./components/recycle/ViewRecycleRequest"
 import Reuse from "./screens/GiveAway";
 import Repair from "./screens/Repair";
 import ViewProduct from "./screens/ViewProduct";
@@ -17,10 +18,14 @@ import RepairCenterRequest from "./screens/RepairCenterRequest";
 import StartScreen from "./screens/StartScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
+import RecycleCompanies from "./screens/recycle/RecycleCompanies";
+import ViewRecycleCompany from "./components/recycle/ViewRecycleCompany";
+import DropOff  from "./screens/recycle/DropOff";
 import ViewMyProduct from "./screens/ViewMyProduct";
-import ViewRecycleRequest from "./components/product/ViewRecycleRequest";
-const Stack = createNativeStackNavigator();
 import { LogBox } from 'react-native';
+import PickUp from "./screens/recycle/PickUp";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -126,6 +131,26 @@ export default function App() {
         <Stack.Screen
           name="ViewRecycleRequest"
           component={ViewRecycleRequest}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="RecycleCompanies"
+          component={RecycleCompanies}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ViewRecycleCompany"
+          component={ViewRecycleCompany}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="DropOff"
+          component={DropOff}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PickUp"
+          component={PickUp}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

@@ -8,11 +8,11 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather, Ionicons } from "@expo/vector-icons";
-import { COLORS, SIZES } from "../constants";
+import { COLORS, SIZES } from "../../constants";
 import { StyleSheet } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "../firebase.config";
-import RecycleRequestCardView from "../components/product/RecycleRequestCardView";
+import { db } from "../../firebase.config";
+import RecycleRequestCardView from "../../components/recycle/RecycleRequestCardView";
 
 const RecycleRequests = () => {
   const [userData, setUserData] = useState([]);
@@ -35,7 +35,7 @@ const RecycleRequests = () => {
       });
       userDataArray.sort((a, b) => b.timestamp - a.timestamp);
       setUserData(userDataArray);
-      console.log("userDataArray", userDataArray)
+      console.log("userDataArray", userDataArray);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -51,39 +51,33 @@ const RecycleRequests = () => {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.searchContainer}>
-        <TouchableOpacity>
-          <Ionicons
-            name="camera-outline"
-            size={SIZES.xLarge}
-            style={styles.searchIcon}
-          />
-        </TouchableOpacity>
+    <SafeAreaView>
 
+      <View style={styles.searchContainer}>
         <View style={styles.searchWrapper}>
           <TextInput
             style={styles.searchInput}
             value={searchQuery}
             onChangeText={(text) => setSearchQuery(text)}
-            placeholder="What are you looking for"
+            placeholder="Search for recycle requests"
           />
         </View>
-        <View>
-          <TouchableOpacity style={styles.searchBtn}>
-            <Feather name="search" size={24} color={COLORS.offwhite} />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity style={styles.searchBtn}>
+          <Feather name="search" size={24} color={COLORS.offwhite} />
+        </TouchableOpacity>
       </View>
 
-      <View style={styles.flatListContainer}>
+      <View >
         <FlatList
+          style={styles.container}
           data={filteredData}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <RecycleRequestCardView recycleRequest={item} />}
-          numColumns={2}
+          renderItem={({ item }) => (
+            <RecycleRequestCardView recycleRequest={item} />
+          )}
         />
       </View>
+
     </SafeAreaView>
   );
 };
@@ -137,7 +131,12 @@ const styles = StyleSheet.create({
     height: 150,
   },
   flatListContainer: {
+    width: "100%",
     flex: 1,
     alignItems: "center",
   },
+  container: {
+    width: "100%",
+    margin: 5,
+  }
 });

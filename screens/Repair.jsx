@@ -15,36 +15,36 @@ import { useNavigation } from "@react-navigation/native";
 import SelectRepairCenter from './SelectRepairCenter';
 
 const Repair = ({ route }) => {
-  const [text, onChangeText] = React.useState('Useless Text');
+  const [days, setDays] = useState();
   const [sliderValue, setSliderValue] = useState(0);
 
   const navigation = useNavigation();
 
   const { data } = route.params;
+  const {item, image } = data;
 
   const handleSliderChange = (value) => {
     setSliderValue(value);
   };
 
   const handleButtonPress = () => {
-    navigation.navigate(SelectRepairCenter);
-  };
-
-  const imageData = {
-    imageUri: "your_image_url_here",
-    title: "Image Title",
-    text: "Description or Text",
+    const data = {item: item, image: image, days: days, sliderValue: sliderValue};
+    navigation.navigate("SelectRepairCenter",  { data });
   };
 
   return (
     <View>
-      <Text style={styles.header}>{formatTitle(data.item)}</Text>
+      <Text style={styles.header}>Your Expectations</Text>
       <View
         style={{
           marginTop: 20
         }}
       >
-        <ImageWithText {...imageData} />
+        <ImageWithText 
+          imageUri={image}
+          title={formatTitle(item)}
+          text=""
+        />
       </View>
       <View>
         <SafeAreaView>
@@ -53,7 +53,7 @@ const Repair = ({ route }) => {
               <Text style={styles.resultText}>Expecting Result In</Text>
               <TextInput
                 style={styles.input}
-                onChangeText={onChangeText}
+                onChangeText={setDays}
                 placeholder='Number of Days'
                 caretHidden
               />

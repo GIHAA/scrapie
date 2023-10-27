@@ -70,7 +70,7 @@ export default function Profile() {
     // }
   }
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, marginVertical: 44, }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ marginVertical: 10, flex: 1, paddingHorizontal: 20 }}
@@ -104,7 +104,7 @@ export default function Profile() {
             }}
           >
             <Text style={{ paddingVertical: 0 }}>
-              {/* {user?.username || user?.email} */}
+              John Snow
             </Text>
             <Text
               style={{ paddingVertical: 0, fontSize: 11, color: "gray" }}
@@ -151,9 +151,33 @@ export default function Profile() {
             borderBottomColor: "#f3f3f3",
           }}
         >
-          <Entypo name="help-with-circle" size={18} color="#2b6ed9" />
+          <Entypo name="grooveshark" size={18} color="#00C135" />
           <Text style={{ paddingHorizontal: 20, flex: 1 }}>
             View Recycling Items
+          </Text>
+          <Ionicons name="chevron-forward" color="gray" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => {
+            navigation.navigate("RepairCenterRequest");
+          }}
+          style={{
+            padding: 10,
+            marginTop: 15,
+            backgroundColor: "white",
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+            flexDirection: "row",
+            alignItems: "center",
+            borderBottomWidth: 0.5,
+            borderBottomColor: "#f3f3f3",
+          }}
+        >
+          <Entypo name="grooveshark" size={18} color="#00C135" />
+          <Text style={{ paddingHorizontal: 20, flex: 1 }}>
+            View Repairing Items
           </Text>
           <Ionicons name="chevron-forward" color="gray" />
         </TouchableOpacity>

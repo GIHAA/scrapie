@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Button from "../components/repair/Button";
 import ModalPopUp from "../components/repair/ModalPopup";
@@ -7,23 +7,67 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from "@react-navigation/native";
 import Home from "./Home";
 import ImageWithText from "../components/repair/ImageWithText";
+import getRepairCenterById from "../service/repair/getRepairCenterById";
+import getUserData from "../service/repair/getUser";
+import { db } from "../firebase.config";
+import { collection, addDoc } from "firebase/firestore";
 
-const ConfirmRequestRepairCenter = () => {
+const ConfirmRequestRepairCenter = ({ route }) => {
     const [isModalVisible, setModalVisible] = useState(false);
     const [success, setSuccess] = useState(false);
-    const navigation = useNavigation();
+    const [repairCenter, setRepairCenter] = useState(null);
+    const [loggedUser, setLoggedUser] = useState(null);
 
-    const handleButtonPress = () => {
-        // Simulate success/failure
-        const isSuccess = true;
-        setSuccess(isSuccess);
-        setModalVisible(true);
+    const navigation = useNavigation();
+    const { data } = route.params;
+    const { item, image, days, sliderValue, repairCenterId } = data;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getRepairCenterById(repairCenterId);
+            getUserData(setLoggedUser);
+            if (data) {
+                setRepairCenter(data);
+            }
+        }
+        fetchData();
+    }, []);
+
+    const requestCollection = collection(db, "repair-center-request");
+
+    const handleButtonPress = async () => {
+        // create a repair center request
+        const data = {
+            item: item,
+            image: image,
+            days: days,
+            budget: sliderValue,
+            repairCenterId: repairCenterId,
+            userId: loggedUser.id,
+            dateTime: new Date().toISOString(),
+            status: "pending",
+            deliveryAt: null,
+        }
+
+        await addDoc(requestCollection, data)
+            .then((docRef) => {
+                console.log("Document written with ID: ", docRef.id);
+                const isSuccess = true;
+                setSuccess(isSuccess);
+                setModalVisible(true);
+            })
+            .catch((error) => {
+                console.error("Error adding document: ", error);
+                const isSuccess = false;
+                setSuccess(isSuccess);
+                setModalVisible(true);
+            });
     }
 
     const imageData = {
-        imageUri: "your_image_url_here",
-        title: "Image Title",
-        text: "Description or Text",
+        imageUri: image,
+        title: item,
+        text: "",
     };
 
     const handleGoBackHomeButtonPress = () => {
@@ -44,15 +88,15 @@ const ConfirmRequestRepairCenter = () => {
             <View style={styles.container}>
                 <View>
                     <Text style={styles.resultText}>Expecting Result In</Text>
-                    <Text style={styles.resultText}>2 Days</Text>
+                    <Text style={styles.resultText}>{days} Days</Text>
                 </View>
                 <View>
                     <Text style={styles.resultText}>Budget</Text>
-                    <Text style={styles.resultText}>LKR: 10000</Text>
+                    <Text style={styles.resultText}>LKR: {sliderValue}</Text>
                 </View>
                 <View>
                     <Text style={styles.resultText}>Repair Center</Text>
-                    <Text style={styles.resultText}>Adam Repair Centers, Colombo 10.</Text>
+                    <Text style={styles.resultText}>{repairCenter ? repairCenter.name : "N/A"}</Text>
                 </View>
             </View>
 
