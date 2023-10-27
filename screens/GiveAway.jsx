@@ -28,7 +28,7 @@ const Reuse = ({ route }) => {
 
   const [selectedOption, setSelectedOption] = useState(null);
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("Free");
+  const [price, setPrice] = useState("0");
   const [isConfirmVisible, setisConfirmVisible] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -150,43 +150,6 @@ const Reuse = ({ route }) => {
     });
 
 
-    // const usersCollection = collection(db, "items");
-  
-    // const itemWithUID = {
-    //   ...data,
-    //   uid: user.uid,
-    //   seller: user.name,
-    //   phone: user.phone,
-    //   description: description,
-    //   price: selectedOption === "Option2" ? parseFloat(price) : null,
-    // };
-
-    // if (selectedOption) {
-    //   setisConfirmVisible(true);
-  
-    //   addDoc(usersCollection, itemWithUID)
-    //     .then((docRef) => {
-    //       console.log("Document written with ID: ", docRef.id);
-    //       setIsSuccess(true);
-    //       setIsAnimationPlaying(true);
-    //     })
-    //     .catch((error) => {
-    //       setIsFail(true);
-    //       setIsAnimationPlaying(true);
-    //       console.error("Error adding document: ", error);
-  
-    //       if (error.code === "permission-denied") {
-    //         Alert.alert("Permission denied. Please check your Firebase rules.");
-    //       } else {
-    //         Alert.alert("An error occurred while connecting to the server.");
-    //       }
-    //     });
-  
-    //   if (selectedOption === "Option2") {
-    //   }
-    //   } else {
-    //     Alert.alert("Please select an option first.");
-    //   }
   };
   
 

@@ -38,7 +38,6 @@ const Scan = ({}) => {
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
   const quotes = [
     "Recycle your aluminum cans, and save energy while reducing waste.",
-    "Don't forget to separate your paper for recycling to help save trees.",
     "Always recycle glass bottles and jars to reduce pollution and conserve resources.",
     "Collect steel items for recycling to make an energy-saving impact.",
     "Recycle plastic bottles to save energy and reduce plastic pollution.",
@@ -62,7 +61,7 @@ const Scan = ({}) => {
     "Recycling is a climate change warrior, reducing greenhouse gas emissions and helping the planet.",
     "Recycling car batteries is a life-saver, preventing harmful lead and acid from harming the environment."
   ];
-  
+  const [marketPrice, setRandomPrice] = useState((Math.random() * 1000 + 500).toFixed(2));
 
   const navigation = useNavigation();
 
@@ -305,6 +304,7 @@ const Scan = ({}) => {
     navigation.navigate("Recycle", { data });
   };
 
+
   if (hasCameraPermission === null) {
     return <View />;
   } else if (hasCameraPermission === false) {
@@ -334,6 +334,7 @@ const Scan = ({}) => {
                   height: 100,
                   width: 100,
                   borderRadius: 50,
+                  opacity : loading ? 1 : 0
                 }}
               />
               <Animatable.Text
@@ -478,8 +479,7 @@ const Scan = ({}) => {
                     style={{ margin: 7 }}
                   />
                   <Text style={{ fontSize: 16, margin: 6, marginRight: 30 }}>
-                    Recycling materials like paper, glass, and aluminum helps
-                    conserve valuable natural resources
+                  Current market value: ${marketPrice}
                   </Text>
                 </View>
 
