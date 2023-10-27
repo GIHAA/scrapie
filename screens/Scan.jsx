@@ -471,14 +471,14 @@ const Scan = ({}) => {
                   </View>
                 </View>
 
-                <View style={{ width: "98%", flexDirection: "row" }}>
+                <View style={{ width: "98%", flexDirection: "row" , marginBottom : 4 }}>
                   <MaterialCommunityIcons
                     name="lightbulb-on-outline"
                     size={30}
                     color="green"
                     style={{ margin: 7 }}
                   />
-                  <Text style={{ fontSize: 16, margin: 6, marginRight: 30 }}>
+                  <Text style={{ fontSize: 16, margin: 6, marginTop : 11,  marginRight: 30 }}>
                   Current market value: ${marketPrice}
                   </Text>
                 </View>

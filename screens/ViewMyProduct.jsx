@@ -24,8 +24,8 @@ const ViewMyProduct = ({ route, navigation }) => {
   const firestore = getFirestore();
 
   const markAsSold = () => {
-    // Get a reference to the Firestore document
-    const itemRef = doc(firestore, "items", data.id); // Replace "your-collection-name" with your actual collection name
+
+    const itemRef = doc(firestore, "items", data.id); 
 
     update(itemRef, { status: "sold" })
       .then(() => {})
@@ -48,6 +48,7 @@ const ViewMyProduct = ({ route, navigation }) => {
   };
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible2, setIsModalVisible2] = useState(false);
   const [success, setSuccess] = useState(false);
 
   return (
@@ -101,7 +102,9 @@ const ViewMyProduct = ({ route, navigation }) => {
               alignItems: "center",
               borderRadius: 50,
             }}
-            onPress={markAsSold}
+            onPress={() => {
+              setIsModalVisible2(true);
+            }}
           >
             <Text style={{ color: "white", fontSize: 20 }}>Mark as sold</Text>
           </TouchableOpacity>
@@ -140,13 +143,63 @@ const ViewMyProduct = ({ route, navigation }) => {
             <View>
               <Icon
                 name="times"
-                style={styles.icon}
+                style={styles.icon2}
                 size={120}
                 color={COLORS.red}
               />
               <Text style={styles.failedPopUpTitle}></Text>
               <Text style={{ fontSize: 20 }}>
-                Are you sure you want to delete this post?
+                Are you sure you want to delete {data.item} post?
+              </Text>
+            </View>
+          )}
+
+          {success ? (
+            <View></View>
+          ) : (
+            <TouchableOpacity
+              style={{
+                marginTop: 13,
+                backgroundColor: "#e75e00",
+                height: 50,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 50,
+                marginHorizontal: 20,
+              }}
+              onPress={() => {
+                deleteItem(data);
+              }}
+            >
+              <Text style={{ color: "white", fontSize: 20  }}>Confirm</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </ModalPopUp>
+
+      <ModalPopUp visible={isModalVisible2}>
+        <View>
+          {success ? (
+            <View>
+              <Icon
+                name="check"
+                style={styles.icon2}
+                size={120}
+                color={COLORS.primary}
+              />
+              <Text style={{ fontSize: 20 , textAlign : 'center' , marginTop : 40 }}>Item marked as sold!</Text>
+            </View>
+          ) : (
+            <View>
+              <Icon
+                name="times"
+                style={styles.icon2}
+                size={120}
+                color={COLORS.red}
+              />
+              <Text style={styles.failedPopUpTitle}></Text>
+              <Text style={{ fontSize: 20 }}>
+                Are you sure you want to mark {data.item} as sold
               </Text>
             </View>
           )}
@@ -198,6 +251,10 @@ const styles = StyleSheet.create({
   icon: {
     textAlign: "center",
     marginTop : 50
+  },
+  icon2: {
+    textAlign: "center",
+    marginTop : 10
   },
   buttonSuccess: {
     backgroundColor: COLORS.primary,
