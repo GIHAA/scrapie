@@ -40,7 +40,9 @@ const RepairCenterPopular = ({ setSelectedCardIndex }) => {
 
 const styles = StyleSheet.create({
     scrollViewContent: {
-    }
+        flexGrow: 1,
+        minHeight: "90%",
+    },
 });
 
 export default RepairCenterPopular;

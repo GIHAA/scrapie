@@ -3,6 +3,39 @@ import RepairRequestedCompletedCard from "./RepairRequestCompletedCard";
 import { useEffect, useState } from "react";
 import { db } from "../../firebase.config";
 import { doc, getDoc, getDocs, collection, query, where } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+const getUserData = async () => {
+    return new Promise((resolve, reject) => {
+        const auth = getAuth();
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const userEmail = user.email;
+                const usersCollection = collection(db, "users");
+                const userQuery = query(usersCollection, where("email", "==", userEmail));
+                try {
+                    const querySnapshot = await getDocs(userQuery);
+                    if (!querySnapshot.empty) {
+                        const userDoc = querySnapshot.docs[0];
+                        const userData = userDoc.data();
+                        const userId = userDoc.id;
+                        const userDataWithId = { ...userData, id: userId };
+                        resolve(userDataWithId);
+                    } else {
+                        console.error("User document not found.");
+                        reject("User document not found");
+                    }
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                    reject(error);
+                }
+            } else {
+                console.error("User not authenticated.");
+                reject("User not authenticated");
+            }
+        });
+    });
+};
 
 const getRepairCenterById = async (repairCenterId) => {
     try {
@@ -40,10 +73,12 @@ const getUserById = async (userId) => {
     }
 };
 
-const fetchRepairCenterRequests = async ({ status }) => {
+const fetchRepairCenterRequests = async ({ status, userId }) => {
     try {
         const requestsCollection = collection(db, "repair-center-request");
-        const requestsQuery = query(requestsCollection, where("status", "==", status));
+        let requestsQuery = requestsCollection;
+        requestsQuery = query(requestsQuery, where("status", "==", status));
+        requestsQuery = query(requestsQuery, where("userId", "==", userId))
 
         const querySnapshot = await getDocs(requestsQuery);
         const data = [];
@@ -78,8 +113,9 @@ const RepairCenterCompletedRequests = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            const userData = await getUserData();
             try {
-                const data = await fetchRepairCenterRequests({ status: "completed" });
+                const data = await fetchRepairCenterRequests({ status: "completed", userId: userData.id });
                 setCompletedRequests(data);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -107,8 +143,8 @@ const RepairCenterCompletedRequests = () => {
                         // phoneNumber={request.repairCenter?.contact || 'N/A'}
                         budget={request.budget}
                         requestedAt={request.dateTime.toLocaleString()}
-                        deliveredAt={request.deliveryAt.toLocaleString()}
-                    />
+                        deliveredAt={request.deliveryAt ? request.deliveryAt.toLocaleString() : 'N/A'}
+                        />
                 ))
             ) : (
                 <Text>No pending requests found.</Text>
@@ -118,13 +154,12 @@ const RepairCenterCompletedRequests = () => {
 }
 
 const styles = StyleSheet.create({
-    scrollViewContent: {
-        flex: 1,
-    },
     loadingContainer: {
         flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
+    },
+    scrollViewContent: {
+        flexGrow: 1,
+        minHeight: "100%",
     },
 });
 
