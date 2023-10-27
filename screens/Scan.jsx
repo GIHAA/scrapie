@@ -131,6 +131,37 @@ const Scan = ({}) => {
     });
   };
 
+  const uploadImageToFirebaseRecycle = async (uri) => {
+    const response = await fetch(uri);
+
+    const blob = await response.blob();
+
+    const storageRef = ref(storage, "images/" + new Date().getTime());
+
+    const uploadTask = uploadBytesResumable(storageRef, blob);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+      },
+      (error) => {
+        console.error(error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+          console.log("File available at", downloadURL);
+          const transferObj = {
+            item: target[0].className.split(",")[0],
+            image: downloadURL,
+          };
+          navigation.navigate("Recycle", { transferObj });
+        });
+      }
+    );
+  };
   const getPicFromGallery = async () => {
     setloading(true);
     setdisplayCameraButtom(false);
@@ -301,8 +332,7 @@ const Scan = ({}) => {
   };
 
   const handleRecycleButtonClick = () => {
-    const data = { item: target[0].className.split(",")[0] };
-    navigation.navigate("Recycle", { data });
+    uploadImageToFirebaseRecycle(image);
   };
 
   if (hasCameraPermission === null) {
