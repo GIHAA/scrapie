@@ -1,7 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import { COLORS, SIZES } from "../../constants";
 
 const MapGlimpse = () => {
   const [mapRegion, setmapRegion] = useState({

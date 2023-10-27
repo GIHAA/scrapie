@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
-  TextInput,
   TouchableOpacity,
   View,
   FlatList,
   Text,
-  Button,
   StyleSheet,
-  TouchableWithoutFeedback,
-  UIManager,
-  LayoutAnimation,
   Modal,
   ScrollView,
   Image,
@@ -47,7 +42,9 @@ function CollectionRequests() {
           id: doc.id,
           ...doc.data(),
         };
-        requestsArray.push(request);
+        if (request.recycleRequest.type != "Drop_Off") {
+          requestsArray.push(request);
+        }
       });
       setRequests(requestsArray);
     } catch (error) {
@@ -152,53 +149,51 @@ function CollectionRequests() {
         {requests.length > 0 ? (
           isListView ? (
             <View style={{ marginTop: 10 }}>
-              <ScrollView>
-              <FlatList
-                data={requests}
-                keyExtractor={(request) => request.id}
-                renderItem={({ item }) => (
-                  <>
-                    <TouchableOpacity key={item.id} style={styles.card}>
-                      <View
-                        style={{
-                          justifyContent: "flex-start",
-                          alignItems: "center",
-                          flexDirection: "column",
-                        }}
-                      >
-                        <View>
-                          <Text
-                            style={[
-                              styles.cardText,
-                              { fontSize: 24, fontWeight: "500" },
-                            ]}
-                          >
-                            {item.recycleItem.item}
-                          </Text>
-                          <Text style={styles.cardText}>
-                            description: {item.recycleItem.description}
-                          </Text>
-                          <Text style={styles.cardText}>
-                            Requested By: {Date().toString().split("2023")[0]}
-                            2023
-                          </Text>
-                          <Text style={styles.cardText}>
-                            requested by: {item.seller}
-                          </Text>
+                <FlatList
+                  data={requests}
+                  keyExtractor={(request) => request.id}
+                  renderItem={({ item }) => (
+                    <>
+                      <TouchableOpacity key={item.id} style={styles.card}>
+                        <View
+                          style={{
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <View>
+                            <Text
+                              style={[
+                                styles.cardText,
+                                { fontSize: 24, fontWeight: "500" },
+                              ]}
+                            >
+                              {item.recycleItem.item}
+                            </Text>
+                            <Text style={styles.cardText}>
+                              description: {item.recycleItem.description}
+                            </Text>
+                            <Text style={styles.cardText}>
+                              Requested By: {Date().toString().split("2023")[0]}
+                              2023
+                            </Text>
+                            <Text style={styles.cardText}>
+                              requested by: {item.seller}
+                            </Text>
+                          </View>
+                          <View>
+                            <Image
+                              style={styles.image}
+                              source={require("../../assets/images/plastic_bottles.jpeg")}
+                            />
+                          </View>
                         </View>
-                        <View>
-                          <Image
-                            style={styles.image}
-                            source={require("../../assets/images/plastic_bottles.jpeg")}
-                          />
-                        </View>
-                      </View>
-                    </TouchableOpacity>
-                  </>
-                )}
-                numColumns={1}
-              />
-              </ScrollView>
+                      </TouchableOpacity>
+                    </>
+                  )}
+                  numColumns={1}
+                />
             </View>
           ) : (
             <View>
