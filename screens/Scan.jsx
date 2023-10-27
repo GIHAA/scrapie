@@ -349,25 +349,32 @@ const Scan = ({}) => {
           ref={cameraRef}
           onCameraReady={handleCameraReady}
         >
-          {loading && (
-            <View
-              style={{
-                flex: 1,
-                marginTop: 250,
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <ActivityIndicator
+
+<ActivityIndicator
                 size={100}
                 color={COLORS.secondary}
                 style={{
                   height: 100,
                   width: 100,
                   borderRadius: 50,
-                  opacity : loading ? 1 : 0
+                  flex: 1,
+                  top : 270,
+                  left : 140
                 }}
+                animating={loading}
+                hidesWhenStopped={true}
               />
+
+          {loading && (
+            <View
+              style={{
+                flex: 1,
+                marginTop: 160,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+
               <Animatable.Text
                 animation="fadeIn"
                 duration={1000}
