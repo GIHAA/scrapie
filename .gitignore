@@ -7,6 +7,24 @@ npm-debug.*
 *.p12
 *.key
 *.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# macOS
+.DS_Store
+*.pem
+
+# local env files
+.env*.local
+
+# typescript
+*.tsbuildinfo
 *.orig.*
 web-build/
 
