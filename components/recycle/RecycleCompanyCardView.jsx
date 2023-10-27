@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginLeft: 20,
     marginBottom: 20,
-    marginTop: 20,
+    marginTop: 5,
   },
   leftSide: {
     flex: 2,
