@@ -4,7 +4,8 @@ import { useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNavigation from "./navigation/BottomTabNavigation";
-import { Cart, Profile, RecycleRequest, RecycleRequests, RecycleCenterHome, RecyclersMap } from "./screens";
+import RCBottomNavBar from "./navigation/RCBottomNavBar";
+import { Cart, Profile, RecycleRequest, RecycleRequests, RecycleCenterHome, RecyclersMap, MapTest, CollectionRequests, CollectionRoutes, RecycleCenterProfile } from "./screens";
 import Test from "./screens/Test";
 import Recycle from "./screens/recycle/Recycle";
 import ViewRecycleRequest from "./components/recycle/ViewRecycleRequest"
@@ -19,7 +20,6 @@ import StartScreen from "./screens/StartScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ViewMyProduct from "./screens/ViewMyProduct";
-import ViewRecycleRequest from "./components/product/ViewRecycleRequest";
 
 const Stack = createNativeStackNavigator();
 import { LogBox } from 'react-native';
@@ -131,13 +131,38 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-            name="Recycle Center Home Screen"
+            name="RecycleCenterBottomNavBar"
+            component={RCBottomNavBar}
+            options={{headerShown: false}}
+        />
+        <Stack.Screen
+            name="RecycleCenterHome"
             component={RecycleCenterHome}
             options={{headerShown: true}}
         />
         <Stack.Screen
-            name="Recyclers Map"
+            name="RecyclersMap"
             component={RecyclersMap}
+            options={{headerShown: true}}
+        />
+        <Stack.Screen
+            name="MapTest"
+            component={MapTest}
+            options={{headerShown: true}}
+        />
+        <Stack.Screen
+            name="RecycleCollectionRequests"
+            component={CollectionRequests}
+            options={{headerShown: true}}
+        />
+        <Stack.Screen
+            name="RecycleCollectionRoutes"
+            component={CollectionRoutes}
+            options={{headerShown: true}}
+        />
+        <Stack.Screen
+            name="RecycleCenterProfile"
+            component={RecycleCenterProfile}
             options={{headerShown: true}}
         />
       </Stack.Navigator>
