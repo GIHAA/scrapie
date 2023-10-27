@@ -19,7 +19,6 @@ import StartScreen from "./screens/StartScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import ViewMyProduct from "./screens/ViewMyProduct";
-import ViewRecycleRequest from "./components/product/ViewRecycleRequest";
 
 const Stack = createNativeStackNavigator();
 import { LogBox } from 'react-native';
