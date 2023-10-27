@@ -33,7 +33,10 @@ const ProductCardView = ({ product }) => {
           <Text style={styles.supplier} numberOfLines={1}>
             {seller}
           </Text>
-          <Text style={styles.price}>${price}</Text>
+          <Text style={styles.price}>
+  {price ? `$${price}` : <Text style={{ color: 'green' }}>Free</Text>}
+</Text>
+
         </View>
       </View>
     </TouchableOpacity>

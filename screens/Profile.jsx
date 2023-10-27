@@ -161,6 +161,30 @@ export default function Profile() {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => {
+            navigation.navigate("RepairCenterRequest");
+          }}
+          style={{
+            padding: 10,
+            marginTop: 15,
+            backgroundColor: "white",
+            borderTopLeftRadius: 10,
+            borderTopRightRadius: 10,
+            flexDirection: "row",
+            alignItems: "center",
+            borderBottomWidth: 0.5,
+            borderBottomColor: "#f3f3f3",
+          }}
+        >
+          <Entypo name="grooveshark" size={18} color="#00C135" />
+          <Text style={{ paddingHorizontal: 20, flex: 1 }}>
+            View Repairing Items
+          </Text>
+          <Ionicons name="chevron-forward" color="gray" />
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => {
             // navigate("Help");
           }}
           style={{

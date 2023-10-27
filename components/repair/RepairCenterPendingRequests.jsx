@@ -1,75 +1,130 @@
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import RepairRequestPendingCard from "./RepairRequestPendingCard";
+import { useEffect, useState } from "react";
+import { db } from "../../firebase.config";
+import { doc, getDoc, getDocs, collection, query, where } from "firebase/firestore";
 
-const pendingRequests = [
-    {
-        imageSource: "https://upload.wikimedia.org/wikipedia/en/c/c1/The_Repair_Shop_title_card.jpg",
-        name: "Kevin Repairs",
-        address: "Colombo 10",
-        phoneNumber: "0768876564",
-        budget: "19000",
-        requestedAt: "2023-10-12",
-        deliveryAt: "2023-10-19",
-    },
-    {
-        imageSource: "https://upload.wikimedia.org/wikipedia/en/c/c1/The_Repair_Shop_title_card.jpg",
-        name: "John's Electronics",
-        address: "New York, NY",
-        phoneNumber: "123-456-7890",
-        budget: "15000",
-        requestedAt: "2023-10-15",
-        deliveryAt: "2023-10-22",
-    },
-    {
-        imageSource: "https://upload.wikimedia.org/wikipedia/en/c/c1/The_Repair_Shop_title_card.jpg",
-        name: "Tech Wizards",
-        address: "Los Angeles, CA",
-        phoneNumber: "555-555-5555",
-        budget: "22000",
-        requestedAt: "2023-10-10",
-        deliveryAt: "2023-10-17",
-    },
-    {
-        imageSource: "https://upload.wikimedia.org/wikipedia/en/c/c1/The_Repair_Shop_title_card.jpg",
-        name: "Gadget Gurus",
-        address: "Chicago, IL",
-        phoneNumber: "777-777-7777",
-        budget: "18000",
-        requestedAt: "2023-10-18",
-        deliveryAt: "2023-10-25",
-    },
-    {
-        imageSource: "https://upload.wikimedia.org/wikipedia/en/c/c1/The_Repair_Shop_title_card.jpg",
-        name: "Fix It All",
-        address: "San Francisco, CA",
-        phoneNumber: "888-888-8888",
-        budget: "20000",
-        requestedAt: "2023-10-14",
-        deliveryAt: "2023-10-21",
-    },
-];
+const getRepairCenterById = async (repairCenterId) => {
+    try {
+        const repairCenterRef = doc(db, "repair-centers", repairCenterId);
+        const repairCenterDoc = await getDoc(repairCenterRef);
+
+        if (repairCenterDoc.exists()) {
+            const repairCenterData = repairCenterDoc.data();
+            return repairCenterData;
+        } else {
+            console.error("Repair center document not found.");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching repair center data:", error);
+        return null;
+    }
+};
+
+const getUserById = async (userId) => {
+    try {
+        const userRef = doc(db, "users", userId);
+        const userDoc = await getDoc(userRef);
+
+        if (userDoc.exists()) {
+            const userData = userDoc.data();
+            return userData;
+        } else {
+            console.error("User center document not found.");
+            return null;
+        }
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+        return null;
+    }
+};
+
+const fetchRepairCenterRequests = async ({ status }) => {
+    try {
+        const requestsCollection = collection(db, "repair-center-request");
+        const requestsQuery = query(requestsCollection, where("status", "==", status));
+
+        const querySnapshot = await getDocs(requestsQuery);
+        const data = [];
+
+        for (const doc of querySnapshot.docs) {
+            const rawData = doc.data();
+            const repairCenterData = await getRepairCenterById(rawData.repairCenterId);
+            const userData = await getUserById(rawData.userId);
+            const processedData = {
+                id: doc.id,
+                budget: parseInt(rawData.budget),
+                dateTime: new Date(rawData.dateTime),
+                days: parseInt(rawData.days),
+                image: rawData.image,
+                item: rawData.item,
+                repairCenter: repairCenterData,
+                status: rawData.status,
+                user: userData,
+            };
+            data.push(processedData);
+        };
+        return data;
+    } catch (error) {
+        console.error("Error fetching repair centers:", error);
+    }
+};
 
 const RepairCenterPendingRequests = () => {
+    const [pendingRequests, setPendingRequests] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const data = await fetchRepairCenterRequests({ status: "pending" });
+                setPendingRequests(data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return (
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
-            {pendingRequests.map((request, index) => (
-                <RepairRequestPendingCard
-                    key={index}
-                    imageSource={request.imageSource}
-                    name={request.name}
-                    address={request.address}
-                    phoneNumber={request.phoneNumber}
-                    budget={request.budget}
-                    requestedAt={request.requestedAt}
-                />
-            ))}
+            {isLoading ? (
+                <View style={styles.loadingContainer}>
+                    <Text>Loading...</Text>
+                </View>
+            ) : pendingRequests && pendingRequests.length > 0 ? (
+                pendingRequests.map((request, index) => (
+                    <RepairRequestPendingCard
+                        key={index}
+                        imageSource={request.image}
+                        name={request.repairCenter?.name || 'N/A'}
+                        address={request.repairCenter?.latitude || 'N/A'}
+                        phoneNumber={request.repairCenter?.contact || 'N/A'}
+                        budget={request.budget}
+                        requestedAt={request.dateTime.toLocaleString()}
+                    />
+                ))
+            ) : (
+                <Text>No pending requests found.</Text>
+            )}
         </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
+    loadingContainer: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+    },
     scrollViewContent: {
-    }
+        flexGrow: 1,
+        minHeight: "100%",
+    },
 });
 
 export default RepairCenterPendingRequests;
