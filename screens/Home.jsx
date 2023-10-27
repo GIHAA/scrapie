@@ -12,10 +12,6 @@ import { useNavigation } from "@react-navigation/native";
 const Home = () => {
   const navigation = useNavigation();
 
-  const handleRepairsButton = () => {
-    navigation.navigate("RepairCenterRequest");
-  }
-
   return (
     <SafeAreaView>
       <View style={styles.appBarWrapper}>
@@ -28,7 +24,6 @@ const Home = () => {
           <Headlng />
           <ProductRow />
       </ScrollView>
-      <Button onPress={handleRepairsButton} title="Repairs">Repairs</Button>
     </SafeAreaView>
   );
 };
