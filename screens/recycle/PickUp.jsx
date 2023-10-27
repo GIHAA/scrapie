@@ -107,7 +107,7 @@ const PickUp = ({ route }) => {
                 recycleItem: recycleItem,
                 recycleRequest: recycleRequest,
                 uid: userData.email,
-                seller: userData.name,
+                user: userData.name,
                 phone: userData.phone,
                 timestamp: new Date().toISOString(),
               };
@@ -148,53 +148,55 @@ const PickUp = ({ route }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
+     <AppBar title={"Pick Up"}></AppBar>
       {Confirmation ? (
-        <View style={{ flex: 1, margin: 20, marginTop: 80 }}>
-          <Text style={{ fontSize: 38, fontWeight: "bold" }}>
-            Confirm listing
-          </Text>
+        <ScrollView>
+          <Text style={styles.header}> Recycle Item Details</Text>
+          <View style={styles.card}>
+            <Image
+              style={styles.itemImage}
+              source={{ uri: recycleItem?.image }}
+            />
 
-          <Animatable.Image
-            animation="fadeIn"
-            duration={1000}
-            style={{ height: "40%", width: "100%", marginTop: 40 }}
-            source={{
-              uri:
-                recycleItem.image || "https://picsum.photos/seed/696/3000/2000",
-            }}
-            placeholder="image"
-            contentFit="cover"
-          />
+            <View style={styles.detailsContainer}>
+              <Text style={styles.itemName}>
+                {recycleItem?.item} |{" "}
+                {recycleRequest?.recycleItem?.type.toUpperCase()}{" "}
+              </Text>
+              <Text style={styles.itemDescription}>
+                {recycleItem?.description}
+              </Text>
 
-          <Text style={{ fontSize: 28, fontWeight: "bold", marginTop: 10 }}>
-            {recycleItem.item}{" "}
-          </Text>
+              <View style={styles.separator} />
 
-          <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 10 }}>
-            Price :{" "}
-            <Text style={{ fontWeight: "500" }}>{recycleCompany.name}</Text>
-          </Text>
-          <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 10 }}>
-            Description :{" "}
-            <Text style={{ fontWeight: "500" }}>{recycleRequest.type}</Text>
-          </Text>
+              <Text style={styles.header}> Recycling Center Details</Text>
 
-          <TouchableOpacity
-            onPress={() => {
-              handleButtonPress();
-            }}
-            style={{
-              margin: 20,
-              backgroundColor: myLocation ? COLORS.primary : "gray",
-              height: 50,
-              justifyContent: "center",
-              alignItems: "center",
-              borderRadius: 50,
-            }}
-          >
-            <Text style={{ color: "white", fontSize: 20 }}>Confirm</Text>
-          </TouchableOpacity>
-        </View>
+              <Image
+                style={styles.companyImage}
+                source={{ uri: recycleCompany.image }}
+              />
+
+              <Text style={styles.itemName}>
+                {recycleCompany.name || "N/A"}
+              </Text>
+
+              {/* <Text style={styles.companyDescription}>{recycleRequest?.recycleCompany.description}</Text> */}
+              <Text style={styles.companyDescription}>
+                {" "}
+                {recycleRequest?.type} | {"Malabe"}{" "}
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              style={styles.confirmButton}
+              onPress={() => {
+                handleButtonPress();
+              }}
+            >
+              <Text style={styles.confirmButtonText}>Confirm</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
       ) : (
 
           <View style={{ flex: 1, backgroundColor: "#FFF", justifyContent: "flex-end" }}>
@@ -226,6 +228,7 @@ const PickUp = ({ route }) => {
                 style={{
                   flex: 1,
                   color: COLORS.primary,
+                  marginTop: 5,
                 }}
               />
               <FontAwesome5 name="times" size={24} color={COLORS.primary} />
@@ -347,8 +350,117 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 50,
   },
-    container: {
-      flex: 1, // This makes the container take up all available space
-      justifyContent: 'space-between', // This aligns items along the vertical axis
-    },
+  container: {
+    flex: 1, // This makes the container take up all available space
+    justifyContent: 'center',
+    marginBottom: 200,
+  },
+  Gcontainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: -100,
+    minHeight: 200,
+  },
+  image: {
+    width: 200,
+    height: 200,
+  },
+  card: {
+    flex: 1,
+    backgroundColor: COLORS.cardBackground,
+    marginVertical: 8,
+    borderRadius: 10,
+    padding: 20,
+  },
+  itemImage: {
+    width: "100%",
+    height: 250,
+    resizeMode: "cover",
+    borderRadius: 10,
+  },
+  detailsContainer: {
+    marginTop: 20,
+  },
+  header: {
+    fontSize: 24,
+    fontWeight: "600",
+    color: COLORS.primary,
+    textAlign: "center",
+  },
+  itemName: {
+    fontSize: 24,
+    fontWeight: "600",
+    color: "#000",
+    textAlign: "center",
+  },
+  itemType: {
+    fontSize: 16,
+    fontWeight: "400",
+    color: COLORS.secondary,
+    textAlign: "center",
+    marginTop: 8,
+  },
+  itemDescription: {
+    fontSize: 14,
+    fontWeight: "400",
+    color: COLORS.text,
+    textAlign: "center",
+    marginTop: 16,
+  },
+  sellerInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    alignSelf: "center",
+    marginTop: 16,
+  },
+  sellerName: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: COLORS.primary,
+    marginLeft: 8,
+  },
+  itemPrice: {
+    fontSize: 24,
+    fontWeight: "600",
+    color: COLORS.primary,
+    textAlign: "center",
+    marginTop: 8,
+  },
+  companyDescription: {
+    fontSize: 14,
+    fontWeight: "400",
+    color: COLORS.text,
+    textAlign: "center",
+    marginTop: 16,
+  },
+  companyImage: {
+    width: "100%",
+    height: 200,
+    resizeMode: "cover",
+    borderRadius: 10,
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  confirmButton: {
+    padding: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: COLORS.primary,
+    borderWidth: 2,
+    borderColor: "#FFF",
+    marginTop: 16,
+    borderRadius: 10,
+    marginBottom: 40,
+  },
+  confirmButtonText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#FFF",
+  },
+  separator: {
+    height: 1,
+    backgroundColor: COLORS.primary,
+    marginVertical: 10,
+  },
 });

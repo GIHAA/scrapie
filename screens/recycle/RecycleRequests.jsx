@@ -7,20 +7,23 @@ import {
   Text,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Feather, Ionicons } from "@expo/vector-icons";
 import { COLORS, SIZES } from "../../constants";
 import { StyleSheet } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase.config";
 import RecycleRequestCardView from "../../components/recycle/RecycleRequestCardView";
+import AppBar from "../../components/recycle/AppBar";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { SegmentedButtons } from "react-native-paper";
 
 const RecycleRequests = () => {
   const [userData, setUserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [value, setValue] = useState("Pick_Up");
 
   const getUsersData = async () => {
     try {
-      const usersCollectionRef = collection(db, "recycleItems");
+      const usersCollectionRef = collection(db, "recycleRequests");
 
       const querySnapshot = await getDocs(usersCollectionRef);
 
@@ -46,28 +49,76 @@ const RecycleRequests = () => {
   }, []);
 
   const filteredData = userData.filter((item) => {
-    const itemName = item.item.toLowerCase();
-    return itemName.includes(searchQuery.toLowerCase());
+    const itemName = item?.recycleItem?.item?.toLowerCase();
+    const itemType = item?.recycleRequest?.type;
+      return (
+      itemType === value &&
+      itemName?.includes(searchQuery?.toLowerCase())
+    );
   });
 
   return (
     <SafeAreaView>
-
-      <View style={styles.searchContainer}>
-        <View style={styles.searchWrapper}>
-          <TextInput
-            style={styles.searchInput}
-            value={searchQuery}
-            onChangeText={(text) => setSearchQuery(text)}
-            placeholder="Search for recycle requests"
-          />
-        </View>
-        <TouchableOpacity style={styles.searchBtn}>
-          <Feather name="search" size={24} color={COLORS.offwhite} />
+      <AppBar title={"Recycle Requests"}></AppBar>
+      <View
+        style={{
+          width: "90%",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          backgroundColor: COLORS.white,
+          borderColor: COLORS.gray,
+          borderRadius: 5,
+          paddingHorizontal: 10,
+          marginHorizontal: 10,
+          marginTop: 20,
+          marginLeft: 20,
+        }}
+      >
+        <TextInput
+          style={{ flex: 1, paddingVertical: 10, color: COLORS.black }}
+          placeholder="Search"
+          placeholderTextColor={COLORS.black}
+          value={searchQuery}
+          onChangeText={(text) => setSearchQuery(text)}
+        />
+        <TouchableOpacity style={{ padding: 10 }}>
+          <Icon name="search" size={20} color={COLORS.primary} />
         </TouchableOpacity>
       </View>
 
-      <View >
+      <SegmentedButtons
+        value={value}
+        onValueChange={setValue}
+        buttons={[
+          {
+            value: "Pick_Up",
+            label: "Pick Ups",
+          },
+          {
+            value: "Drop_Off",
+            label: "Drop Offs",
+          },
+        ]}
+        theme={{
+          colors: {
+            primary: COLORS.primary,
+            onPrimary: COLORS.primary,
+            primaryContainer: COLORS.primary,
+            onPrimaryContainer: COLORS.primary,
+            secondary: COLORS.primary,
+            onSecondary: COLORS.primary,
+            secondaryContainer: COLORS.primary,
+            underlineColor: COLORS.primary,
+            tertiary: COLORS.primary,
+            background: COLORS.primary,
+          },
+          marginTop: 20,
+        }}
+        style={{marginTop: 20, marginLeft: 20, marginRight: 20, color: COLORS.primary}}
+      />
+
+      <View>
         <FlatList
           style={styles.container}
           data={filteredData}
@@ -77,7 +128,6 @@ const RecycleRequests = () => {
           )}
         />
       </View>
-
     </SafeAreaView>
   );
 };
@@ -138,5 +188,5 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     margin: 5,
-  }
+  },
 });
