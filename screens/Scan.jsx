@@ -286,8 +286,9 @@ const Scan = ({}) => {
     navigation.navigate(Test);
   };
 
-  const handleRepairButtonClick = () => {
-    const data = { item: target[0].className.split(",")[0] };
+  const handleRepairButtonClick = async () => {
+    const ImageUpload = await uploadImageToFirebase(image);
+    const data = { item: target[0].className.split(",")[0], image: ImageUpload.image };
     navigation.navigate("Repair", { data });
   };
 
