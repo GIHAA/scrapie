@@ -22,6 +22,7 @@ const RepairCenterPopular = ({ setSelectedCardIndex }) => {
                 {repairCenterData.map((center, index) => (
                     <RepairCenterCard
                         key={index}
+                        id={center.id}
                         imageSource={center.image}
                         name={center.name}
                         // address={center.address}
@@ -29,6 +30,7 @@ const RepairCenterPopular = ({ setSelectedCardIndex }) => {
                         opens={`${center.openFrom}- ${center.openTo}`}
                         description={center.description}
                         popular={center.isPopular}
+                        count={center.visits}
                         isSelected={cardIndex === center.id}
                         onPress={() => handleCardPress(center.id)}
                     />

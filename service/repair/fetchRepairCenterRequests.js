@@ -29,9 +29,6 @@ const fetchRepairCenterRequests = async ({ setPendingRequests, status }) => {
             data.push(processedData);
         };
 
-        console.log('====================================');
-        console.log(data);
-        console.log('====================================');
         setPendingRequests(data);
     } catch (error) {
         console.error("Error fetching repair centers:", error);
