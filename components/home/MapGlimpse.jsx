@@ -4,8 +4,8 @@ import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 const MapGlimpse = () => {
   const [mapRegion, setmapRegion] = useState({
-    latitude: 7.25184587048,
-    longitude: 80.3456412507,
+    latitude: 6.914933,
+    longitude: 79.972918,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
@@ -17,8 +17,8 @@ const MapGlimpse = () => {
       >
         <Marker
           coordinate={{
-            latitude: 7.25184587048,
-            longitude: 80.3456412507,
+            latitude: 6.914933,
+            longitude: 79.972918,
           }}
           title={`Pick up request`}
         ></Marker>
@@ -53,8 +53,7 @@ export default MapGlimpse;
 const styles = StyleSheet.create({
   container: {
     borderRadius: 30,
-    height: "40%",
-    margin: 30,
+    height: "30%",
     marginTop: 10,
   },
 });

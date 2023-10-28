@@ -6,7 +6,9 @@ import Scan from "./Scan";
 import Fav from "./Fav";
 import ViewProduct from "./ViewProduct"
 import RecycleRequests from "./recycle/RecycleRequests"
-import { MapTest, RecycleCenterHome, RecyclersMap, CollectionRequests, CollectionRoutes, RecycleCenterProfile} from "./recycle-center";
+import { MapTest, RecycleCenterHome, RecyclersMap, CollectionRequests, CollectionRoutes, RecycleCenterProfile,
+    RecycleCenterSignUp} from "./recycle-center";
 
 export { Search, Home, Profile ,Cart , Scan , Fav , ViewProduct, RecycleRequests, 
-    RecycleCenterHome, RecyclersMap, MapTest, CollectionRequests, CollectionRoutes, RecycleCenterProfile};
+    RecycleCenterHome, RecyclersMap, MapTest, CollectionRequests, CollectionRoutes, RecycleCenterProfile,
+    RecycleCenterSignUp};

@@ -47,7 +47,7 @@ const Welcome = () => {
     <View>
       <View style={styles.container}>
         <Text style={styles.welcomeText(COLORS.black, 2)}>
-          Good Morning, {name.charAt(0).toUpperCase() + name.slice(1)}
+          Good Day, {name.charAt(0).toUpperCase() + name.slice(1)}
         </Text>
       </View>
 

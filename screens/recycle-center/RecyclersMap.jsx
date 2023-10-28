@@ -2,12 +2,12 @@ import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, SIZES } from "../../constants";
-import MapView, { Marker } from "react-native-maps";
-import { RotateWithOffset } from "@tensorflow/tfjs";
+import MapView, { Marker, Polyline } from "react-native-maps";
 import { useEffect } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { MapViewDirections } from "react-native-maps-directions";
 
-const RecyclersMap = () => {
+const RecyclersMap = ({navigation}) => {
   const [longiDelta, setLongiDelta] = useState(0.421);
   const [latiDelta, setLatiDelta] = useState(0.922);
   const [zoom, setZoom] = useState(0.02);
@@ -18,13 +18,13 @@ const RecyclersMap = () => {
     latitudeDelta: 0.421,
     longitudeDelta: 0.922,
   });
+
   const [mapRegion, setmapRegion] = useState({
     latitude: 7.2518,
     longitude: 80.3456,
     latitudeDelta: 0.421,
     longitudeDelta: 0.922,
   });
-
   function generateNearbyCoordinates(lat, lon) {
     const radius = zoom;
     const nearbyCoordinates = [];
@@ -41,8 +41,14 @@ const RecyclersMap = () => {
     );
   }, []);
 
+  const handleGetRoutePress = () => {
+    navigation.navigate("MapTest", {
+      coordinates: result,
+      from: "RecyclersMap"
+    })
+  }
   useEffect(() => {
-    console.log(zoom)
+    console.log(zoom);
     let sortedLatitudes = [];
     let sortedLongitudes = [];
     result.map(({ latitude, longitude }) => {
@@ -51,19 +57,20 @@ const RecyclersMap = () => {
     });
     sortedLatitudes = sortedLatitudes.sort();
     sortedLongitudes = sortedLongitudes.sort();
-    setLatiDelta(
-        (sortedLatitudes[sortedLatitudes.length - 1] - sortedLatitudes[0])*zoom
-    );
-    setLongiDelta(
-        (sortedLatitudes[sortedLatitudes.length - 1] - sortedLatitudes[0])*zoom
-    );
+    // setLatiDelta(
+    //   (sortedLatitudes[sortedLatitudes.length - 1] - sortedLatitudes[0]) * zoom
+    // );
+    // setLongiDelta(
+    //   (sortedLatitudes[sortedLatitudes.length - 1] - sortedLatitudes[0]) * zoom
+    // );
+
     setmapRegion({
       latitude: parseFloat(mapRegion.latitude),
       longitude: parseFloat(mapRegion.longitude),
-      latitudeDelta: parseFloat((sortedLatitudes[sortedLatitudes.length - 1] - sortedLatitudes[0])*zoom),
-      longitudeDelta: parseFloat((sortedLatitudes[sortedLatitudes.length - 1] - sortedLatitudes[0])*zoom),
+      latitudeDelta: latiDelta * zoom,
+      longitudeDelta: longiDelta * zoom,
     });
-    console.log(mapRegion)
+    console.log(mapRegion);
   }, [zoom]);
 
   const handleZoomIn = () => {
@@ -73,11 +80,23 @@ const RecyclersMap = () => {
     setZoom(zoom * 10);
   };
   const handleMyLocationPress = () => {
-    setZoom(0.02)
+    setZoom(0.02);
     setmapRegion(initialRegion);
   };
   return (
     <SafeAreaView>
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: "400",
+              color: COLORS.black,
+              fontFamily: "normal",
+            }}
+          >
+            Anonymous Requests
+          </Text>
+        </View>
       <View style={styles.appBarWrapper}>
         <View
           style={{
@@ -86,6 +105,23 @@ const RecyclersMap = () => {
             justifyContent: "flex-end",
           }}
         >
+          <TouchableOpacity
+          onPress={handleGetRoutePress}
+            style={{
+              backgroundColor: COLORS.primary,
+              padding: 10,
+              margin: 10,
+              borderRadius: 50,
+              alignItems: "center",
+              justifyContent: "center",
+              paddingHorizontal: 50,
+            }}
+          >
+            <Text style={{ fontSize: 20, color: COLORS.lightWhite,
+            marginLeft: 30, }}>
+              Get Routes
+            </Text>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={handleZoomIn}
             style={{ paddingHorizontal: 20 }}
@@ -106,7 +142,7 @@ const RecyclersMap = () => {
           </TouchableOpacity>
         </View>
         <MapView
-          style={{ alignSelf: "stretch", height: "90%" }}
+          style={{ alignSelf: "stretch", height: "85%" }}
           region={mapRegion}
           ref={(MapView) => (this.MapView = MapView)}
           initialRegion={initialRegion}
@@ -120,6 +156,13 @@ const RecyclersMap = () => {
           provider="google"
           onRegionChangeComplete={(region, details) => setmapRegion(region)}
         >
+          {/* <MapViewDirections
+          origin={{latitude: initialRegion.latitude, longitude: initialRegion.longitude}}
+          destination={result[0]}
+          apikey={GOOGLE_API_KEY} // insert your API Key here
+          strokeWidth={4}
+          strokeColor="#111111"
+        /> */}
           <Marker
             coordinate={{
               latitude: 7.25184587048,
@@ -150,6 +193,12 @@ const RecyclersMap = () => {
               ></Marker>
             </>
           )}
+          {/* <Polyline
+            coordinates={result}
+            strokeColor="#000"
+            strokeColors={["#7F0000"]}
+            strokeWidth={3}
+          ></Polyline> */}
         </MapView>
       </View>
     </SafeAreaView>
@@ -166,7 +215,6 @@ const styles = StyleSheet.create({
   appBarWrapper: {
     flexDirection: "column-reverse",
     marginHorizontal: 22,
-    marginTop: SIZES.small,
   },
   appBar: {
     flexDirection: "row",

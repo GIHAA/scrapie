@@ -25,7 +25,7 @@ const RecycleCenterHome = () => {
         <MapGlimpse />
         <View style={styles.continer}>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}> You have new Requets</Text>
+            <Text style={styles.headerTitle}> Find anonymous recyclers near you!</Text>
           </View>
         </View>
         <SchedulesCarousel />
@@ -62,10 +62,8 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
   },
   headerTitle: {
     fontFamily: "semibold",
-    fontSize: SIZES.xLarge - 2,
   },
 });

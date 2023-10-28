@@ -69,7 +69,7 @@ const RCBottomNavBar = () => {
         }}
       />
       <Tab.Screen
-        name="MapTest3"
+        name="CollectionRoutes"
         component={CollectionRoutes}
         options={{
           tabBarIcon: ({ focused }) => {

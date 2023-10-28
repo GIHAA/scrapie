@@ -5,10 +5,22 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import BottomTabNavigation from "./navigation/BottomTabNavigation";
 import RCBottomNavBar from "./navigation/RCBottomNavBar";
-import { Cart, Profile, RecycleRequest, RecycleRequests, RecycleCenterHome, RecyclersMap, MapTest, CollectionRequests, CollectionRoutes, RecycleCenterProfile } from "./screens";
+import {
+  Cart,
+  Profile,
+  RecycleRequest,
+  RecycleRequests,
+  RecycleCenterHome,
+  RecyclersMap,
+  MapTest,
+  CollectionRequests,
+  CollectionRoutes,
+  RecycleCenterProfile,
+  RecycleCenterSignUp,
+} from "./screens";
 import Test from "./screens/Test";
 import Recycle from "./screens/recycle/Recycle";
-import ViewRecycleRequest from "./components/recycle/ViewRecycleRequest"
+import ViewRecycleRequest from "./components/recycle/ViewRecycleRequest";
 import Reuse from "./screens/GiveAway";
 import Repair from "./screens/Repair";
 import ViewProduct from "./screens/ViewProduct";
@@ -21,9 +33,9 @@ import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import RecycleCompanies from "./screens/recycle/RecycleCompanies";
 import ViewRecycleCompany from "./components/recycle/ViewRecycleCompany";
-import DropOff  from "./screens/recycle/DropOff";
+import DropOff from "./screens/recycle/DropOff";
 import ViewMyProduct from "./screens/ViewMyProduct";
-import { LogBox } from 'react-native';
+import { LogBox } from "react-native";
 import PickUp from "./screens/recycle/PickUp";
 
 const Stack = createNativeStackNavigator();
@@ -37,7 +49,7 @@ export default function App() {
     extrabold: require("./assets/fonts/Poppins-ExtraBold.ttf"),
     semibold: require("./assets/fonts/Poppins-SemiBold.ttf"),
   });
-  LogBox.ignoreLogs(['@firebase/auth']);
+  LogBox.ignoreLogs(["@firebase/auth"]);
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) await SplashScreen.hideAsync();
   }, [fontsLoaded]);
@@ -135,39 +147,48 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-            name="RecycleCenterBottomNavBar"
-            component={RCBottomNavBar}
-            options={{headerShown: false}}
+          name="RecycleCenterBottomNavBar"
+          component={RCBottomNavBar}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
-            name="RecycleCenterHome"
-            component={RecycleCenterHome}
-            options={{headerShown: true}}
+          name="RecycleCenterHome"
+          component={RecycleCenterHome}
+          options={{ headerShown: true }}
         />
         <Stack.Screen
-            name="RecyclersMap"
-            component={RecyclersMap}
-            options={{headerShown: true}}
+          name="RecyclersMap"
+          component={RecyclersMap}
+          options={{
+            headerShown: true,
+          }}
         />
         <Stack.Screen
-            name="MapTest"
-            component={MapTest}
-            options={{headerShown: true}}
+          name="MapTest"
+          component={MapTest}
+          options={{
+            headerShown: true,
+            topBar: {
+              backButton: {
+                popStackOnPress: false,
+              },
+            },
+          }}
         />
         <Stack.Screen
-            name="RecycleCollectionRequests"
-            component={CollectionRequests}
-            options={{headerShown: true}}
+          name="RecycleCollectionRequests"
+          component={CollectionRequests}
+          options={{ headerShown: true }}
         />
         <Stack.Screen
-            name="RecycleCollectionRoutes"
-            component={CollectionRoutes}
-            options={{headerShown: true}}
+          name="RecycleCollectionRoutes"
+          component={CollectionRoutes}
+          options={{ headerShown: true }}
         />
         <Stack.Screen
-            name="RecycleCenterProfile"
-            component={RecycleCenterProfile}
-            options={{headerShown: true}} 
+          name="RecycleCenterProfile"
+          component={RecycleCenterProfile}
+          options={{ headerShown: true }}
         />
         <Stack.Screen
           name="RecycleCompanies"
@@ -187,6 +208,11 @@ export default function App() {
         <Stack.Screen
           name="PickUp"
           component={PickUp}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="RecylceCenterSignup"
+          component={RecycleCenterSignUp}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

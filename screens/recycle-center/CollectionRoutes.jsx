@@ -15,43 +15,87 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather, Ionicons, Entypo } from "@expo/vector-icons";
 import { COLORS, SIZES } from "../../constants";
 
-function CollectionRoutes() {
+function CollectionRoutes({navigation}) {
   const [isCompleted, setIsCompleted] = useState(false);
-  const [routes, setRoutes] = useState([
-    {
-      id: 1,
-      distance: 10,
-      totalCollection: 0,
-      noOfPickUps: 0,
-      location: "Kegalle",
-      scheduledDate: Date(),
-    },
-    {
-      id: 2,
-      distance: 10,
-      totalCollection: 0,
-      noOfPickUps: 0,
-      location: "Kegalle",
-      scheduledDate: Date(),
-    },
-    {
-      id: 3,
-      distance: 10,
-      totalCollection: 0,
-      noOfPickUps: 0,
-      location: "Kegalle",
-      scheduledDate: Date(),
-    },
-  ]);
+  const [result, setResult] = useState([]);
+
+  const upcomingList = [{
+    id: 1,
+    distance: 5.3,
+    totalCollection: 4,
+    noOfPickUps: 5,
+    location: "Kegalle",
+    scheduledDate: Date(),
+  },
+  {
+    id: 2,
+    distance: 7.2,
+    totalCollection: 9,
+    noOfPickUps: 4,
+    location: "Uthuwankanda",
+    scheduledDate: Date(),
+  },]
+  const completedList = [{
+    id: 3,
+    distance: 11.3,
+    totalCollection: 10,
+    noOfPickUps: 10,
+    location: "Kegalle",
+    scheduledDate: Date(),
+  },
+  {
+    id: 4,
+    distance: 9.1,
+    totalCollection: 7,
+    noOfPickUps: 13,
+    location: "Warakapola",
+    scheduledDate: Date(),
+  },
+  {
+    id: 5,
+    distance: 20.3,
+    totalCollection: 2,
+    noOfPickUps: 5,
+    location: "Aranayake",
+    scheduledDate: Date(),
+  },]
+  const [routes, setRoutes] = useState(upcomingList);
 
   const fetchRoutes = async () => {};
   useEffect(() => {
     if (isCompleted) {
+      setRoutes(completedList)
     } else {
+      setRoutes(upcomingList)
     }
   }, [isCompleted]);
+  const [mapRegion, setmapRegion] = useState({
+    latitude: 7.2518,
+    longitude: 80.3456,
+    latitudeDelta: 0.421,
+    longitudeDelta: 0.922,
+  });
+  function generateNearbyCoordinates(lat, lon) {
+    const radius = 0.1;
+    const nearbyCoordinates = [];
+    for (let i = 0; i < 10; i++) {
+      const newLat = lat + (Math.random() - 0.5) * radius * 2;
+      const newLon = lon + (Math.random() - 0.5) * radius * 2;
+      nearbyCoordinates.push({ latitude: newLat, longitude: newLon });
+    }
+    return nearbyCoordinates;
+  }
+  useEffect(() => {
+    setResult(
+      generateNearbyCoordinates(mapRegion.latitude, mapRegion.longitude)
+    );
+  }, []);
+
   const handleRoutePress = (routeId) => {
-    alert("pressed " + routeId);
+    navigation.navigate("MapTest", {
+      coordinates: result,
+      from: "RecyclersMap"
+    })
   };
 
   return (

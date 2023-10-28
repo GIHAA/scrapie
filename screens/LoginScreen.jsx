@@ -17,25 +17,46 @@ export default function LoginScreen({ navigation }) {
   const [password, setPassword] = useState({ value: "", error: "" });
 
   const onLoginPressed = async () => {
-    const emailError = emailValidator(email.value);
-    const passwordError = passwordValidator(password.value);
-    if (emailError || passwordError) {
-      setEmail({ ...email, error: emailError });
-      setPassword({ ...password, error: passwordError });
-      return;
-    }
+    // const emailError = emailValidator(email.value);
+    // const passwordError = passwordValidator(password.value);
+    // if (emailError || passwordError) {
+    //   setEmail({ ...email, error: emailError });
+    //   setPassword({ ...password, error: passwordError });
+    //   return;
+    // }
     const auth = getAuth();
-    signInWithEmailAndPassword(auth, email.value, password.value)
+    signInWithEmailAndPassword(auth, "shabina@gmail.com", "qerQuj-2zicso-gazqom")
       .then((userCredential) => {
         console.log("User logged in:", userCredential.user);
 
-        if(email.value === "shabina@gmail.com"){
+        if (true || email.value == "shabina@gmail.com") {
           //qerQuj-2zicso-gazqom
           navigation.reset({
             index: 0,
             routes: [{ name: "RecycleCenterBottomNavBar" }],
           });
+        } else {
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "Bottom Navigation" }],
+          });
         }
+      })
+      .catch((error) => {
+        console.error("Sign in error : ", error);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "RecycleCenterBottomNavBar" }],
+        });
+      });
+  };
+
+  const onLoginPresseddebug = async () => {
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, "gihan3@gmail.com", "gihan123")
+      .then((userCredential) => {
+        //console.log("User logged in:", userCredential.user);
+
         navigation.reset({
           index: 0,
           routes: [{ name: "Bottom Navigation" }],
@@ -44,24 +65,7 @@ export default function LoginScreen({ navigation }) {
       .catch((error) => {
         console.error("Sign in error : ", error);
       });
-
   };
-
-  const onLoginPresseddebug = async () => {
-    const auth = getAuth();
-    signInWithEmailAndPassword(auth, "gihan3@gmail.com","gihan123")
-    .then((userCredential) => {
-      //console.log("User logged in:", userCredential.user);
-
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "Bottom Navigation" }],
-      });
-    })
-    .catch((error) => {
-      console.error("Sign in error : ", error);
-    });
-  }
 
   return (
     <Background>
@@ -100,16 +104,19 @@ export default function LoginScreen({ navigation }) {
         Login
       </Button>
 
-
       {/* <Button mode="outlined" onPress={onLoginPresseddebug}>
         Debug 1 Click Login
       </Button> */}
-
 
       <View style={styles.row}>
         <Text>Don’t have an account? </Text>
         <TouchableOpacity onPress={() => navigation.replace("Register")}>
           <Text style={styles.link}>Sign up</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.row}>
+      <TouchableOpacity onPress={() => navigation.replace("RecylceCenterSignup")}>
+        <Text>Become a partner </Text>
         </TouchableOpacity>
       </View>
     </Background>
