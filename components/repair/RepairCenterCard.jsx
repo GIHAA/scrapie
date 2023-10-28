@@ -24,20 +24,13 @@ const RepairCenterCard = ({ id, imageSource, name, address, phoneNumber, opens, 
     }
 
     const modalContent = (
-        <View>
-            <Text>Additional Details:</Text>
-            <Text>{description}</Text>
-            <Text style={styles.name}>{name} and {count}</Text>
-            <Text style={styles.details}>Contacts: {phoneNumber}</Text>
-            <Text style={styles.details}>Location: {address}</Text>
-            <Text style={styles.details}>Opens: {opens}</Text>
-            <Text style={styles.description}>Description: {description}</Text>
-            <TouchableOpacity
-                style={[styles.button, { backgroundColor: COLORS.primary }]}
-                onPress={() => setModalVisible(false)}
-            >
-                <Text style={{ color: COLORS.white, fontSize: 15 }}>Close</Text>
-            </TouchableOpacity>
+        <View style={styles.modalContentContainer}>
+            <Image source={{ uri: imageSource }} style={styles.modalImage} />
+            <Text style={styles.modalName}>{name}</Text>
+            <Text style={styles.modalDetails}>Contacts: {phoneNumber}</Text>
+            {/* <Text style={styles.modalDetails}>Location: {address}</Text> */}
+            <Text style={styles.modalDetails}>Opens: {opens}</Text>
+            <Text style={styles.modalDescription}>Description: {description}</Text>
         </View>
     );
 
@@ -148,6 +141,38 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginHorizontal: 5,
+    },
+    modalContentContainer: {
+        padding: 20,
+        alignItems: 'center',
+    },
+    modalImage: {
+        width: 120,
+        height: 150,
+        borderRadius: 5,
+    },
+    modalName: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginVertical: 10,
+    },
+    modalDetails: {
+        fontSize: 16,
+        color: 'gray',
+        marginVertical: 5,
+    },
+    modalDescription: {
+        fontSize: 14,
+        color: 'gray',
+        marginTop: 10,
+    },
+    modalButton: {
+        marginTop: 20,
+        width: 150,
+        height: 40,
+        borderRadius: 50,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 });
 
