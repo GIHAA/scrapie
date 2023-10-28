@@ -22,7 +22,6 @@ import { db } from "../../firebase.config";
 import { async } from "@firebase/util";
 
 function MapTest({ route, navigation }) {
-  const GOOGLE_API_KEY = "AIzaSyCWiOaJO60oKRaaWoiBU2X8_J-cTSRt5eU";
   const [currLati, setCurrLat] = useState(7.25184587048);
   const [currLongi, setCurrLongi] = useState(80.3456412507);
   const [confirmedScehdule, setConfirmedScehdule] = useState(false);

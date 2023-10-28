@@ -1,5 +1,4 @@
 export async function getDistance(origin) {
-  const GOOGLE_DISTANCES_API_KEY = "AIzaSyCWiOaJO60oKRaaWoiBU2X8_J-cTSRt5eU";
   const BaseLocation = "555 E Lafayette St, Detroit, MI 48226";
   const TargetLocation = "21000 W 10 Mile Rd, Southfield, MI 48075";
   
