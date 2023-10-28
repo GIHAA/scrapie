@@ -27,7 +27,7 @@ const RepairCenterPopular = ({ setSelectedCardIndex }) => {
                         name={center.name}
                         // address={center.address}
                         phoneNumber={center.contact}
-                        opens={`${center.openFrom}- ${center.openTo}`}
+                        opens={`${new Date(eval(center.openFrom)).toTimeString().split(' ')[0]}- ${new Date(eval(center.openTo)).toTimeString().split(' ')[0]}`}
                         description={center.description}
                         popular={center.isPopular}
                         count={center.visits}
