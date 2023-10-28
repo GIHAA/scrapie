@@ -75,6 +75,7 @@ const Scan = ({}) => {
   }, [currentQuoteIndex]);
 
   useEffect(() => {
+    //getcurrentmarketPrice()
     const askCameraPermission = async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
       setHasCameraPermission(status === "granted");
@@ -333,6 +334,31 @@ const Scan = ({}) => {
 
   const handleRecycleButtonClick = () => {
     uploadImageToFirebaseRecycle(image);
+  };
+
+  const getcurrentmarketPrice = async () => {
+
+    const pricesCollectionRef = collection(db, "prices");
+    const querySnapshot = await getDocs(pricesCollectionRef);
+  
+    const priceArray = [];
+  
+    querySnapshot.forEach((doc) => {
+      if (doc.exists()) {
+        priceArray.push(doc.data().price);
+      }
+    });
+  
+    if (priceArray.length > 0) {
+      // Calculate the average price
+      const total = priceArray.reduce((acc, price) => acc + price, 0);
+      const avgPrice = total / priceArray.length;
+
+      return avgPrice;
+      console.log("Average Price:", avgPrice);
+    } else {
+      console.log("No price data found in the collection.");
+    }
   };
 
 

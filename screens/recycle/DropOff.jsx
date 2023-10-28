@@ -250,7 +250,7 @@ const DropOff = ({ route }) => {
           >
             <Text style={{ color: "#FFF", fontSize: 20 }}>{selectedDay}</Text>
           </View>
-          <View style={{ flex: 1, backgroundColor: "#f0efeb", padding: 20 }}>
+          <View style={{ flex: 1, backgroundColor: "#f0efeb", padding: 5 }}>
             <View>
               <TouchableOpacity
                 onPress={() => {
@@ -263,9 +263,10 @@ const DropOff = ({ route }) => {
                   justifyContent: "center",
                   alignItems: "center",
                   borderRadius: 50,
+                  marginBottom : 20
                 }}
               >
-                <Text style={{ color: "white", fontSize: 20 }}>
+                <Text style={{ color: "white", fontSize: 20  }}>
                   Schedule a Drop Off
                 </Text>
               </TouchableOpacity>

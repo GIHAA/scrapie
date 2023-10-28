@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  Image
 } from "react-native";
 import { RadioButton, TextInput } from "react-native-paper";
 import { COLORS } from "../constants";
@@ -217,6 +218,8 @@ const Reuse = ({ route }) => {
               onChangeText={(text) => updateDescription(text)}
               style={styles.input}
             />
+
+
           </View>
         ) : (
           <View style={{ flex: 1, margin: 20, marginTop: 80 }}>
@@ -283,47 +286,6 @@ const Reuse = ({ route }) => {
           </TouchableOpacity>
         )}
       </View>
-
-      
-{/* <View>
-  <TouchableOpacity
-    onPress={() => {
-      if (selectedOption) {
-        setisConfirmVisible(false);
-      }
-    }}
-    style={{
-      margin: 20,
-      backgroundColor: selectedOption ? COLORS.primary : 'gray', // Set background color based on selectedOption
-      height: 50,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 50
-    }}
-    disabled={!selectedOption}
-  >
-    <Text style={{ color: 'white', fontSize: 20 }}>Proceed</Text>
-  </TouchableOpacity>
-
-  <TouchableOpacity
-    onPress={() => {
-      if (selectedOption) {
-        handleButtonPress();
-      }
-    }}
-    style={{
-      margin: 20,
-      backgroundColor: selectedOption ? COLORS.primary : 'gray', // Set background color based on selectedOption
-      height: 50,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 50
-    }}
-    disabled={!selectedOption}
-  >
-    <Text style={{ color: 'white', fontSize: 20 }}>Post item</Text>
-  </TouchableOpacity>
-</View> */}
 
 
       <Modal visible={isModalVisible} transparent={true} animationType="fade">
