@@ -40,7 +40,7 @@ const ViewMyProduct = ({ route, navigation }) => {
       console.log("Item deleted successfully!");
       setSuccess(true);
       setTimeout(() => {
-        navigation.navigate("Bottom Navigation");
+        navigation.navigate("Home");
       }, 3000);
     } catch (error) {
       console.error("Error deleting item:", error);

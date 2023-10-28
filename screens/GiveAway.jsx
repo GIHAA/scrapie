@@ -192,7 +192,7 @@ const Reuse = ({ route }) => {
                   status={
                     selectedOption === "Option2" ? "checked" : "unchecked"
                   }
-                  onPress={() => setSelectedOption("Option2")}
+                  onPress={() => { setSelectedOption("Option2"); setPrice("") } }
                 />
               </View>
             </View>

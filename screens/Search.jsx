@@ -21,7 +21,7 @@ const Search = () => {
   const [userData, setUserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [view, setView] = useState("marketplace");
-  const [currentUserEmail, setCurrentUserEmail] = useState("gihan3@gmail.com"); // Replace with your authentication logic
+  const [currentUserEmail, setCurrentUserEmail] = useState("gihan3@gmail.com"); 
 
   const getUsersData = async () => {
     try {
@@ -104,6 +104,7 @@ const Search = () => {
           view === "marketplace" ? "My Items" : "Marketplace"
         }`}</Text>
       </TouchableOpacity>
+      
 
       <View style={styles.searchContainer}>
         <TouchableOpacity>
