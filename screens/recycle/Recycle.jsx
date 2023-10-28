@@ -16,9 +16,8 @@ import AppBar from "../../components/recycle/AppBar";
 import { Dimensions } from "react-native";
 
 const Recycle = ({ route }) => {
-  const {
-    recycleItem = { item: "Shoes", image: "https://picsum.photos/200/300" },
-  } = route.params;
+  console.log("Recycle Screen",route.params)
+  const { recycleItem } = route.params;
 
   console.log("Recycle Screen Data", recycleItem);
 
@@ -51,7 +50,9 @@ const Recycle = ({ route }) => {
       <AppBar title={"Item Details"}></AppBar>
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <View style={{ flex: 1, margin: 20, marginTop: 10 }}>
-          <Text style={{ fontSize: 38, fontWeight: "bold", color: COLORS.primary }}>
+          <Text
+            style={{ fontSize: 38, fontWeight: "bold", color: COLORS.primary }}
+          >
             Recycle {recycleItem.item}? 🍀
           </Text>
 
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     minHeight: 200,
   },
   image: {
-    width: 200, 
-    height: 200, 
+    width: 200,
+    height: 200,
   },
 });

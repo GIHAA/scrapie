@@ -153,11 +153,11 @@ const Scan = ({}) => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
           console.log("File available at", downloadURL);
-          const transferObj = {
+          const recycleItem = {
             item: target[0].className.split(",")[0],
             image: downloadURL,
           };
-          navigation.navigate("Recycle", { transferObj });
+          navigation.navigate("Recycle", { recycleItem });
         });
       }
     );
