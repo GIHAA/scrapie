@@ -1,6 +1,7 @@
 
 import { Dimensions } from 'react-native'
 const { height, width } = Dimensions.get('window');
+import { DefaultTheme } from 'react-native-paper'
 
 const COLORS = {
   primary: "#198155",
@@ -16,6 +17,8 @@ const COLORS = {
   red: "#e81e4d",
   green: " #00C135",
   lightWhite: "#FAFAFC",
+
+  button: "#DDF0FF",
 };
 
 const SIZES = {
@@ -52,5 +55,16 @@ const SHADOWS = {
   },
 };
 
+const THEME = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    text: '#000000',
+    primary: "#198155",
+    secondary: "#57AE09",
+    tertiary: "#FF7754",
+    error: '#f13a59',
+  },
+}
 
-export { COLORS, SIZES , SHADOWS };
+export { COLORS, SIZES , SHADOWS , THEME};

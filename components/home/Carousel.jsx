@@ -6,9 +6,9 @@ import { COLORS, SIZES } from '../../constants';
 const Carousel = () => {
   
     const slides = [
-        "https://i.ibb.co/SNH7hLW/imagesasd.jpg",
-        "https://i.ibb.co/X5pSPdL/images.jpg",
-        "https://t3.ftcdn.net/jpg/03/29/63/10/240_F_329631000_Km32vmHK7u8jyCGiSq70aTIkNRSnVEwf.jpg"
+        "https://firebasestorage.googleapis.com/v0/b/scrapie-85d87.appspot.com/o/Group%20289323.jpg?alt=media&token=31116a4c-0897-47e8-afe3-3f80b21684fe",
+        "https://firebasestorage.googleapis.com/v0/b/scrapie-85d87.appspot.com/o/Group%20289328.jpg?alt=media&token=7a8edd1b-cb10-4a03-8d2b-989044302955",
+        "https://firebasestorage.googleapis.com/v0/b/scrapie-85d87.appspot.com/o/PCT-031%201.jpg?alt=media&token=a31aab7b-ba90-48a2-b2f8-429fbe0410a8"
        ];
       
     return (

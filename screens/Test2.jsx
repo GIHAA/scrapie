@@ -1,52 +1,40 @@
 import React, { useState, useEffect } from "react";
-import { View, Image, Text } from "react-native";
+import { View } from "react-native";
+import * as Animatable from "react-native-animatable";
 
-const MyImageComponent = () => {
-  const [imageBlobUrl, setImageBlobUrl] = useState(null);
-  const [imageUrl, setImageUrl] = useState(null);
+const App = () => {
+  const quotes = [
+    "Did you know that recycling one aluminum can saves enough energy to run a TV for three hours?",
+    "Did you know that recycling paper saves trees? One ton of recycled paper can save 17 trees",
+    "Did you know that recycling glass reduces air pollution by 20% and water pollution by 50%",
+    "Did you know that recycling 100 pounds of steel can save enough energy to power a home for two months"
+  ];
 
-
-  useEffect(() => {
-
-    const blobUrl =
-      "https://firebasestorage.googleapis.com/v0/b/scrapie-85d87.appspot.com/o/images%2Fgihaaaaa?alt=media&token=e157ba69-2070-41b3-937d-4b13f21aa533";
-
-    // Simulate fetching Blob data (replace with your actual fetching logic)
-    fetch(blobUrl)
-      .then((response) => response.blob())
-      .then((blob) => {
-        // Convert Blob data to a Base64 string
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImageBlobUrl(reader.result);
-        };
-        reader.readAsDataURL(blob);
-      })
-      .catch((error) => {
-        console.error("Error fetching Blob data:", error);
-      });
-  }, []);
+  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
 
   useEffect(() => {
-    if (imageBlobUrl) {
-      setImageUrl(imageBlobUrl);
-    }
-  }, [imageBlobUrl]);
+    const timer = setInterval(() => {
+      setCurrentQuoteIndex((currentQuoteIndex + 1) % quotes.length);
+    }, 3500);
+
+    return () => clearInterval(timer);
+  }, [currentQuoteIndex]);
 
   return (
     <View>
-      {imageUrl ? (
-        <View>
-          <Image
-            style={{ width: 200, height: 200 }}
-            source={{ uri: imageUrl }}
-          />
-        </View>
-      ) : (
-        <Text>Loading Image...</Text>
-      )}
+      <Animatable.Text
+        animation="fadeIn"
+        duration={1000}
+        iterationCount={1}
+        style={{
+          fontSize: 16,
+          textAlign: "center"
+        }}
+      >
+        {quotes[currentQuoteIndex]}
+      </Animatable.Text>
     </View>
   );
 };
 
-export default MyImageComponent;
+export default App;

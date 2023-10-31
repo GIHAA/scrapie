@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
+  Image
 } from "react-native";
 import { RadioButton, TextInput } from "react-native-paper";
 import { COLORS } from "../constants";
@@ -13,12 +14,14 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import {  collection , query , where , getDocs , addDoc} from "firebase/firestore";
 import * as Animatable from "react-native-animatable";
 import { Modal } from "react-native";
 import { Video } from "expo-av";
 import { useNavigation } from "@react-navigation/native";
 import { db } from "../firebase.config";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
 
 const Reuse = ({ route }) => {
   const { data } = route.params;
@@ -26,12 +29,13 @@ const Reuse = ({ route }) => {
 
   const [selectedOption, setSelectedOption] = useState(null);
   const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
+  const [price, setPrice] = useState("0");
   const [isConfirmVisible, setisConfirmVisible] = useState(true);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isFail, setIsFail] = useState(false);
-
+  const [user , setUser] = useState({})
+ 
 
   const updateDescription = (value) => {
     setDescription(value);
@@ -41,44 +45,112 @@ const Reuse = ({ route }) => {
     setPrice(value);
   };
 
-  const handleButtonPress = () => {
-    setIsModalVisible(true);
-    const usersCollection = collection(db, "items");
-    const itemWithUID = {
-      ...data,
-      uid: "2222",
-      seller: "gihan sudeepa",
-      phone: "0710816191",
-      description: description,
-      price: selectedOption === "Option2" ? parseFloat(price) : null,
-    };
-  
-    if (selectedOption) {
-      setisConfirmVisible(true);
-  
-      addDoc(usersCollection, itemWithUID)
-        .then((docRef) => {
-          console.log("Document written with ID: ", docRef.id);
-          setIsSuccess(true);
-          setIsAnimationPlaying(true);
-        })
-        .catch((error) => {
-          setIsFail(true);
-          setIsAnimationPlaying(true);
-          console.error("Error adding document: ", error);
-  
-          if (error.code === "permission-denied") {
-            Alert.alert("Permission denied. Please check your Firebase rules.");
-          } else {
-            Alert.alert("An error occurred while connecting to the server.");
-          }
-        });
-  
-      if (selectedOption === "Option2") {
+
+  useEffect(() => {
+    const auth = getAuth();
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const userEmail = user.email;
+
+        const usersCollection = collection(db, "users");
+        const userQuery = query(
+          usersCollection,
+          where("email", "==", userEmail)
+        );
+
+        getDocs(userQuery)
+          .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+              const userDoc = querySnapshot.docs[0];
+              const userData = userDoc.data();
+
+              setUser(userData)
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching user data:", error);
+          });
       }
-    } else {
-      Alert.alert("Please select an option first.");
-    }
+    });
+
+    return unsubscribe;
+  }, []);
+
+
+  const handleButtonPress = () => {
+    console.log('sdasdasd')
+    setIsModalVisible(true);
+
+    const auth = getAuth();
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        const userEmail = user.email;
+
+        const usersCollection = collection(db, "users");
+        const userQuery = query(
+          usersCollection,
+          where("email", "==", userEmail)
+        );
+          console.log('sdasdasd')
+        getDocs(userQuery)
+          .then((querySnapshot) => {
+            if (!querySnapshot.empty) {
+              const userDoc = querySnapshot.docs[0];
+              const userData = userDoc.data();
+
+              setUser(userData)
+
+              const usersCollection = collection(db, "items");
+  
+              const itemWithUID = {
+                ...data,
+                uid: userData.email,
+                seller: userData.name,
+                phone: userData.phone,
+                description: description,
+                price: selectedOption === "Option2" ? parseFloat(price) : null,
+                timestamp: new Date().toISOString(),
+              };
+          
+              if (selectedOption) {
+                setisConfirmVisible(true);
+            
+                addDoc(usersCollection, itemWithUID)
+                  .then((docRef) => {
+                    console.log("Document written with ID: ", docRef.id);
+                    setIsSuccess(true);
+                    setIsAnimationPlaying(true);
+                  })
+                  .catch((error) => {
+                    setIsFail(true);
+                    setIsAnimationPlaying(true);
+                    console.error("Error adding document: ", error);
+            
+                    if (error.code === "permission-denied") {
+                      Alert.alert("Permission denied. Please check your Firebase rules.");
+                    } else {
+                      Alert.alert("An error occurred while connecting to the server.");
+                    }
+                  });
+            
+                if (selectedOption === "Option2") {
+                }
+                } else {
+                  Alert.alert("Please select an option first.");
+                }
+
+
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching user data:", error);
+          });
+      }
+    });
+
+
   };
   
 
@@ -120,7 +192,7 @@ const Reuse = ({ route }) => {
                   status={
                     selectedOption === "Option2" ? "checked" : "unchecked"
                   }
-                  onPress={() => setSelectedOption("Option2")}
+                  onPress={() => { setSelectedOption("Option2"); setPrice("") } }
                 />
               </View>
             </View>
@@ -146,6 +218,8 @@ const Reuse = ({ route }) => {
               onChangeText={(text) => updateDescription(text)}
               style={styles.input}
             />
+
+
           </View>
         ) : (
           <View style={{ flex: 1, margin: 20, marginTop: 80 }}>
@@ -212,47 +286,6 @@ const Reuse = ({ route }) => {
           </TouchableOpacity>
         )}
       </View>
-
-      
-{/* <View>
-  <TouchableOpacity
-    onPress={() => {
-      if (selectedOption) {
-        setisConfirmVisible(false);
-      }
-    }}
-    style={{
-      margin: 20,
-      backgroundColor: selectedOption ? COLORS.primary : 'gray', // Set background color based on selectedOption
-      height: 50,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 50
-    }}
-    disabled={!selectedOption}
-  >
-    <Text style={{ color: 'white', fontSize: 20 }}>Proceed</Text>
-  </TouchableOpacity>
-
-  <TouchableOpacity
-    onPress={() => {
-      if (selectedOption) {
-        handleButtonPress();
-      }
-    }}
-    style={{
-      margin: 20,
-      backgroundColor: selectedOption ? COLORS.primary : 'gray', // Set background color based on selectedOption
-      height: 50,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 50
-    }}
-    disabled={!selectedOption}
-  >
-    <Text style={{ color: 'white', fontSize: 20 }}>Post item</Text>
-  </TouchableOpacity>
-</View> */}
 
 
       <Modal visible={isModalVisible} transparent={true} animationType="fade">

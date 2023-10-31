@@ -1,4 +1,6 @@
 import Welcome from "./home/Welcome";
+import Heading from "./home/Heading";
+import MapGlimpse from "./home/MapGlimpse";
+import SchedulesCarousel from "./home/SchedulesCarousel";
 
-
-export { Welcome }
+export { Welcome, Heading, MapGlimpse, SchedulesCarousel }
